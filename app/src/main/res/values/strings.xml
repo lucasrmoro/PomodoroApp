@@ -1,12 +1,19 @@
 <resources>
     <string name="app_name">Pomodoro App</string>
+    <string name="pomodoro_timer">Pomodoro Timer:</string> />
+    <string name="edit_timer">Choose your Pomodoro Timer:</string>
+    <string name="task_name">Task:</string>
+    <string name="edit_task">Write your task</string>
+    <string name="ringtone">Ringtone:</string>
+    <string name="edit_ringtone">Choose Ringtone:</string>
+    <string name="save_button">SAVE</string>
+    <string name="save_and_run_button">SAVE AND RUN</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

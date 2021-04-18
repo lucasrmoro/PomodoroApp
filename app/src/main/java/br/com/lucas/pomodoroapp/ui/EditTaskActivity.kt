@@ -1,11 +1,20 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.annotation.IntRange
+import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
+import java.util.*
 
 class EditTaskActivity : AppCompatActivity() {
 
@@ -15,8 +24,6 @@ class EditTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         binding.editTimer.setOnClickListener() {
             showTimePicker()
@@ -29,15 +36,19 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     private fun showTimePicker() {
-        val picker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_12H)
-            .setHour(12)
-            .setMinute(10)
-            .setTitleText("Select Appointment time")
+        val picker = Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(0)
+            .setMinute(25)
+            .setTitleText("SELECT POMODORO TIME")
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
-            binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
+            if (DateHelper.checkTimeIsValid(picker.hour, picker.minute)) {
+                binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
+            } else {
+                Toast.makeText(this, "This time is invalid", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

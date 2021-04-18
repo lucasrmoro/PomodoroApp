@@ -18,7 +18,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="44dp"
             android:layout_marginEnd="16dp"
-            android:text="Pomodoro Timer:"
+            android:text="@string/pomodoro_timer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Chose your Pomodoro timer"
+            android:hint="@string/edit_timer"
             app:layout_constraintEnd_toEndOf="@+id/pomodoro_timer"
             app:layout_constraintStart_toStartOf="@+id/pomodoro_timer"
             app:layout_constraintTop_toBottomOf="@+id/pomodoro_timer" />
@@ -41,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="16dp"
-            android:text="Task:"
+            android:text="@string/task_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Write your task"
+            android:hint="@string/edit_task"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="@+id/task_name"
             app:layout_constraintStart_toStartOf="@+id/task_name"
@@ -65,7 +65,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="16dp"
-            android:text="Ringtone:"
+            android:text="@string/ringtone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_task" />
@@ -74,7 +74,8 @@
             android:id="@+id/edit_ringtone"
             android:layout_width="0dp"
             android:layout_height="42dp"
-            android:text="Choose Ringtone"
+            android:inputType="text"
+            android:text="@string/edit_ringtone"
             app:layout_constraintEnd_toEndOf="@+id/ringtone"
             app:layout_constraintStart_toStartOf="@+id/ringtone"
             app:layout_constraintTop_toBottomOf="@+id/ringtone" />
@@ -86,7 +87,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="55dp"
             android:layout_marginEnd="24dp"
-            android:text="Save"
+            android:text="@string/save_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
@@ -99,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:text="Save and run"
+            android:text="@string/save_and_run_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -112,7 +113,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
