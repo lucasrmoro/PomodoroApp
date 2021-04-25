@@ -1,11 +1,15 @@
 package br.com.lucas.pomodoroapp.ui
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.IntRange
 import androidx.annotation.MenuRes
@@ -20,6 +24,7 @@ class EditTaskActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityEditTaskBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
@@ -31,6 +36,8 @@ class EditTaskActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             val taskName = binding.editTask.text.toString()
+            makeRequiredText(binding.taskName)
+            makeRequiredText(binding.pomodoroTimer)
             Toast.makeText(this, "Task \"$taskName\" saved", Toast.LENGTH_LONG).show()
         }
     }
@@ -39,6 +46,14 @@ class EditTaskActivity : AppCompatActivity() {
         super.onResume()
         binding.editTask.requestFocus()
     }
+
+    @SuppressLint("SetTextI18n")
+    fun makeRequiredText(textView: TextView) {
+        textView.setTextColor(Color.RED)
+        textView.setTypeface(textView.typeface, Typeface.BOLD)
+        textView.text = "${textView.text} *"
+    }
+
 
     private fun showTimePicker() {
         val picker = Builder()
