@@ -55,6 +55,7 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun showTimePicker() {
         val picker = Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
