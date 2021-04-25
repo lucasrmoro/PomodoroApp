@@ -35,6 +35,11 @@ class EditTaskActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.editTask.requestFocus()
+    }
+
     private fun showTimePicker() {
         val picker = Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -47,7 +52,7 @@ class EditTaskActivity : AppCompatActivity() {
             if (DateHelper.checkTimeIsValid(picker.hour, picker.minute)) {
                 binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
             } else {
-                Toast.makeText(this, "This time is invalid", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Select a valid time between 0 and 1 hour", Toast.LENGTH_LONG).show()
             }
         }
     }

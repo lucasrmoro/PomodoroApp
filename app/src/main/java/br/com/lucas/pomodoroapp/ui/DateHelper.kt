@@ -7,7 +7,7 @@ object DateHelper {
     fun checkTimeIsValid(hour: Int, minute: Int): Boolean{
         val hoursInMinutes = hour * MINUTES_ON_HOUR
         val total = hoursInMinutes + minute
-        return total < 60
+        return total <= 60
     }
 
 }
