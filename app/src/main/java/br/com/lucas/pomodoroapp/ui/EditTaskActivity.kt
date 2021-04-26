@@ -4,21 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.view.View
-import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.IntRange
-import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
-import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
-import java.util.*
 
 class EditTaskActivity : AppCompatActivity() {
 
@@ -35,10 +26,15 @@ class EditTaskActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener {
-            val taskName = binding.editTask.text.toString()
-            makeRequiredText(binding.taskName)
-            makeRequiredText(binding.pomodoroTimer)
-            Toast.makeText(this, "Task \"$taskName\" saved", Toast.LENGTH_LONG).show()
+            val isTaskNameValid = isValid(
+                binding.taskName, binding.editTask.text.toString()
+            )
+            val isPomodoroTimerValid = isValid(
+                binding.pomodoroTimer, binding.editTimer.text.toString()
+            )
+            if (!isTaskNameValid || !isPomodoroTimerValid) {
+                Toast.makeText(this, "These fields are required!", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -48,10 +44,21 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun makeRequiredText(textView: TextView) {
-        textView.setTextColor(Color.RED)
-        textView.setTypeface(textView.typeface, Typeface.BOLD)
-        textView.text = "${textView.text} *"
+    fun isValid(textView: TextView, content: String): Boolean {
+
+        return if (content.isEmpty()) {
+            textView.setTextColor(Color.RED)
+            textView.setTypeface(textView.typeface, Typeface.BOLD)
+            if (!textView.text.contains("*")) {
+                textView.text = "${textView.text} *"
+            }
+            false
+        } else {
+            textView.setTextColor(Color.BLACK)
+            textView.setTypeface(textView.typeface, Typeface.NORMAL)
+            textView.text = textView.text.toString().removeSuffix("*")
+            true
+        }
     }
 
 
@@ -68,7 +75,8 @@ class EditTaskActivity : AppCompatActivity() {
             if (DateHelper.checkTimeIsValid(picker.hour, picker.minute)) {
                 binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
             } else {
-                Toast.makeText(this, "Select a valid time between 0 and 1 hour", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Select a valid time between 0 and 1 hour", Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
