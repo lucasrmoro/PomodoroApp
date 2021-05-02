@@ -2,11 +2,12 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.observe
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
@@ -15,25 +16,51 @@ class EditTaskActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityEditTaskBinding
 
+    lateinit var viewModel: EditTaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
+        viewModel = EditTaskViewModel()
         setContentView(binding.root)
 
         binding.editTimer.setOnClickListener() {
             showTimePicker()
         }
 
+        binding.editTimer.doAfterTextChanged {
+            Log.d("log test editTimer", it.toString())
+        }
+
+        binding.editTask.doAfterTextChanged {
+            viewModel.validTask(it.toString())
+            Log.d("log test editTask", it.toString())
+        }
+
+
         binding.saveButton.setOnClickListener {
-            val isTaskNameValid = isValid(
-                binding.taskName, binding.editTask.text.toString()
-            )
-            val isPomodoroTimerValid = isValid(
-                binding.pomodoroTimer, binding.editTimer.text.toString()
-            )
-            if (!isTaskNameValid || !isPomodoroTimerValid) {
-                Toast.makeText(this, "These fields are required!", Toast.LENGTH_LONG).show()
+            viewModel.onSaveEvent()
+        }
+
+        viewModel.isTaskNameValid.observe(this) {
+            if (it == true) {
+                binding.taskName.setTextColor(Color.BLACK)
+            } else {
+                binding.taskName.setTextColor(Color.RED)
+            }
+        }
+
+        viewModel.isPomodoroTimerValid.observe(this) {
+            if (it == false) {
+                Toast.makeText(
+                    this,
+                    "Select a valid time between 25 minutes and 1 hour",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+                binding.pomodoroTimer.setTextColor(Color.RED)
+            } else {
+                binding.pomodoroTimer.setTextColor(Color.BLACK)
             }
         }
     }
@@ -41,24 +68,6 @@ class EditTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.editTask.requestFocus()
-    }
-
-    @SuppressLint("SetTextI18n")
-    fun isValid(textView: TextView, content: String): Boolean {
-
-        return if (content.isEmpty()) {
-            textView.setTextColor(Color.RED)
-            textView.setTypeface(textView.typeface, Typeface.BOLD)
-            if (!textView.text.contains("*")) {
-                textView.text = "${textView.text} *"
-            }
-            false
-        } else {
-            textView.setTextColor(Color.BLACK)
-            textView.setTypeface(textView.typeface, Typeface.NORMAL)
-            textView.text = textView.text.toString().removeSuffix("*")
-            true
-        }
     }
 
 
@@ -72,12 +81,9 @@ class EditTaskActivity : AppCompatActivity() {
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
-            if (DateHelper.checkTimeIsValid(picker.hour, picker.minute)) {
-                binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
-            } else {
-                Toast.makeText(this, "Select a valid time between 0 and 1 hour", Toast.LENGTH_LONG)
-                    .show()
-            }
+            viewModel.checkTimeIsValid(picker.hour, picker.minute)
+            binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
         }
     }
 }
+
