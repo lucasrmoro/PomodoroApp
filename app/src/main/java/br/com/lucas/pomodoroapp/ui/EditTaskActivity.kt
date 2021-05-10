@@ -39,7 +39,7 @@ class EditTaskActivity : AppCompatActivity() {
 
 
         binding.saveButton.setOnClickListener {
-            viewModel.onSaveEvent()
+            viewModel.onSaveEvent(context = this, taskName = binding.editTask.text.toString() )
         }
 
         viewModel.isTaskNameValid.observe(this) {
