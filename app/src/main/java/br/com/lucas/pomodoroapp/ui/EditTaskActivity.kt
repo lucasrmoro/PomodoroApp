@@ -1,6 +1,8 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -83,6 +85,12 @@ class EditTaskActivity : AppCompatActivity() {
         picker.addOnPositiveButtonClickListener {
             viewModel.checkTimeIsValid(picker.hour, picker.minute)
             binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
+        }
+    }
+    companion object{
+        fun launch(context: Context){
+            val intent = Intent(context, EditTaskActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }

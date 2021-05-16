@@ -10,15 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PomodoroApp">
         <activity
-            android:name=".ui.EditTaskActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible"
-            android:label="@string/app_name"
+            android:name=".ui.ListTaskActivity"
+            android:label="@string/title_activity_list_task"
             android:theme="@style/Theme.PomodoroApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.EditTaskActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PomodoroApp.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysVisible">
         </activity>
     </application>
 
