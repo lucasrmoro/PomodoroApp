@@ -32,11 +32,10 @@
         app:tint="@color/teal_200" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/list_task_item"
-        app:layout_anchorGavity="bottom|center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        tools:listitem="@layout/list_task_item" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
