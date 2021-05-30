@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ListTaskActivity">
+    tools:context=".ui.ListTaskActivity"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +28,15 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/purple_500"
-        app:tint = "@color/teal_200"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/teal_200" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/list_task_item"
+        app:layout_anchorGavity="bottom|center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
