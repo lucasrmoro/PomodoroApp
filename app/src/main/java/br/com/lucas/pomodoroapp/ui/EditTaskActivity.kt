@@ -41,7 +41,9 @@ class EditTaskActivity : AppCompatActivity() {
 
 
         binding.saveButton.setOnClickListener {
-            viewModel.onSaveEvent(context = this, taskName = binding.editTask.text.toString() )
+            viewModel.onSaveEvent(context = this,
+                taskName = binding.editTask.text.toString(),
+                closeScreen = { finish() })
         }
 
         viewModel.isTaskNameValid.observe(this) {
@@ -87,8 +89,9 @@ class EditTaskActivity : AppCompatActivity() {
             binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
         }
     }
-    companion object{
-        fun launch(context: Context){
+
+    companion object {
+        fun launch(context: Context) {
             val intent = Intent(context, EditTaskActivity::class.java)
             context.startActivity(intent)
         }
