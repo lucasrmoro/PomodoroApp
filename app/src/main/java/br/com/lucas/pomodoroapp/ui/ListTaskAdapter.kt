@@ -12,6 +12,7 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
     private val tasks = mutableListOf<Task>()
 
     fun addTask(tasks: List<Task>) {
+        this.tasks.clear()
         this.tasks.addAll(tasks)
         notifyDataSetChanged()
     }

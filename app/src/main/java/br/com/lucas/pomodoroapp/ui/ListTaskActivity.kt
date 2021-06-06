@@ -5,6 +5,7 @@ import android.widget.LinearLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.Task
@@ -14,11 +15,20 @@ class ListTaskActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityListTaskBinding
 
+    lateinit var viewModel: ListTaskViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListTaskBinding.inflate(layoutInflater)
+        viewModel = ListTaskViewModel(application)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        viewModel.taskList.observe(
+            this
+        ) { tasks ->
+            (binding.recyclerView.adapter as ListTaskAdapter).addTask(tasks)
+        }
 
         binding.fab.setOnClickListener { view ->
             EditTaskActivity.launch(this)
@@ -26,7 +36,10 @@ class ListTaskActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = ListTaskAdapter()
 
-        val tasks = (1 .. 100).map { Task(it, "Test$it", it * 100)}
-        (binding.recyclerView.adapter as ListTaskAdapter).addTask(tasks)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 }

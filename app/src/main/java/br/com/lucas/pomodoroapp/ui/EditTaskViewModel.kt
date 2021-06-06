@@ -27,7 +27,7 @@ class EditTaskViewModel : ViewModel() {
         isPomodoroTimerValid.value = total in 25..60
     }
 
-    fun onSaveEvent(context: Context, taskName: String) {
+    fun onSaveEvent(context: Context, taskName: String, closeScreen : (()->Unit)) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
                 DataBaseConnect.getTaskDao(context).insertTask(
@@ -37,6 +37,7 @@ class EditTaskViewModel : ViewModel() {
                         uid = 0
                     )
                 )
+                closeScreen()
             }
         } else {
             Log.d("SAVE_ACTION", "Data is not valid")
