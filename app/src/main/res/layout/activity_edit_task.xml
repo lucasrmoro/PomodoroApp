@@ -24,12 +24,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/edit_task"
+            android:id="@+id/edit_task_name"
             android:layout_width="0dp"
             android:layout_height="42dp"
             android:ems="10"
             android:hint="@string/edit_task"
-            android:inputType="textPersonName"
+            android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="@+id/task_name"
             app:layout_constraintStart_toStartOf="@+id/task_name"
             app:layout_constraintTop_toBottomOf="@+id/task_name" />
@@ -45,10 +45,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_task" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_task_name" />
 
         <TextView
-            android:id="@+id/edit_timer"
+            android:id="@+id/edit_pomodoro_timer"
             android:layout_width="0dp"
             android:layout_height="42dp"
             android:ems="10"
@@ -71,7 +71,7 @@
             tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_timer" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_pomodoro_timer" />
 
         <TextView
             android:id="@+id/edit_ringtone"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ringtone" />
 
         <Button
-            android:id="@+id/save_button"
+            android:id="@+id/fab_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -94,13 +94,13 @@
             android:layout_marginEnd="24dp"
             android:text="@string/save_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_ringtone" />
 
         <Button
-            android:id="@+id/save_and_run_button"
+            android:id="@+id/fab_save_and_run"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -109,11 +109,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/save_button" />
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/fab_save" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

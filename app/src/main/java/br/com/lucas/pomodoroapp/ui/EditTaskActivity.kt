@@ -26,23 +26,23 @@ class EditTaskActivity : AppCompatActivity() {
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
 
-        binding.editTimer.setOnClickListener() {
+        binding.editPomodoroTimer.setOnClickListener() {
             showTimePicker()
         }
 
-        binding.editTimer.doAfterTextChanged {
+        binding.editPomodoroTimer.doAfterTextChanged {
             Log.d("log test editTimer", it.toString())
         }
 
-        binding.editTask.doAfterTextChanged {
+        binding.editTaskName.doAfterTextChanged {
             viewModel.validTask(it.toString())
             Log.d("log test editTask", it.toString())
         }
 
 
-        binding.saveButton.setOnClickListener {
+        binding.fabSave.setOnClickListener {
             viewModel.onSaveEvent(context = this,
-                taskName = binding.editTask.text.toString(),
+                taskName = binding.editTaskName.text.toString(),
                 closeScreen = { finish() })
         }
 
@@ -71,7 +71,7 @@ class EditTaskActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.editTask.requestFocus()
+        binding.editTaskName.requestFocus()
     }
 
 
@@ -86,7 +86,7 @@ class EditTaskActivity : AppCompatActivity() {
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
             viewModel.checkTimeIsValid(picker.hour, picker.minute)
-            binding.editTimer.setText(" ${picker.hour} : ${picker.minute}")
+            binding.editPomodoroTimer.setText(" ${picker.hour} : ${picker.minute}")
         }
     }
 
