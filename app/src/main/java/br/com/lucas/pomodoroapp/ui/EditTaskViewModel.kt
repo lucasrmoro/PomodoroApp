@@ -17,6 +17,12 @@ class EditTaskViewModel : ViewModel() {
     val isTaskNameValid = MutableLiveData<Boolean>()
     private val HOUR_ON_MINUTES = 60
 
+    val onTaskAlreadyExist = MutableLiveData<Task>()
+
+    fun setup(task: Task) {
+        onTaskAlreadyExist.value = task
+    }
+
     fun validTask(content: String) {
         isTaskNameValid.value = content.length >= 3
     }
@@ -28,6 +34,7 @@ class EditTaskViewModel : ViewModel() {
     }
 
     fun onSaveEvent(context: Context, taskName: String, closeScreen : (()->Unit)) {
+        // TODO - [EditTaskSupport] 6. Check if the task already exists you should update the data base, else you keep the same code to create a new one
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
                 DataBaseConnect.getTaskDao(context).insertTask(

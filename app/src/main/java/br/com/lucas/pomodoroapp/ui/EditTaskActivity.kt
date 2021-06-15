@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
@@ -25,6 +26,13 @@ class EditTaskActivity : AppCompatActivity() {
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
+
+
+        val task: Task? = null
+        // TODO - [EditTaskSupport] 4. Unwrap the intent to get the Task object
+        if(task!=null) {
+            viewModel.setup(task)
+        }
 
         binding.editPomodoroTimer.setOnClickListener() {
             showTimePicker()
@@ -67,6 +75,10 @@ class EditTaskActivity : AppCompatActivity() {
                 binding.pomodoroTimer.setTextColor(Color.BLACK)
             }
         }
+
+        viewModel.onTaskAlreadyExist.observe(this) { task ->
+            // TODO - [EditTaskSupport] 5. Show all values from your task to the UI
+        }
     }
 
     override fun onResume() {
@@ -94,6 +106,10 @@ class EditTaskActivity : AppCompatActivity() {
         fun launch(context: Context) {
             val intent = Intent(context, EditTaskActivity::class.java)
             context.startActivity(intent)
+        }
+
+        fun launch(context: Context, task: Task) {
+            // TODO - [EditTaskSupport] 3. Create an intent to open the EditTaskActivity (the same as the previous launch), and passing an object as parameter
         }
     }
 }
