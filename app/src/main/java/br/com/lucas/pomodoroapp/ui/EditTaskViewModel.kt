@@ -1,7 +1,7 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,6 +35,14 @@ class EditTaskViewModel : ViewModel() {
 
     fun onSaveEvent(context: Context, taskName: String, closeScreen : (()->Unit)) {
         // TODO - [EditTaskSupport] 6. Check if the task already exists you should update the data base, else you keep the same code to create a new one
+        saveNewTask(context, taskName, closeScreen)
+    }
+
+    private fun saveNewTask(
+        context: Context,
+        taskName: String,
+        closeScreen: () -> Unit
+    ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
                 DataBaseConnect.getTaskDao(context).insertTask(
@@ -44,10 +52,11 @@ class EditTaskViewModel : ViewModel() {
                         uid = 0
                     )
                 )
+                Toast.makeText(context, "Successfully saved!", Toast.LENGTH_SHORT).show()
                 closeScreen()
             }
         } else {
-            Log.d("SAVE_ACTION", "Data is not valid")
+            Toast.makeText(context, "Fill all required fields!", Toast.LENGTH_SHORT).show()
         }
     }
 
