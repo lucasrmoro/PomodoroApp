@@ -37,13 +37,6 @@ class EditTaskActivity : AppCompatActivity() {
         val task: Task? = null
         // TODO - [EditTaskSupport] 4. Unwrap the intent to get the Task object
 
-        val bundle: Bundle? = intent.extras
-        val string: String? = intent.getStringExtra("edit_task")
-
-        if (bundle != null) {
-            intent.putExtras(bundle)
-        }
-
         if (task != null) {
             viewModel.setup(task)
         }
