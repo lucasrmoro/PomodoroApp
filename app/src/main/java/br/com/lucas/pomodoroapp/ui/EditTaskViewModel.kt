@@ -5,8 +5,10 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import kotlinx.coroutines.launch
 
 class EditTaskViewModel : ViewModel() {
@@ -17,10 +19,11 @@ class EditTaskViewModel : ViewModel() {
     val isTaskNameValid = MutableLiveData<Boolean>()
     private val HOUR_ON_MINUTES = 60
 
-    val onTaskAlreadyExist = MutableLiveData<Task>()
+    var task: Task? = null
+        private set
 
     fun setup(task: Task) {
-        onTaskAlreadyExist.value = task
+        this.task = task
     }
 
     fun validTask(content: String) {
@@ -33,9 +36,32 @@ class EditTaskViewModel : ViewModel() {
         isPomodoroTimerValid.value = total in 25..60
     }
 
-    fun onSaveEvent(context: Context, taskName: String, closeScreen : (()->Unit)) {
-        // TODO - [EditTaskSupport] 6. Check if the task already exists you should update the data base, else you keep the same code to create a new one
-        saveNewTask(context, taskName, closeScreen)
+    fun onSaveEvent(context: Context, taskName: String, closeScreen: (() -> Unit)) {
+        if (task == null) {
+            saveNewTask(context, taskName, closeScreen)
+        } else {
+            task!!.taskName = taskName
+            task!!.taskMinutes = total
+            saveSameTask(context, task!!, closeScreen)
+        }
+    }
+
+    private fun saveSameTask(
+        context: Context,
+        task: Task,
+        closeScreen: () -> Unit
+    ) {
+        if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
+            viewModelScope.launch {
+                DataBaseConnect.getTaskDao(context).updateTask(
+                    task
+                )
+                Toast.makeText(context, "Successfully changed!", Toast.LENGTH_SHORT).show()
+                closeScreen()
+            }
+        } else {
+            Toast.makeText(context, "Fill all required fields!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun saveNewTask(

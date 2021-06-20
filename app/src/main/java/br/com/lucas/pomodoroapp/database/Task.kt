@@ -10,7 +10,7 @@ data class Task(
     @PrimaryKey(autoGenerate = true)
     val uid: Int,
     @ColumnInfo
-    val taskName: String,
+    var taskName: String,
     @ColumnInfo
-    val taskMinutes: Int
+    var taskMinutes: Int
 ) : Serializable

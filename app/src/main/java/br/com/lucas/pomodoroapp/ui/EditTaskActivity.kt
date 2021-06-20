@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.nfc.Tag
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +14,6 @@ import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
-import java.io.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
 
 class EditTaskActivity : AppCompatActivity() {
 
@@ -33,12 +27,12 @@ class EditTaskActivity : AppCompatActivity() {
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
 
-
-        val task: Task? = null
-        // TODO - [EditTaskSupport] 4. Unwrap the intent to get the Task object
+        val task: Task? = intent.getSerializableExtra("task") as? Task
 
         if (task != null) {
             viewModel.setup(task)
+            binding.editTaskName.setText("${viewModel.task?.taskName}")
+            binding.editPomodoroTimer.text = "${viewModel.task?.taskMinutes}"
         }
 
         binding.editPomodoroTimer.setOnClickListener() {
@@ -81,10 +75,6 @@ class EditTaskActivity : AppCompatActivity() {
                 binding.pomodoroTimer.setTextColor(Color.BLACK)
             }
         }
-
-        viewModel.onTaskAlreadyExist.observe(this) { task ->
-            // TODO - [EditTaskSupport] 5. Show all values from your task to the UI
-        }
     }
 
     override fun onResume() {
@@ -115,10 +105,8 @@ class EditTaskActivity : AppCompatActivity() {
         }
 
         fun launchEditTaskScreen(context: Context, task: Task?) {
-        // TODO - [EditTaskSupport] 3. Create an intent to open the EditTaskActivity (the same as the previous launch), and passing an object as parameter
-            val intent = Intent(context, EditTaskActivity::class.java).apply {
-                putExtra("edit_task", task as Serializable)
-            }
+            val intent = Intent(context, EditTaskActivity::class.java)
+            intent.putExtra("task", task)
             context.startActivity(intent)
         }
     }

@@ -39,14 +39,10 @@ class ListTaskActivity : AppCompatActivity() {
     private fun configureList(context: Context) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = ListTaskAdapter()
-
-        // TODO - [EditTaskSupport] 1. Add the code to open a new activity according to the user's click
-        // TODO - [EditTaskSupport] 2. Inside of the user click you should call EditTaskActivity.launch(context, task), where the task will be the task that the user selected
-        binding.recyclerView.addOnItemClickListener(object: OnItemClickListener {
+        binding.recyclerView.addOnItemClickListener(object : OnItemClickListener {
             override fun onItemClicked(position: Int, view: View) {
                 val task = viewModel.findTaskByPosition(position)
                 EditTaskActivity.launchEditTaskScreen(context, task = task)
-                Toast.makeText(context, "$task", Toast.LENGTH_SHORT).show()
             }
         })
     }
