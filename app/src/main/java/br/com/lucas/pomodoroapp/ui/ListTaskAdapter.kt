@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
@@ -40,7 +41,7 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
-            binding.itemTaskTime.text = task.taskMinutes.toString()
+            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
         }
     }
 }

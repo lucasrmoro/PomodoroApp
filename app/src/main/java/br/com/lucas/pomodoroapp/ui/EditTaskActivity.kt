@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
@@ -32,7 +33,8 @@ class EditTaskActivity : AppCompatActivity() {
         if (task != null) {
             viewModel.setup(task)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
-            binding.editPomodoroTimer.text = "${viewModel.task?.taskMinutes}"
+            binding.editPomodoroTimer.text =
+                "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"
         }
 
         binding.editPomodoroTimer.setOnClickListener() {
@@ -94,7 +96,7 @@ class EditTaskActivity : AppCompatActivity() {
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
             viewModel.checkTimeIsValid(picker.hour, picker.minute)
-            binding.editPomodoroTimer.setText(" ${picker.hour} : ${picker.minute}")
+            binding.editPomodoroTimer.text = viewModel.total.convertMinutesToHour()
         }
     }
 

@@ -5,15 +5,14 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
-import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import kotlinx.coroutines.launch
 
 class EditTaskViewModel : ViewModel() {
 
-    private var total: Int = 25
+    var total: Int = 25
+        private set
 
     val isPomodoroTimerValid = MutableLiveData<Boolean>()
     val isTaskNameValid = MutableLiveData<Boolean>()
@@ -33,6 +32,10 @@ class EditTaskViewModel : ViewModel() {
     fun checkTimeIsValid(hour: Int, minute: Int) {
         val hoursInMinutes = hour * HOUR_ON_MINUTES
         total = hoursInMinutes + minute
+        checkTotalTime()
+    }
+
+    private fun checkTotalTime() {
         isPomodoroTimerValid.value = total in 25..60
     }
 
@@ -42,6 +45,8 @@ class EditTaskViewModel : ViewModel() {
         } else {
             task!!.taskName = taskName
             task!!.taskMinutes = total
+            validTask(task!!.taskName)
+            checkTotalTime()
             saveSameTask(context, task!!, closeScreen)
         }
     }
