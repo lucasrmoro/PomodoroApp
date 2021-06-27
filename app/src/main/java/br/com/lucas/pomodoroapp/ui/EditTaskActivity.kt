@@ -28,7 +28,7 @@ class EditTaskActivity : AppCompatActivity() {
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
 
-        val task: Task? = intent.getSerializableExtra("task") as? Task
+        val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
 
         if (task != null) {
             viewModel.setup(task)
@@ -108,8 +108,9 @@ class EditTaskActivity : AppCompatActivity() {
 
         fun launchEditTaskScreen(context: Context, task: Task?) {
             val intent = Intent(context, EditTaskActivity::class.java)
-            intent.putExtra("task", task)
+            intent.putExtra(TASK_NAME_KEY, task)
             context.startActivity(intent)
         }
+        private const val TASK_NAME_KEY = "task"
     }
 }

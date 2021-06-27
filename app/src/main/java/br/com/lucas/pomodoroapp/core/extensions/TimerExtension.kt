@@ -16,6 +16,5 @@ fun Int.convertMinutesToHour(): String {
     if (minutesText.length == 1) {
         minutesText = "0$minutesText"
     }
-
-    return ("$hoursText:$minutesText")
+    return "$hoursText:$minutesText"
 }
