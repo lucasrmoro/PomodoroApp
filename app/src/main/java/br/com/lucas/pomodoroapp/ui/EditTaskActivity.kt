@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
+import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
@@ -26,6 +28,15 @@ class EditTaskActivity : AppCompatActivity() {
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
 
+        val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
+
+        if (task != null) {
+            viewModel.setup(task)
+            binding.editTaskName.setText("${viewModel.task?.taskName}")
+            binding.editPomodoroTimer.text =
+                "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"
+        }
+
         binding.editPomodoroTimer.setOnClickListener() {
             showTimePicker()
         }
@@ -38,7 +49,6 @@ class EditTaskActivity : AppCompatActivity() {
             viewModel.validTask(it.toString())
             Log.d("log test editTask", it.toString())
         }
-
 
         binding.fabSave.setOnClickListener {
             viewModel.onSaveEvent(context = this,
@@ -86,15 +96,21 @@ class EditTaskActivity : AppCompatActivity() {
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
             viewModel.checkTimeIsValid(picker.hour, picker.minute)
-            binding.editPomodoroTimer.setText(" ${picker.hour} : ${picker.minute}")
+            binding.editPomodoroTimer.text = viewModel.total.convertMinutesToHour()
         }
     }
 
     companion object {
-        fun launch(context: Context) {
+        fun launchNewTaskScreen(context: Context) {
             val intent = Intent(context, EditTaskActivity::class.java)
             context.startActivity(intent)
         }
+
+        fun launchEditTaskScreen(context: Context, task: Task?) {
+            val intent = Intent(context, EditTaskActivity::class.java)
+            intent.putExtra(TASK_NAME_KEY, task)
+            context.startActivity(intent)
+        }
+        private const val TASK_NAME_KEY = "task"
     }
 }
-
