@@ -1,7 +1,9 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
@@ -42,6 +44,12 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            binding.root.setOnLongClickListener { v ->
+                if (v != null) {
+                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
+                }
+                true
+            }
         }
     }
 }
