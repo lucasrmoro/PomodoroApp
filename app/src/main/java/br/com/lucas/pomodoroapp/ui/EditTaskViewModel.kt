@@ -18,11 +18,23 @@ class EditTaskViewModel : ViewModel() {
     val isTaskNameValid = MutableLiveData<Boolean>()
     private val HOUR_ON_MINUTES = 60
 
+    var isEditMode = false
+        private set
+
     var task: Task? = null
         private set
 
     fun setup(task: Task) {
         this.task = task
+        this.isEditMode = true
+    }
+
+    fun delete(context: Context, closeScreen: () -> Unit){
+        val task = task ?: return
+            viewModelScope.launch {
+                DataBaseConnect.getTaskDao(context).deleteTask(task)
+                closeScreen()
+            }
     }
 
     fun validTask(content: String) {

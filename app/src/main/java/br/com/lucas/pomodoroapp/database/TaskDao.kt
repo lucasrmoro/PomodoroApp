@@ -1,9 +1,6 @@
 package br.com.lucas.pomodoroapp.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface TaskDao {
@@ -13,4 +10,6 @@ interface TaskDao {
     suspend fun getAll() : List<Task>
     @Update
     suspend fun updateTask(task: Task)
+    @Delete
+    suspend fun deleteTask(task: Task)
 }
