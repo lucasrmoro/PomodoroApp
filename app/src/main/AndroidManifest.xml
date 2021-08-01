@@ -23,7 +23,7 @@
             android:name=".ui.EditTaskActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.PomodoroApp.NoActionBar"
+            android:parentActivityName=".ui.ListTaskActivity"
             android:windowSoftInputMode="stateAlwaysVisible">
         </activity>
     </application>

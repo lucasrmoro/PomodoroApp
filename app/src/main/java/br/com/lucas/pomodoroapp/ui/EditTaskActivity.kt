@@ -6,10 +6,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
@@ -84,6 +87,17 @@ class EditTaskActivity : AppCompatActivity() {
         binding.editTaskName.requestFocus()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.delete_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menu_delete_action){
+            Toast.makeText(this, "Test menu delete icon", Toast.LENGTH_LONG).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     @SuppressLint("SetTextI18n")
     private fun showTimePicker() {
