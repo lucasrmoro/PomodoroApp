@@ -29,6 +29,14 @@ class EditTaskViewModel : ViewModel() {
         this.isEditMode = true
     }
 
+    fun delete(context: Context, closeScreen: () -> Unit){
+        val task = task ?: return
+            viewModelScope.launch {
+                DataBaseConnect.getTaskDao(context).deleteTask(task)
+                closeScreen()
+            }
+    }
+
     fun validTask(content: String) {
         isTaskNameValid.value = content.length >= 3
     }

@@ -96,7 +96,14 @@ class EditTaskActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.menu_delete_action){
-            Toast.makeText(this, "Test menu delete icon", Toast.LENGTH_LONG).show()
+            viewModel.delete(this) {
+                Toast.makeText(
+                    this,
+                    "Successfully deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
