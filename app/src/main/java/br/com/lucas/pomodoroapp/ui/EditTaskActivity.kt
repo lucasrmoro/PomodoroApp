@@ -88,7 +88,9 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.delete_menu, menu)
+        if(viewModel.isEditMode) {
+            menuInflater.inflate(R.menu.delete_menu, menu)
+        }
         return true
     }
 

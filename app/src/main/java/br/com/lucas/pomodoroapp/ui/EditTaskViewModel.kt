@@ -18,11 +18,15 @@ class EditTaskViewModel : ViewModel() {
     val isTaskNameValid = MutableLiveData<Boolean>()
     private val HOUR_ON_MINUTES = 60
 
+    var isEditMode = false
+        private set
+
     var task: Task? = null
         private set
 
     fun setup(task: Task) {
         this.task = task
+        this.isEditMode = true
     }
 
     fun validTask(content: String) {
