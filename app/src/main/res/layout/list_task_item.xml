@@ -7,7 +7,9 @@
     app:cardBackgroundColor="#8C8684"
     app:cardCornerRadius="20dp"
     app:cardElevation="50dp"
-    app:contentPadding="20dp">
+    app:contentPadding="20dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/itemTaskName"

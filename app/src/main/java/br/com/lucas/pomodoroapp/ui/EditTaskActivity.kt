@@ -2,6 +2,7 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
@@ -19,7 +21,7 @@ import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
 
-class EditTaskActivity : AppCompatActivity() {
+class EditTaskActivity() : AppCompatActivity() {
 
     lateinit var binding: ActivityEditTaskBinding
 
@@ -88,24 +90,43 @@ class EditTaskActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if(viewModel.isEditMode) {
+        if (viewModel.isEditMode) {
             menuInflater.inflate(R.menu.delete_menu, menu)
         }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_delete_action){
-            viewModel.delete(this) {
-                Toast.makeText(
-                    this,
-                    "Successfully deleted",
-                    Toast.LENGTH_SHORT
-                ).show()
-                finish()
-            }
+        if (item.itemId == R.id.menu_delete_action) {
+            setupConfirmationDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun setupConfirmationDialog() {
+        var builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.confirm_delete))
+        builder.setMessage(getString(R.string.delete_confirmation_message))
+        builder.setPositiveButton(
+            getString(R.string.delete),
+            DialogInterface.OnClickListener { dialog, _ ->
+                viewModel.delete(this) {
+                    Toast.makeText(
+                        this,
+                        "Successfully deleted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+                dialog.cancel()
+            })
+        builder.setNegativeButton(
+            getString(R.string.cancel),
+            DialogInterface.OnClickListener { dialog, _ ->
+                dialog.cancel()
+            })
+        var alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 
     @SuppressLint("SetTextI18n")
@@ -134,6 +155,7 @@ class EditTaskActivity : AppCompatActivity() {
             intent.putExtra(TASK_NAME_KEY, task)
             context.startActivity(intent)
         }
+
         private const val TASK_NAME_KEY = "task"
     }
 }

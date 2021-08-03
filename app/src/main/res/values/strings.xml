@@ -8,4 +8,8 @@
     <string name="edit_ringtone">Choose Ringtone:</string>
     <string name="save_button">Save</string>
     <string name="save_and_run_button">Save and run</string>
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete this item?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>
