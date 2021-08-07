@@ -3,8 +3,11 @@ package br.com.lucas.pomodoroapp.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
@@ -46,8 +49,19 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
                     Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
+                    toggleSelectionMode()
                 }
                 true
+            }
+        }
+        private fun toggleSelectionMode(){
+            val cardColorDefault = ContextCompat.getColor(binding.root.context, R.color.card_color_default)
+            val cardColorSelected = ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
+            binding.itemCheckBox.isVisible = !binding.itemCheckBox.isVisible
+            if(binding.itemCheckBox.isVisible){
+                binding.root.setCardBackgroundColor(cardColorSelected)
+            } else {
+                binding.root.setCardBackgroundColor(cardColorDefault)
             }
         }
     }
