@@ -12,7 +12,9 @@ import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
-class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
+class ListTaskAdapter(
+    private val selectionTaskCallback: ((Task, Boolean) -> Unit)
+) : Adapter<ListTaskAdapter.TaskViewHolder>() {
 
     private val tasks = mutableListOf<Task>()
 
@@ -41,7 +43,7 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
         return tasks.size
     }
 
-    class TaskViewHolder(private val binding: ListTaskItemBinding) :
+    inner class TaskViewHolder(private val binding: ListTaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
@@ -50,15 +52,19 @@ class ListTaskAdapter : Adapter<ListTaskAdapter.TaskViewHolder>() {
                 if (v != null) {
                     Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
                     toggleSelectionMode()
+                    selectionTaskCallback(task, binding.itemCheckBox.isVisible)
                 }
                 true
             }
         }
-        private fun toggleSelectionMode(){
-            val cardColorDefault = ContextCompat.getColor(binding.root.context, R.color.card_color_default)
-            val cardColorSelected = ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
+
+        private fun toggleSelectionMode() {
+            val cardColorDefault =
+                ContextCompat.getColor(binding.root.context, R.color.card_color_default)
+            val cardColorSelected =
+                ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
             binding.itemCheckBox.isVisible = !binding.itemCheckBox.isVisible
-            if(binding.itemCheckBox.isVisible){
+            if (binding.itemCheckBox.isVisible) {
                 binding.root.setCardBackgroundColor(cardColorSelected)
             } else {
                 binding.root.setCardBackgroundColor(cardColorDefault)

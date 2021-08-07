@@ -2,6 +2,7 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
@@ -37,7 +38,9 @@ class ListTaskActivity : AppCompatActivity() {
 
     private fun configureList(context: Context) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = ListTaskAdapter()
+        binding.recyclerView.adapter = ListTaskAdapter() { task, isSelected ->
+            Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
+        }
         binding.recyclerView.addOnItemClickListener(object : OnItemClickListener {
             override fun onItemClicked(position: Int, view: View) {
                 val task = viewModel.findTaskByPosition(position)

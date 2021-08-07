@@ -21,5 +21,4 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     }
 
     fun findTaskByPosition(position: Int) = taskList.value?.get(position)
-
 }
