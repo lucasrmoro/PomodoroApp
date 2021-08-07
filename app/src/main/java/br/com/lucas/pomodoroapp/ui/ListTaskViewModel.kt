@@ -11,6 +11,23 @@ import kotlinx.coroutines.launch
 class ListTaskViewModel(private val context: Application) : AndroidViewModel(context) {
 
     val taskList = MutableLiveData<List<Task>>()
+    val isSelectedModeEnabled = MutableLiveData<Boolean>(false)
+    val selectedTasks = ArrayList<Task>()
+
+    fun syncSelection(task: Task, isSelected: Boolean) {
+        if (isSelected) {
+            val exists = selectedTasks.any { it.taskName == task.taskName }
+            if (!exists) {
+                selectedTasks.add(task)
+            }
+        } else {
+            selectedTasks.remove(task)
+        }
+
+        if (selectedTasks.isNotEmpty() != isSelectedModeEnabled.value) {
+            isSelectedModeEnabled.value = selectedTasks.isNotEmpty()
+        }
+    }
 
     fun refresh() {
         viewModelScope.launch {

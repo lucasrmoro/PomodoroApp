@@ -50,7 +50,7 @@ class ListTaskAdapter(
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
-                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
                     toggleSelectionMode()
                     selectionTaskCallback(task, binding.itemCheckBox.isVisible)
                 }
