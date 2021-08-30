@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/layout/activity_edit_task.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/activity_list_task.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/dialog_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/list_task_item.xml" value="0.5" />
         <entry key="app/src/main/res/menu/delete_menu.xml" value="0.25" />
       </map>
     </option>

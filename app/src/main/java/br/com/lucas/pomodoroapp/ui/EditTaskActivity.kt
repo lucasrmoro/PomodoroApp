@@ -16,6 +16,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
+import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
@@ -63,7 +64,7 @@ class EditTaskActivity() : AppCompatActivity() {
 
         viewModel.isTaskNameValid.observe(this) {
             if (it == true) {
-                binding.taskName.setTextColor(Color.BLACK)
+                binding.taskName.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
             } else {
                 binding.taskName.setTextColor(Color.RED)
             }
@@ -79,7 +80,7 @@ class EditTaskActivity() : AppCompatActivity() {
                     .show()
                 binding.pomodoroTimer.setTextColor(Color.RED)
             } else {
-                binding.pomodoroTimer.setTextColor(Color.BLACK)
+                binding.pomodoroTimer.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
             }
         }
     }

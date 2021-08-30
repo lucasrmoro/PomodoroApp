@@ -12,7 +12,7 @@
         <activity
             android:name=".ui.ListTaskActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PomodoroApp.NoActionBar">
+            android:theme="@style/Theme.PomodoroApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
