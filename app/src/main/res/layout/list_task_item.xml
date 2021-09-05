@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
@@ -15,13 +16,14 @@
 
         <TextView
             android:id="@+id/itemTaskName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="42dp"
             android:text="@string/task_name"
             android:padding="5dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/checkItem"/>
 
         <ImageView
             android:id="@+id/iconTimer"
@@ -33,13 +35,26 @@
 
         <TextView
             android:id="@+id/itemTaskTime"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/pomodoro_timer"
             android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@id/iconTimer"
-            app:layout_constraintTop_toTopOf="@id/iconTimer"/>
+            app:layout_constraintTop_toTopOf="@id/iconTimer"
+            app:layout_constraintEnd_toStartOf="@id/checkItem"/>
+
+        <ImageView
+            android:id="@+id/checkItem"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:src="@drawable/ic_check"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

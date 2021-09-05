@@ -27,6 +27,7 @@ class EditTaskViewModel : ViewModel() {
     fun setup(task: Task) {
         this.task = task
         this.isEditMode = true
+        total = task.taskMinutes
     }
 
     fun delete(context: Context, closeScreen: () -> Unit) {

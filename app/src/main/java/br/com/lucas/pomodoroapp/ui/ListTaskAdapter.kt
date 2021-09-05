@@ -52,7 +52,7 @@ class ListTaskAdapter(
                 if (v != null) {
 //                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
                     toggleSelectionMode()
-                    selectionTaskCallback(task, binding.itemCheckBox.isVisible)
+                    selectionTaskCallback(task, binding.checkItem.isVisible)
                 }
                 true
             }
@@ -63,8 +63,8 @@ class ListTaskAdapter(
                 ContextCompat.getColor(binding.root.context, R.color.card_color_default)
             val cardColorSelected =
                 ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
-            binding.itemCheckBox.isVisible = !binding.itemCheckBox.isVisible
-            if (binding.itemCheckBox.isVisible) {
+            binding.checkItem.isVisible = !binding.checkItem.isVisible
+            if (binding.checkItem.isVisible) {
                 binding.root.setCardBackgroundColor(cardColorSelected)
             } else {
                 binding.root.setCardBackgroundColor(cardColorDefault)
