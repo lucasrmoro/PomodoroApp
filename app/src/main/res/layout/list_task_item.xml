@@ -4,26 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
-    app:cardBackgroundColor="#8C8684"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="50dp"
+    app:cardElevation="35dp"
     app:contentPadding="20dp"
     android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true">
 
-    <TextView
-        android:id="@+id/itemTaskName"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="start"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/itemTaskTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginTop="56dp"
-        android:text="20 minutos" />
+        <TextView
+            android:id="@+id/itemTaskName"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:text="@string/task_name"
+            android:padding="5dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iconTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_timer"
+            app:layout_constraintTop_toBottomOf="@id/itemTaskName"
+            app:layout_constraintStart_toStartOf="@id/itemTaskName"/>
+
+        <TextView
+            android:id="@+id/itemTaskTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pomodoro_timer"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@id/iconTimer"
+            app:layout_constraintTop_toTopOf="@id/iconTimer"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
