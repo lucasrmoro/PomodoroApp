@@ -59,16 +59,13 @@ class ListTaskActivity : AppCompatActivity() {
 
     private fun configureList(context: Context) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = ListTaskAdapter() { task, isSelected ->
-            Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
-            viewModel.syncSelection(task, isSelected)
-        }
-        binding.recyclerView.addOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClicked(position: Int, view: View) {
-                val task = viewModel.findTaskByPosition(position)
-                EditTaskActivity.launchEditTaskScreen(context, task = task)
-            }
-        })
+        binding.recyclerView.adapter = ListTaskAdapter(
+            selectionTaskCallback = { task, isSelected ->
+                Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
+                viewModel.syncSelection(task, isSelected) },
+            isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
+            launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

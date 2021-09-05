@@ -13,7 +13,9 @@ import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
 class ListTaskAdapter(
-    private val selectionTaskCallback: ((Task, Boolean) -> Unit)
+    private val selectionTaskCallback: ((Task, Boolean) -> Unit),
+    private val isSelectionModeEnabledCallback: ((Task) -> Boolean),
+    private val launchEditScreenCallback: ((Task) -> Unit)
 ) : Adapter<ListTaskAdapter.TaskViewHolder>() {
 
     private val tasks = mutableListOf<Task>()
@@ -50,11 +52,20 @@ class ListTaskAdapter(
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
-//                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_LONG).show()
+                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_SHORT).show()
                     toggleSelectionMode()
                     selectionTaskCallback(task, binding.checkItem.isVisible)
                 }
                 true
+            }
+            binding.root.setOnClickListener { v ->
+                if(isSelectionModeEnabledCallback(task)) {
+                    toggleSelectionMode()
+                    selectionTaskCallback(task, binding.checkItem.isVisible)
+                } else {
+                    launchEditScreenCallback(task)
+                }
+                Toast.makeText(v.context, "SIMPLE CLICK", Toast.LENGTH_SHORT).show()
             }
         }
 
