@@ -1,6 +1,7 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,6 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     private val tasksSelected = ArrayList<Task>()
 
     fun syncSelection(task: Task, isSelected: Boolean) {
-
         if (isSelected) {
             val exists = tasksSelected.any { it.taskName == task.taskName }
             if (!exists) {
@@ -32,6 +32,17 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun isSelectedModeEnabled():Boolean{
         return tasksSelected.isNotEmpty()
+    }
+
+    fun deleteTasks(context: Context){
+        viewModelScope.launch {
+            tasksSelected.forEach {
+                DataBaseConnect.getTaskDao(context).deleteTask(it)
+            }
+            selectionMode.postValue(false)
+            tasksSelected.clear()
+            refresh()
+        }
     }
 
     fun refresh() {

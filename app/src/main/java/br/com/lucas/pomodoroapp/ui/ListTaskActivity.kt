@@ -4,14 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.View
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.core.extensions.OnItemClickListener
-import br.com.lucas.pomodoroapp.core.extensions.addOnItemClickListener
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 
 
@@ -73,6 +71,13 @@ class ListTaskActivity : AppCompatActivity() {
         this.menu = menu
         this.menu?.findItem(R.id.menu_delete_action)?.isVisible = false
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if(item.itemId == R.id.menu_delete_action){
+            viewModel.deleteTasks(this)
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
