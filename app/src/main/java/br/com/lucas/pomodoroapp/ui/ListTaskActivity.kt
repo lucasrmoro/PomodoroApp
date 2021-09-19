@@ -19,6 +19,8 @@ class ListTaskActivity : AppCompatActivity() {
 
     lateinit var viewModel: ListTaskViewModel
 
+    lateinit var adapter: ListTaskAdapter
+
     private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +43,10 @@ class ListTaskActivity : AppCompatActivity() {
                 //Show the trash
                 this.menu?.findItem(R.id.menu_delete_action)?.isVisible = true
                 Toast.makeText(this, "Selection mode enabled", Toast.LENGTH_SHORT).show()
-                //Change the click event to the same like the long press
             } else {
                 //Hide the trash
                 this.menu?.findItem(R.id.menu_delete_action)?.isVisible = false
+                adapter.reset()
                 Toast.makeText(this, "Selection mode disabled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -56,14 +58,15 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun configureList(context: Context) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = ListTaskAdapter(
+        adapter = ListTaskAdapter(
             selectionTaskCallback = { task, isSelected ->
                 Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
                 viewModel.syncSelection(task, isSelected) },
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
             launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
         )
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

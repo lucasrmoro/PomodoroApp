@@ -26,6 +26,13 @@ class ListTaskAdapter(
         notifyDataSetChanged()
     }
 
+    fun reset(){
+        this.tasks.forEach{
+            it.resetTaskSelection()
+        }
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         return TaskViewHolder(
             ListTaskItemBinding.inflate(
@@ -50,18 +57,19 @@ class ListTaskAdapter(
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            binding.checkItem.isVisible = task.isTaskSelected()
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
                     Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_SHORT).show()
-                    toggleSelectionMode()
-                    selectionTaskCallback(task, binding.checkItem.isVisible)
+                    toggleSelectionMode(task)
+                    selectionTaskCallback(task, task.isTaskSelected())
                 }
                 true
             }
             binding.root.setOnClickListener { v ->
                 if(isSelectionModeEnabledCallback(task)) {
-                    toggleSelectionMode()
-                    selectionTaskCallback(task, binding.checkItem.isVisible)
+                    toggleSelectionMode(task)
+                    selectionTaskCallback(task, task.isTaskSelected())
                 } else {
                     launchEditScreenCallback(task)
                 }
@@ -69,13 +77,14 @@ class ListTaskAdapter(
             }
         }
 
-        private fun toggleSelectionMode() {
+        private fun toggleSelectionMode(task: Task) {
             val cardColorDefault =
                 ContextCompat.getColor(binding.root.context, R.color.card_color_default)
             val cardColorSelected =
                 ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
-            binding.checkItem.isVisible = !binding.checkItem.isVisible
-            if (binding.checkItem.isVisible) {
+            task.toggleTask()
+            binding.checkItem.isVisible = task.isTaskSelected()
+            if (task.isTaskSelected()) {
                 binding.root.setCardBackgroundColor(cardColorSelected)
             } else {
                 binding.root.setCardBackgroundColor(cardColorDefault)
