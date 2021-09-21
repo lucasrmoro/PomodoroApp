@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ListTaskActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".ui.ListTaskActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -16,9 +16,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="?attr/colorOnSecondary"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.PomodoroApp" />
+            app:popupTheme="@style/Theme.PomodoroApp"
+            app:titleTextColor="?attr/colorOnSecondary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,8 +29,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:fabSize="normal"/>
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

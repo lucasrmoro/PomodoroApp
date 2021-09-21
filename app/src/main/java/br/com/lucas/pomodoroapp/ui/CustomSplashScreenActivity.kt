@@ -2,7 +2,6 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.lucas.pomodoroapp.databinding.ActivitySplashScreenBinding
 
@@ -14,10 +13,12 @@ class CustomSplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val intent = Intent(this@CustomSplashScreenActivity,
-            ListTaskActivity::class.java)
+        val intent = Intent(
+            this@CustomSplashScreenActivity,
+            ListTaskActivity::class.java
+        )
 
-        if(android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.R){
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.R) {
             startActivity(intent)
         } else {
             binding.pomodoroIcon.alpha = 0f

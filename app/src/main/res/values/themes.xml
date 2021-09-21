@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Theme.PomodoroApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorPrimaryDark">@color/primary_dark_color</item>

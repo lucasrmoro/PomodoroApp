@@ -1,7 +1,5 @@
 package br.com.lucas.pomodoroapp.ui
 
-import android.os.Handler
-import android.os.Looper.getMainLooper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

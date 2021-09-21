@@ -58,15 +58,15 @@
             android:id="@+id/edit_pomodoro_timer"
             android:layout_width="0dp"
             android:layout_height="46dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
             android:ems="10"
+            android:focusable="true"
             android:hint="@string/edit_timer"
             app:layout_constraintEnd_toEndOf="@+id/pomodoro_timer"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/pomodoro_timer"
-            app:layout_constraintTop_toBottomOf="@+id/pomodoro_timer"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/pomodoro_timer" />
 
 
         <TextView
@@ -78,10 +78,10 @@
             android:layout_marginEnd="16dp"
             android:text="@string/ringtone"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_pomodoro_timer" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_pomodoro_timer"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/edit_ringtone"
@@ -90,10 +90,10 @@
             android:inputType="text"
             android:text="@string/edit_ringtone"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/ringtone"
             app:layout_constraintStart_toStartOf="@+id/ringtone"
-            app:layout_constraintTop_toBottomOf="@+id/ringtone" />
+            app:layout_constraintTop_toBottomOf="@+id/ringtone"
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/fab_save"
@@ -103,8 +103,8 @@
             android:layout_marginTop="55dp"
             android:layout_marginEnd="24dp"
             android:text="@string/save_button"
-            android:textColor="?attr/colorOnSecondary"
             android:textAllCaps="false"
+            android:textColor="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="0.0"

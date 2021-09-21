@@ -66,9 +66,11 @@ class EditTaskActivity() : AppCompatActivity() {
         }
 
         binding.fabSaveAndRun.setOnClickListener {
-            Toast.makeText(this,
+            Toast.makeText(
+                this,
                 "This feature still isn't implemented!",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         viewModel.isTaskNameValid.observe(this) {
