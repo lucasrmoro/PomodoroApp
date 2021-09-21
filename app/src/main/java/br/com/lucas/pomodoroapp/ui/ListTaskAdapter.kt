@@ -60,7 +60,6 @@ class ListTaskAdapter(
             binding.checkItem.isVisible = task.isTaskSelected()
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
-                    Toast.makeText(v.context, "LONG PRESS", Toast.LENGTH_SHORT).show()
                     toggleSelectionMode(task)
                     selectionTaskCallback(task, task.isTaskSelected())
                 }
@@ -73,7 +72,6 @@ class ListTaskAdapter(
                 } else {
                     launchEditScreenCallback(task)
                 }
-                Toast.makeText(v.context, "SIMPLE CLICK", Toast.LENGTH_SHORT).show()
             }
         }
 

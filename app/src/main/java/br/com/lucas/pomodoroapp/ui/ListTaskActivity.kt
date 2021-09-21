@@ -42,12 +42,10 @@ class ListTaskActivity : AppCompatActivity() {
             if (selectionMode) {
                 //Show the trash
                 this.menu?.findItem(R.id.menu_delete_action)?.isVisible = true
-                Toast.makeText(this, "Selection mode enabled", Toast.LENGTH_SHORT).show()
             } else {
                 //Hide the trash
                 this.menu?.findItem(R.id.menu_delete_action)?.isVisible = false
                 adapter.reset()
-                Toast.makeText(this, "Selection mode disabled", Toast.LENGTH_SHORT).show()
             }
         }
 
