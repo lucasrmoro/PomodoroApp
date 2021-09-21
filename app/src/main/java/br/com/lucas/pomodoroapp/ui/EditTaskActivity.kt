@@ -62,6 +62,12 @@ class EditTaskActivity() : AppCompatActivity() {
                 closeScreen = { finish() })
         }
 
+        binding.fabSaveAndRun.setOnClickListener {
+            Toast.makeText(this,
+                "This feature still isn't implemented!",
+                Toast.LENGTH_SHORT).show()
+        }
+
         viewModel.isTaskNameValid.observe(this) {
             if (it == true) {
                 binding.taskName.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
