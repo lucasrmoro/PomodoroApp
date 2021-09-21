@@ -39,27 +39,28 @@ class ListTaskActivity : AppCompatActivity() {
         viewModel.selectionMode.observe(
             this
         ) { selectionMode ->
-            if (selectionMode) {
-                //Show the trash
-                this.menu?.findItem(R.id.menu_delete_action)?.isVisible = true
-            } else {
-                //Hide the trash
-                this.menu?.findItem(R.id.menu_delete_action)?.isVisible = false
-                adapter.reset()
-            }
+            changeTrashVisibilityBasedOnSelectionMode()
+            if (!selectionMode) adapter.reset()
         }
 
         binding.fab.setOnClickListener { view ->
             EditTaskActivity.launchNewTaskScreen(this)
         }
+
         configureList(this)
+    }
+
+    private fun changeTrashVisibilityBasedOnSelectionMode() {
+        this.menu?.findItem(R.id.menu_delete_action)?.isVisible =
+            viewModel.selectionMode.value == true
     }
 
     private fun configureList(context: Context) {
         adapter = ListTaskAdapter(
             selectionTaskCallback = { task, isSelected ->
                 Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
-                viewModel.syncSelection(task, isSelected) },
+                viewModel.syncSelection(task, isSelected)
+            },
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
             launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
         )
@@ -75,7 +76,7 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if(item.itemId == R.id.menu_delete_action){
+        return if (item.itemId == R.id.menu_delete_action) {
             viewModel.deleteTasks(this)
             true
         } else super.onOptionsItemSelected(item)

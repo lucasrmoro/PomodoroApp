@@ -1,18 +1,16 @@
 package br.com.lucas.pomodoroapp.ui
 
-import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper.getMainLooper
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
+
 
 class ListTaskAdapter(
     private val selectionTaskCallback: ((Task, Boolean) -> Unit),
@@ -28,8 +26,8 @@ class ListTaskAdapter(
         notifyDataSetChanged()
     }
 
-    fun reset(){
-        this.tasks.forEach{
+    fun reset() {
+        this.tasks.forEach {
             it.resetTaskSelection()
         }
         notifyDataSetChanged()
@@ -61,12 +59,9 @@ class ListTaskAdapter(
             binding.root.context.getColorResCompat(android.R.attr.colorBackground)
         private val cardColorSelected =
             binding.root.context.getColorResCompat(android.R.attr.colorControlHighlight)
-        
+
         fun bind(task: Task) {
-            binding.itemTaskName.text = task.taskName
-            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
-            binding.root.setCardBackgroundColor(cardColorDefault)
-            binding.checkItem.isVisible = task.isTaskSelected()
+            addTaskItemProperties(task)
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
                     toggleSelectionMode(task)
@@ -75,7 +70,7 @@ class ListTaskAdapter(
                 true
             }
             binding.root.setOnClickListener { v ->
-                if(isSelectionModeEnabledCallback(task)) {
+                if (isSelectionModeEnabledCallback(task)) {
                     toggleSelectionMode(task)
                     selectionTaskCallback(task, task.isTaskSelected())
                 } else {
@@ -84,14 +79,35 @@ class ListTaskAdapter(
             }
         }
 
+        private fun addTaskItemProperties(task: Task) {
+            binding.itemTaskName.text = task.taskName
+            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            binding.root.setCardBackgroundColor(cardColorDefault)
+            configureCheckItem()
+        }
+
+        private fun configureCheckItem() {
+            binding.checkItem.scaleX = 0f
+            binding.checkItem.scaleY = 0f
+        }
+
         private fun toggleSelectionMode(task: Task) {
             task.toggleTask()
-            binding.checkItem.isVisible = task.isTaskSelected()
             if (task.isTaskSelected()) {
+                checkIconAppearAnimation()
                 binding.root.setCardBackgroundColor(cardColorSelected)
             } else {
+                checkIconDisappearAnimation()
                 binding.root.setCardBackgroundColor(cardColorDefault)
             }
+        }
+
+        private fun checkIconAppearAnimation() {
+            binding.checkItem.animate().scaleX(1f).scaleY(1f).duration = 250
+        }
+
+        private fun checkIconDisappearAnimation() {
+            binding.checkItem.animate().scaleX(0f).scaleY(0f).duration = 250
         }
     }
 }
