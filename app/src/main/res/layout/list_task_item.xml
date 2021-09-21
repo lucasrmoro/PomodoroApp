@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    app:cardElevation="35dp"
     app:contentPadding="20dp"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     android:clickable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_timer"
+            android:layout_marginStart="15dp"
             app:layout_constraintTop_toBottomOf="@id/itemTaskName"
             app:layout_constraintStart_toStartOf="@id/itemTaskName"/>
 

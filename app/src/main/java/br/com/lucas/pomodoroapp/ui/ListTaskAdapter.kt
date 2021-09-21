@@ -1,5 +1,6 @@
 package br.com.lucas.pomodoroapp.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
+import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
@@ -54,11 +56,11 @@ class ListTaskAdapter(
 
     inner class TaskViewHolder(private val binding: ListTaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        
+
         private val cardColorDefault =
-            ContextCompat.getColor(binding.root.context, R.color.card_color_default)
+            binding.root.context.getColorResCompat(android.R.attr.colorBackground)
         private val cardColorSelected =
-            ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
+            binding.root.context.getColorResCompat(android.R.attr.colorControlHighlight)
         
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
