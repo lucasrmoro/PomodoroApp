@@ -33,11 +33,14 @@ class EditTaskActivity() : AppCompatActivity() {
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
         viewModel = EditTaskViewModel()
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
 
         if (task != null) {
             viewModel.setup(task)
+            binding.toolbar.title = getString(R.string.edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =
                 "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"

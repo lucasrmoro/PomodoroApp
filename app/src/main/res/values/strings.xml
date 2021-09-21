@@ -12,4 +12,6 @@
     <string name="delete_confirmation_message">Are you sure you want to delete this item?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="create_task_toolbar_label">Create task</string>
+    <string name="edit_task_toolbar_label">Edit task</string>
 </resources>
