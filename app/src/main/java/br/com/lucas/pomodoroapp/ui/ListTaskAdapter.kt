@@ -54,9 +54,16 @@ class ListTaskAdapter(
 
     inner class TaskViewHolder(private val binding: ListTaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        
+        private val cardColorDefault =
+            ContextCompat.getColor(binding.root.context, R.color.card_color_default)
+        private val cardColorSelected =
+            ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
+        
         fun bind(task: Task) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            binding.root.setCardBackgroundColor(cardColorDefault)
             binding.checkItem.isVisible = task.isTaskSelected()
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
@@ -76,10 +83,6 @@ class ListTaskAdapter(
         }
 
         private fun toggleSelectionMode(task: Task) {
-            val cardColorDefault =
-                ContextCompat.getColor(binding.root.context, R.color.card_color_default)
-            val cardColorSelected =
-                ContextCompat.getColor(binding.root.context, R.color.card_color_selected)
             task.toggleTask()
             binding.checkItem.isVisible = task.isTaskSelected()
             if (task.isTaskSelected()) {
