@@ -47,14 +47,14 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     }
 
     fun setupConfirmationDialogMessage(context: Context): String {
-        return if (isSelectedTasksAreMoreThanOne()) {
+        return if (isSelectedTasksAmountAreMoreThanOne()) {
             "Are you sure you want to delete ${getQuantityOfSelectedTasks()} tasks?"
         } else {
             context.getString(R.string.delete_confirmation_message)
         }
     }
 
-    private fun isSelectedTasksAreMoreThanOne(): Boolean {
+    private fun isSelectedTasksAmountAreMoreThanOne(): Boolean {
         return getQuantityOfSelectedTasks() > 1
     }
 

@@ -61,7 +61,7 @@ class ListTaskActivity : AppCompatActivity() {
     private fun configureList(context: Context) {
         adapter = ListTaskAdapter(
             selectionTaskCallback = { task, isSelected ->
-                Log.d("taskselection", "task: ${task.taskName} --> isSelected: $isSelected")
+                Log.d("taskSelection", "task: ${task.taskName} --> isSelected: $isSelected")
                 viewModel.syncSelection(task, isSelected)
             },
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
@@ -98,7 +98,7 @@ class ListTaskActivity : AppCompatActivity() {
                 viewModel.deleteTasks(this) {
                     Toast.makeText(
                         this,
-                        "Successfully deleted",
+                        getString(R.string.successfully_deleted),
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
@@ -107,7 +107,7 @@ class ListTaskActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this,
-                    "Something went wrong, try again later.",
+                    getString(R.string.somenthing_went_wrong),
                     Toast.LENGTH_LONG
                 )
                     .show()

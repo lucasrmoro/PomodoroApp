@@ -68,7 +68,7 @@ class EditTaskActivity() : AppCompatActivity() {
         binding.fabSaveAndRun.setOnClickListener {
             Toast.makeText(
                 this,
-                "This feature still isn't implemented!",
+                getString(R.string.feature_isnt_implemented),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -85,7 +85,7 @@ class EditTaskActivity() : AppCompatActivity() {
             if (it == false) {
                 Toast.makeText(
                     this,
-                    "Select a valid time between 25 minutes and 1 hour",
+                    getString(R.string.select_valid_time),
                     Toast.LENGTH_LONG
                 )
                     .show()
@@ -126,7 +126,7 @@ class EditTaskActivity() : AppCompatActivity() {
                 viewModel.delete(this) {
                     Toast.makeText(
                         this,
-                        "Successfully deleted",
+                        getString(R.string.successfully_deleted),
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
@@ -135,7 +135,7 @@ class EditTaskActivity() : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this,
-                    "Something went wrong, try again later.",
+                    getString(R.string.somenthing_went_wrong),
                     Toast.LENGTH_LONG
                 )
                     .show()
@@ -157,7 +157,7 @@ class EditTaskActivity() : AppCompatActivity() {
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(0)
             .setMinute(25)
-            .setTitleText("SELECT POMODORO TIME")
+            .setTitleText(getString(R.string.select_pomodoro_time))
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
