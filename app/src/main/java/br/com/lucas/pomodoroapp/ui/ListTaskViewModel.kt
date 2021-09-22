@@ -55,7 +55,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         return tasksSelected.isNotEmpty()
     }
 
-    fun deleteTasks(context: Context, toast: () -> Unit) {
+    fun deleteTasks(context: Context) {
         viewModelScope.launch {
             tasksSelected.forEach {
                 DataBaseConnect.getTaskDao(context).deleteTask(it)
@@ -68,7 +68,8 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun setupConfirmationDialogMessage(context: Context): String {
         return if (isSelectedTasksAmountAreMoreThanOne()) {
-            "Are you sure you want to delete ${getQuantityOfSelectedTasks()} tasks?"
+            context.getString(R.string.delete_confirmation_multiple_tasks,
+                getQuantityOfSelectedTasks().toString())
         } else {
             context.getString(R.string.delete_confirmation_message)
         }

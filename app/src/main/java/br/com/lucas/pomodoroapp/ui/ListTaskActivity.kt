@@ -70,7 +70,7 @@ class ListTaskActivity : AppCompatActivity() {
         if (viewModel.isDebugMode()) {
             setupDebugButtons()
         }
-        
+
         configureList(this)
     }
 
@@ -91,7 +91,7 @@ class ListTaskActivity : AppCompatActivity() {
         binding.debugFab.visibility = View.VISIBLE
     }
 
-    private fun addTenTasksAutomatically(){
+    private fun addTenTasksAutomatically() {
         try {
             viewModel.addTenTasksOnDataBase()
             Toast.makeText(
@@ -181,14 +181,13 @@ class ListTaskActivity : AppCompatActivity() {
             getString(R.string.delete)
         ) { dialog, _ ->
             try {
-                viewModel.deleteTasks(this) {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.successfully_deleted),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-                }
+                viewModel.deleteTasks(this)
+                Toast.makeText(
+                    this,
+                    getString(R.string.successfully_deleted),
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
                 dialog.cancel()
             } catch (e: Exception) {
                 Toast.makeText(
