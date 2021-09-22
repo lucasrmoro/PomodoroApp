@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import br.com.lucas.pomodoroapp.BuildConfig
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
@@ -29,6 +30,25 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         if (isSelectedModeEnabled() != selectionMode.value) {
             selectionMode.value = isSelectedModeEnabled()
         }
+    }
+
+    fun addTenTasksOnDataBase() {
+        viewModelScope.launch {
+            for (i in 1..10) {
+                DataBaseConnect.getTaskDao(context).insertTask(
+                    Task(
+                        taskName = "Test Task $i",
+                        taskMinutes = 25,
+                        uid = 0
+                    )
+                )
+            }
+            refresh()
+        }
+    }
+
+    fun isDebugMode(): Boolean {
+        return BuildConfig.DEBUG
     }
 
     fun isSelectedModeEnabled(): Boolean {

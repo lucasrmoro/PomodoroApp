@@ -1,19 +1,21 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
-import java.lang.Exception
 
 
 class ListTaskActivity : AppCompatActivity() {
@@ -25,6 +27,21 @@ class ListTaskActivity : AppCompatActivity() {
     lateinit var adapter: ListTaskAdapter
 
     private var menu: Menu? = null
+
+    private var clicked = false
+
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.from_bottom_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.to_bottom_anim
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +67,71 @@ class ListTaskActivity : AppCompatActivity() {
             EditTaskActivity.launchNewTaskScreen(this)
         }
 
+        if (viewModel.isDebugMode()) {
+            setupDebugButtons()
+        }
+        
         configureList(this)
+    }
+
+    private fun setupDebugButtons() {
+        setDebugFabVisible()
+
+        binding.debugFab.setOnClickListener {
+            onDebugButtonClicked()
+        }
+
+        binding.debugAddTasksFab.setOnClickListener {
+            try {
+                viewModel.addTenTasksOnDataBase()
+                Toast.makeText(
+                    this,
+                    getString(R.string.successfully_ten_tasks_added),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this,
+                    getString(R.string.somenthing_went_wrong),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun setDebugFabVisible() {
+        binding.debugFab.visibility = View.VISIBLE
+    }
+
+    private fun onDebugButtonClicked() {
+        setVisibility()
+        setAnimation()
+        changeDebugIcon()
+        setClickable()
+        clicked = !clicked
+    }
+
+    private fun setVisibility() {
+        binding.debugAddTasksFab.isVisible = clicked
+    }
+
+    private fun changeDebugIcon() {
+        if (!clicked)
+            binding.debugFab.setImageResource(R.drawable.ic_close)
+        else
+            binding.debugFab.setImageResource(R.drawable.ic_skull)
+    }
+
+    private fun setAnimation() {
+        if (!clicked)
+            binding.debugAddTasksFab.startAnimation(fromBottom)
+        else
+            binding.debugAddTasksFab.startAnimation(toBottom)
+    }
+
+    private fun setClickable() {
+        binding.debugAddTasksFab.isClickable = !clicked
     }
 
     private fun changeTrashVisibilityBasedOnSelectionMode() {

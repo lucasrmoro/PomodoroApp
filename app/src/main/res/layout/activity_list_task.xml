@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,9 +8,11 @@
     tools:context=".ui.ListTaskActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.PomodoroApp">
+        android:theme="@style/Theme.PomodoroApp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,23 +22,53 @@
             app:popupTheme="@style/Theme.PomodoroApp"
             app:titleTextColor="?attr/colorOnSecondary" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            tools:listitem="@layout/list_task_item" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/debug_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/list_task_item" />
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_skull"
+        android:visibility="gone"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/fab"
+        app:layout_constraintEnd_toStartOf="@id/fab"
+        tools:visibility="visible" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/debug_add_tasks_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_ten_plus"
+        android:visibility="invisible"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/debug_fab"
+        app:layout_constraintEnd_toEndOf="@id/debug_fab"
+        app:layout_constraintStart_toStartOf="@id/debug_fab"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
