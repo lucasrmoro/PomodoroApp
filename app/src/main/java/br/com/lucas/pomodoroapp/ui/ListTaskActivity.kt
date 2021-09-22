@@ -78,25 +78,12 @@ class ListTaskActivity : AppCompatActivity() {
         setDebugFabVisible()
 
         binding.debugFab.setOnClickListener {
-            onDebugButtonClicked()
+            onButtonClicked()
         }
 
         binding.debugAddTasksFab.setOnClickListener {
-            try {
-                viewModel.addTenTasksOnDataBase()
-                Toast.makeText(
-                    this,
-                    getString(R.string.successfully_ten_tasks_added),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.somenthing_went_wrong),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            addTenTasksAutomatically()
+            onButtonClicked()
         }
     }
 
@@ -104,7 +91,25 @@ class ListTaskActivity : AppCompatActivity() {
         binding.debugFab.visibility = View.VISIBLE
     }
 
-    private fun onDebugButtonClicked() {
+    private fun addTenTasksAutomatically(){
+        try {
+            viewModel.addTenTasksOnDataBase()
+            Toast.makeText(
+                this,
+                getString(R.string.successfully_ten_tasks_added),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                getString(R.string.somenthing_went_wrong),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun onButtonClicked() {
         setVisibility()
         setAnimation()
         changeDebugIcon()

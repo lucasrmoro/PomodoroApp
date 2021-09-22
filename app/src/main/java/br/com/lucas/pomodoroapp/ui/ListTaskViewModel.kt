@@ -19,7 +19,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun syncSelection(task: Task, isSelected: Boolean) {
         if (isSelected) {
-            val exists = tasksSelected.any { it.taskName == task.taskName }
+            val exists = tasksSelected.any { it.uid == task.uid }
             if (!exists) {
                 tasksSelected.add(task)
             }
