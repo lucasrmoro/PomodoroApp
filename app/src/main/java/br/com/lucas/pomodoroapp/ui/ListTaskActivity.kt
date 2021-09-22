@@ -98,8 +98,7 @@ class ListTaskActivity : AppCompatActivity() {
                 this,
                 getString(R.string.successfully_ten_tasks_added),
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         } catch (e: Exception) {
             Toast.makeText(
                 this,
@@ -187,7 +186,6 @@ class ListTaskActivity : AppCompatActivity() {
                     getString(R.string.successfully_deleted),
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
                 dialog.cancel()
             } catch (e: Exception) {
                 Toast.makeText(
