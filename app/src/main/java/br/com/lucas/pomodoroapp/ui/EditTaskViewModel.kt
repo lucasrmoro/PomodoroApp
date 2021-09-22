@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
@@ -74,11 +75,19 @@ class EditTaskViewModel : ViewModel() {
                 DataBaseConnect.getTaskDao(context).updateTask(
                     task
                 )
-                Toast.makeText(context, "Successfully changed!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.successfully_changed),
+                    Toast.LENGTH_SHORT
+                ).show()
                 closeScreen()
             }
         } else {
-            Toast.makeText(context, "Fill all required fields!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.fill_all_required_fields),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -96,11 +105,19 @@ class EditTaskViewModel : ViewModel() {
                         uid = 0
                     )
                 )
-                Toast.makeText(context, "Successfully saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.successfully_saved),
+                    Toast.LENGTH_SHORT
+                ).show()
                 closeScreen()
             }
         } else {
-            Toast.makeText(context, "Fill all required fields!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.fill_all_required_fields),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

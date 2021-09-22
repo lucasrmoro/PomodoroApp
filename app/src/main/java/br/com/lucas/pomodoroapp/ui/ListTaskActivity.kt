@@ -1,15 +1,19 @@
 package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
+import java.lang.Exception
 
 
 class ListTaskActivity : AppCompatActivity() {
@@ -76,9 +80,47 @@ class ListTaskActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.menu_delete_action) {
-            viewModel.deleteTasks(this)
+            setupConfirmationDialog()
             true
         } else super.onOptionsItemSelected(item)
+    }
+
+    private fun setupConfirmationDialog() {
+        var builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.confirm_delete))
+        builder.setMessage(
+            viewModel.setupConfirmationDialogMessage(this)
+        )
+        builder.setPositiveButton(
+            getString(R.string.delete)
+        ) { dialog, _ ->
+            try {
+                viewModel.deleteTasks(this) {
+                    Toast.makeText(
+                        this,
+                        "Successfully deleted",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+                dialog.cancel()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this,
+                    "Something went wrong, try again later.",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+                Log.e("deleteError", "${e.message}")
+            }
+        }
+        builder.setNegativeButton(
+            getString(R.string.cancel)
+        ) { dialog, _ ->
+            dialog.cancel()
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
     }
 
     override fun onResume() {

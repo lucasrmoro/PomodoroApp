@@ -120,8 +120,9 @@ class EditTaskActivity() : AppCompatActivity() {
         builder.setTitle(getString(R.string.confirm_delete))
         builder.setMessage(getString(R.string.delete_confirmation_message))
         builder.setPositiveButton(
-            getString(R.string.delete),
-            DialogInterface.OnClickListener { dialog, _ ->
+            getString(R.string.delete)
+        ) { dialog, _ ->
+            try {
                 viewModel.delete(this) {
                     Toast.makeText(
                         this,
@@ -131,12 +132,21 @@ class EditTaskActivity() : AppCompatActivity() {
                     finish()
                 }
                 dialog.cancel()
-            })
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this,
+                    "Something went wrong, try again later.",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+                Log.e("deleteError", "${e.message}")
+            }
+        }
         builder.setNegativeButton(
-            getString(R.string.cancel),
-            DialogInterface.OnClickListener { dialog, _ ->
-                dialog.cancel()
-            })
+            getString(R.string.cancel)
+        ) { dialog, _ ->
+            dialog.cancel()
+        }
         var alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }

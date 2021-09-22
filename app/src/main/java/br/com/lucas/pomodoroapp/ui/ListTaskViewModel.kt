@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
@@ -30,11 +31,11 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         }
     }
 
-    fun isSelectedModeEnabled():Boolean{
+    fun isSelectedModeEnabled(): Boolean {
         return tasksSelected.isNotEmpty()
     }
 
-    fun deleteTasks(context: Context){
+    fun deleteTasks(context: Context, toast: () -> Unit) {
         viewModelScope.launch {
             tasksSelected.forEach {
                 DataBaseConnect.getTaskDao(context).deleteTask(it)
@@ -43,6 +44,22 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             tasksSelected.clear()
             refresh()
         }
+    }
+
+    fun setupConfirmationDialogMessage(context: Context): String {
+        return if (isSelectedTasksAreMoreThanOne()) {
+            "Are you sure you want to delete ${getQuantityOfSelectedTasks()} tasks?"
+        } else {
+            context.getString(R.string.delete_confirmation_message)
+        }
+    }
+
+    private fun isSelectedTasksAreMoreThanOne(): Boolean {
+        return getQuantityOfSelectedTasks() > 1
+    }
+
+    private fun getQuantityOfSelectedTasks(): Int {
+        return tasksSelected.size
     }
 
     fun refresh() {
