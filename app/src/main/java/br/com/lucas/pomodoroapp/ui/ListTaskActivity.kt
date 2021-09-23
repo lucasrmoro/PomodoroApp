@@ -48,7 +48,6 @@ class ListTaskActivity : AppCompatActivity() {
         binding = ActivityListTaskBinding.inflate(layoutInflater)
         viewModel = ListTaskViewModel(application)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
         viewModel.taskList.observe(
             this

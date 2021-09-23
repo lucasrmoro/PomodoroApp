@@ -1,11 +1,20 @@
 <resources>
 
-    <style name="Theme.PomodoroApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.PomodoroApp" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorOnPrimary">@color/primary_dark_color</item>
+        <item name="colorPrimaryDark">@color/primary_dark_color</item>
 
         <item name="colorSecondary">@color/primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/gray</item>
+
+        <item name="colorSurface">@color/primary_color</item>
+    </style>
+
+    <style name="Theme.PomodoroAppNoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_dark_color</item>
+
+        <item name="colorSecondary">@color/primary_color</item>
+        <item name="colorOnSecondary">@color/white</item>
     </style>
 </resources>
