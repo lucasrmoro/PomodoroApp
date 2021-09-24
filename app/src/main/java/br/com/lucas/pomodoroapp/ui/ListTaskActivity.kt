@@ -75,6 +75,19 @@ class ListTaskActivity : AppCompatActivity() {
         configureList(this)
     }
 
+    private fun configureList(context: Context) {
+        adapter = ListTaskAdapter(
+            selectionTaskCallback = { task, isSelected ->
+                Log.d("taskSelection", "task: ${task.taskName} --> isSelected: $isSelected")
+                viewModel.syncSelection(task, isSelected)
+            },
+            isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
+            launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
+        )
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
+    }
+
     private fun setupDebugButtons() {
         setDebugFabVisible()
 
@@ -92,6 +105,14 @@ class ListTaskActivity : AppCompatActivity() {
         binding.debugFab.visibility = View.VISIBLE
     }
 
+    private fun onButtonClicked() {
+        setVisibility()
+        setAnimation()
+        changeDebugIcon()
+        setClickable()
+        clicked = !clicked
+    }
+
     private fun addTenTasksAutomatically() {
         try {
             viewModel.addTenTasksOnDataBase()
@@ -101,23 +122,8 @@ class ListTaskActivity : AppCompatActivity() {
         }
     }
 
-    private fun onButtonClicked() {
-        setVisibility()
-        setAnimation()
-        changeDebugIcon()
-        setClickable()
-        clicked = !clicked
-    }
-
     private fun setVisibility() {
         binding.debugAddTasksFab.isVisible = clicked
-    }
-
-    private fun changeDebugIcon() {
-        if (!clicked)
-            binding.debugFab.setImageResource(R.drawable.ic_close)
-        else
-            binding.debugFab.setImageResource(R.drawable.ic_skull)
     }
 
     private fun setAnimation() {
@@ -127,6 +133,13 @@ class ListTaskActivity : AppCompatActivity() {
             binding.debugAddTasksFab.startAnimation(toBottom)
     }
 
+    private fun changeDebugIcon() {
+        if (!clicked)
+            binding.debugFab.setImageResource(R.drawable.ic_close)
+        else
+            binding.debugFab.setImageResource(R.drawable.ic_skull)
+    }
+
     private fun setClickable() {
         binding.debugAddTasksFab.isClickable = !clicked
     }
@@ -134,19 +147,6 @@ class ListTaskActivity : AppCompatActivity() {
     private fun changeTrashVisibilityBasedOnSelectionMode() {
         this.moreOptionsMenu?.findItem(R.id.menu_more_options_action)?.isVisible =
             viewModel.selectionMode.value == true
-    }
-
-    private fun configureList(context: Context) {
-        adapter = ListTaskAdapter(
-            selectionTaskCallback = { task, isSelected ->
-                Log.d("taskSelection", "task: ${task.taskName} --> isSelected: $isSelected")
-                viewModel.syncSelection(task, isSelected)
-            },
-            isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
-            launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
-        )
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
