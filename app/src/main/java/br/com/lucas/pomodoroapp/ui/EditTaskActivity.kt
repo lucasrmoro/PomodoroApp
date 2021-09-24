@@ -2,7 +2,6 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -15,8 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
 import br.com.lucas.pomodoroapp.R
+import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
+import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
@@ -66,11 +67,7 @@ class EditTaskActivity() : AppCompatActivity() {
         }
 
         binding.fabSaveAndRun.setOnClickListener {
-            Toast.makeText(
-                this,
-                getString(R.string.feature_isnt_implemented),
-                Toast.LENGTH_SHORT
-            ).show()
+            toast(feature_isnt_implemented)
         }
 
         viewModel.isTaskNameValid.observe(this) {
@@ -83,12 +80,7 @@ class EditTaskActivity() : AppCompatActivity() {
 
         viewModel.isPomodoroTimerValid.observe(this) {
             if (it == false) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.select_valid_time),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+                toast(select_valid_time, 3500)
                 binding.pomodoroTimer.setTextColor(Color.RED)
             } else {
                 binding.pomodoroTimer.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
@@ -115,7 +107,7 @@ class EditTaskActivity() : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setupConfirmationDialog() {
+    private fun setupConfirmationDialog() {
         var builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.confirm_delete))
         builder.setMessage(getString(R.string.delete_confirmation_message))
@@ -124,22 +116,13 @@ class EditTaskActivity() : AppCompatActivity() {
         ) { dialog, _ ->
             try {
                 viewModel.delete(this) {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.successfully_deleted),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toast(successfully_deleted)
                     finish()
+                    dialog.cancel()
                 }
-                dialog.cancel()
             } catch (e: Exception) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.somenthing_went_wrong),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-                Log.e("deleteError", "${e.message}")
+                toast(somenthing_went_wrong)
+                Log.e("exception", "${e.message}")
             }
         }
         builder.setNegativeButton(

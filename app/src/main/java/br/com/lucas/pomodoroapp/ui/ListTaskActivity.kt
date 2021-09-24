@@ -8,25 +8,27 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
+import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
+import br.com.lucas.pomodoroapp.R.string.*
+import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 
 
 class ListTaskActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityListTaskBinding
+    private lateinit var binding: ActivityListTaskBinding
 
     lateinit var viewModel: ListTaskViewModel
 
     lateinit var adapter: ListTaskAdapter
 
-    private var menu: Menu? = null
+    private var moreOptionsMenu: Menu? = null
 
     private var clicked = false
 
@@ -93,17 +95,9 @@ class ListTaskActivity : AppCompatActivity() {
     private fun addTenTasksAutomatically() {
         try {
             viewModel.addTenTasksOnDataBase()
-            Toast.makeText(
-                this,
-                getString(R.string.successfully_ten_tasks_added),
-                Toast.LENGTH_SHORT
-            ).show()
+            toast(successfully_ten_tasks_added)
         } catch (e: Exception) {
-            Toast.makeText(
-                this,
-                getString(R.string.somenthing_went_wrong),
-                Toast.LENGTH_SHORT
-            ).show()
+            toast(somenthing_went_wrong)
         }
     }
 
@@ -138,7 +132,7 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun changeTrashVisibilityBasedOnSelectionMode() {
-        this.menu?.findItem(R.id.menu_delete_action)?.isVisible =
+        this.moreOptionsMenu?.findItem(R.id.menu_more_options_action)?.isVisible =
             viewModel.selectionMode.value == true
     }
 
@@ -156,48 +150,57 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.delete_menu, menu)
-        this.menu = menu
-        this.menu?.findItem(R.id.menu_delete_action)?.isVisible = false
+        menuInflater.inflate(R.menu.more_options_menu, menu)
+        this.moreOptionsMenu = menu
+        this.moreOptionsMenu?.findItem(R.id.menu_more_options_action)?.isVisible = false
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.menu_delete_action) {
-            setupConfirmationDialog()
+        if (item.itemId == R.id.menu_more_options_action) {
+            setupPopupMenu()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupPopupMenu() {
+        val menuItemView = findViewById<View>(R.id.menu_more_options_action)
+        val popupMenu = PopupMenu(this, menuItemView)
+        popupMenu.inflate(R.menu.popup_options_menu)
+        popupMenu.show()
+        configurePopupMenuListeners(popupMenu)
+    }
+
+    private fun configurePopupMenuListeners(popupMenu: PopupMenu) {
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.popup_menu_select_all_action -> toast(getString(feature_isnt_implemented))
+                R.id.popup_menu_delete -> setupConfirmationDialog()
+            }
             true
-        } else super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupConfirmationDialog() {
-        var builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.confirm_delete))
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(confirm_delete))
         builder.setMessage(
             viewModel.setupConfirmationDialogMessage(this)
         )
         builder.setPositiveButton(
-            getString(R.string.delete)
+            getString(delete)
         ) { dialog, _ ->
             try {
                 viewModel.deleteTasks(this)
-                Toast.makeText(
-                    this,
-                    getString(R.string.successfully_deleted),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toast(successfully_deleted)
                 dialog.cancel()
             } catch (e: Exception) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.somenthing_went_wrong),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-                Log.e("deleteError", "${e.message}")
+                toast(somenthing_went_wrong)
+                Log.e("exception", "${e.message}")
             }
         }
         builder.setNegativeButton(
-            getString(R.string.cancel)
+            getString(cancel)
         ) { dialog, _ ->
             dialog.cancel()
         }

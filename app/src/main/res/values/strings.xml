@@ -24,4 +24,5 @@
     <string name="select_valid_time">Select a valid time between 25 minutes and 1 hour</string>
     <string name="feature_isnt_implemented">This feature still isn\'t implemented!</string>
     <string name="successfully_ten_tasks_added">Ten tasks have been successfully added</string>
+    <string name="select_all">Select all</string>
 </resources>
