@@ -1,18 +1,18 @@
 <resources>
 
     <style name="Theme.PomodoroApp" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
+        <item name="colorPrimary">@color/light_mode_primary_color</item>
+        <item name="colorPrimaryDark">@color/light_mode_primary_dark_color</item>
 
-        <item name="colorSecondary">@color/primary_color</item>
+        <item name="colorSecondary">@color/light_mode_primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
     </style>
 
     <style name="Theme.PomodoroAppNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary_color</item>
-        <item name="colorPrimaryDark">@color/primary_dark_color</item>
+        <item name="colorPrimary">@color/light_mode_primary_color</item>
+        <item name="colorPrimaryDark">@color/light_mode_primary_dark_color</item>
 
-        <item name="colorSecondary">@color/primary_color</item>
+        <item name="colorSecondary">@color/light_mode_primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
     </style>
 </resources>

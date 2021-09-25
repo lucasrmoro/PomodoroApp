@@ -7,6 +7,5 @@
         android:id="@+id/menu_more_options_action"
         android:icon="@drawable/ic_more"
         app:showAsAction="always"
-        tools:ignore="MenuTitle"
-        app:iconTint="?attr/colorOnSecondary"/>
+        tools:ignore="MenuTitle"/>
 </menu>
