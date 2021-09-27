@@ -28,7 +28,7 @@ class ListTaskActivity : AppCompatActivity() {
 
     lateinit var adapter: ListTaskAdapter
 
-    private var moreOptionsMenu: Menu? = null
+    private var deleteMenu: Menu? = null
 
     private var clicked = false
 
@@ -145,40 +145,22 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun changeTrashVisibilityBasedOnSelectionMode() {
-        this.moreOptionsMenu?.findItem(R.id.menu_more_options_action)?.isVisible =
+        this.deleteMenu?.findItem(R.id.menu_delete_action)?.isVisible =
             viewModel.selectionMode.value == true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.more_options_menu, menu)
-        this.moreOptionsMenu = menu
-        this.moreOptionsMenu?.findItem(R.id.menu_more_options_action)?.isVisible = false
+        menuInflater.inflate(R.menu.delete_menu, menu)
+        this.deleteMenu = menu
+        this.deleteMenu?.findItem(R.id.menu_delete_action)?.isVisible = false
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_more_options_action) {
-            setupPopupMenu()
+        if (item.itemId == R.id.menu_delete_action) {
+            setupConfirmationDialog()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setupPopupMenu() {
-        val menuItemView = findViewById<View>(R.id.menu_more_options_action)
-        val popupMenu = PopupMenu(this, menuItemView)
-        popupMenu.inflate(R.menu.popup_options_menu)
-        popupMenu.show()
-        configurePopupMenuListeners(popupMenu)
-    }
-
-    private fun configurePopupMenuListeners(popupMenu: PopupMenu) {
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.popup_menu_select_all_action -> toast(getString(feature_isnt_implemented))
-                R.id.popup_menu_delete -> setupConfirmationDialog()
-            }
-            true
-        }
     }
 
     private fun setupConfirmationDialog() {
