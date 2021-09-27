@@ -25,4 +25,9 @@
     <string name="feature_isnt_implemented">This feature still isn\'t implemented!</string>
     <string name="successfully_ten_tasks_added">Ten tasks have been successfully added</string>
     <string name="select_all">Select all</string>
+    <string name="add_task_button">Add task</string>
+    <string name="open_debug_options_button">Open debug options</string>
+    <string name="add_ten_tasks_button">Add ten tasks</string>
+    <string name="save_task">Save task</string>
+    <string name="save_and_run_the_task">Save and run the task</string>
 </resources>

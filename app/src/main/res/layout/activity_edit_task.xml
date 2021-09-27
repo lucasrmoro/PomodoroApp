@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/edit_task"
+            android:textSize="20sp"
             android:inputType="textCapWords"
             app:layout_constraintEnd_toEndOf="@+id/task_name"
             app:layout_constraintStart_toStartOf="@+id/task_name"
@@ -57,7 +58,9 @@
         <TextView
             android:id="@+id/edit_pomodoro_timer"
             android:layout_width="0dp"
-            android:layout_height="46dp"
+            android:layout_height="48dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:ems="10"
@@ -86,7 +89,8 @@
         <TextView
             android:id="@+id/edit_ringtone"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:inputType="text"
             android:text="@string/edit_ringtone"
             android:visibility="gone"
@@ -109,7 +113,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_ringtone" />
+            app:layout_constraintTop_toBottomOf="@id/edit_ringtone"
+            android:contentDescription="@string/save_task" />
 
         <Button
             android:id="@+id/fab_save_and_run"
@@ -124,7 +129,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/fab_save" />
+            app:layout_constraintTop_toTopOf="@+id/fab_save"
+            android:contentDescription="@string/save_and_run_the_task"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

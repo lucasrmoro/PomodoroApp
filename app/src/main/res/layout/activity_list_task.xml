@@ -25,7 +25,8 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:contentDescription="@string/add_task_button" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/debug_fab"
@@ -38,7 +39,8 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@id/fab"
         app:layout_constraintEnd_toStartOf="@id/fab"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="@string/open_debug_options_button"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/debug_add_tasks_fab"
@@ -51,6 +53,7 @@
         app:layout_constraintBottom_toTopOf="@id/debug_fab"
         app:layout_constraintEnd_toEndOf="@id/debug_fab"
         app:layout_constraintStart_toStartOf="@id/debug_fab"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="@string/add_ten_tasks_button"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
