@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/task_name"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="16dp"
@@ -45,7 +45,7 @@
         <TextView
             android:id="@+id/pomodoro_timer"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="16dp"
@@ -58,8 +58,10 @@
         <TextView
             android:id="@+id/edit_pomodoro_timer"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:gravity="center|start"
+            android:paddingTop="10dp"
+            android:paddingBottom="11dp"
             android:textSize="20sp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -75,7 +77,7 @@
         <TextView
             android:id="@+id/ringtone"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="48dp"
             android:layout_marginEnd="16dp"
@@ -90,6 +92,8 @@
             android:id="@+id/edit_ringtone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="11dp"
             android:textSize="20sp"
             android:inputType="text"
             android:text="@string/edit_ringtone"
