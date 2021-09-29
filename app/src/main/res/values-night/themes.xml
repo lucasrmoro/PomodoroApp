@@ -8,6 +8,8 @@
         <item name="colorOnSecondary">@color/white</item>
 
         <item name="colorSurface">@color/dark_mode_primary_color</item>
+
+        <item name="android:statusBarColor">@color/dark_mode_primary_color</item>
     </style>
 
     <style name="Theme.PomodoroAppNoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -16,5 +18,7 @@
 
         <item name="colorSecondary">@color/dark_mode_primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">@color/dark_mode_primary_color</item>
     </style>
 </resources>
