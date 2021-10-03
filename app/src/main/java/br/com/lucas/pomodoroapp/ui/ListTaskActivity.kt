@@ -152,7 +152,9 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.delete_menu, menu)
         this.deleteMenu = menu
-        this.deleteMenu?.findItem(R.id.menu_delete_action)?.isVisible = false
+        val deleteMenu = menu?.findItem(R.id.menu_delete_action)
+        deleteMenu?.isVisible = false
+        deleteMenu?.title = getString(delete_selected_tasks)
         return true
     }
 

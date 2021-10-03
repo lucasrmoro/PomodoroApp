@@ -96,6 +96,8 @@ class EditTaskActivity() : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if (viewModel.isEditMode) {
             menuInflater.inflate(R.menu.delete_menu, menu)
+            val deleteMenu = menu?.findItem(R.menu.delete_menu)
+            deleteMenu?.title = getString(delete)
         }
         return true
     }
@@ -108,7 +110,7 @@ class EditTaskActivity() : AppCompatActivity() {
     }
 
     private fun setupConfirmationDialog() {
-        var builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.confirm_delete))
         builder.setMessage(getString(R.string.delete_confirmation_message))
         builder.setPositiveButton(
@@ -130,7 +132,7 @@ class EditTaskActivity() : AppCompatActivity() {
         ) { dialog, _ ->
             dialog.cancel()
         }
-        var alertDialog: AlertDialog = builder.create()
+        val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
 

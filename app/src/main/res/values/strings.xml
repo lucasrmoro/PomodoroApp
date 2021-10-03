@@ -30,4 +30,5 @@
     <string name="add_ten_tasks_button">Add ten tasks</string>
     <string name="save_task">Save task</string>
     <string name="save_and_run_the_task">Save and run the task</string>
+    <string name="delete_selected_tasks">Delete selected tasks</string>
 </resources>
