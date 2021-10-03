@@ -2,8 +2,9 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.database.Task
@@ -14,21 +15,16 @@ class ListTaskAdapter(
     private val selectionTaskCallback: ((Task, Boolean) -> Unit),
     private val isSelectionModeEnabledCallback: ((Task) -> Boolean),
     private val launchEditScreenCallback: ((Task) -> Unit)
-) : Adapter<ListTaskAdapter.TaskViewHolder>() {
-
-    private val tasks = mutableListOf<Task>()
+) : ListAdapter<Task, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
 
     fun addTask(tasks: List<Task>) {
-        this.tasks.clear()
-        this.tasks.addAll(tasks)
-        notifyDataSetChanged()
+        submitList(tasks)
     }
 
     fun reset() {
-        this.tasks.forEach {
+        currentList.forEach {
             it.resetTaskSelection()
         }
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -42,12 +38,11 @@ class ListTaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = tasks[position]
-        holder.bind(task)
+        holder.bind(getItem(position))
     }
 
     override fun getItemCount(): Int {
-        return tasks.size
+        return currentList.size
     }
 
     inner class TaskViewHolder(private val binding: ListTaskItemBinding) :
@@ -107,5 +102,16 @@ class ListTaskAdapter(
         private fun checkIconDisappearAnimation() {
             binding.checkItem.animate().scaleX(0f).scaleY(0f).duration = 250
         }
+    }
+
+    private class DiffCallback: DiffUtil.ItemCallback<Task>(){
+        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem.uid == newItem.uid
+        }
+
+        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+            return oldItem == newItem
+        }
+
     }
 }

@@ -6,6 +6,8 @@
 
         <item name="colorSecondary">@color/light_mode_primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">@color/light_mode_primary_color</item>
     </style>
 
     <style name="Theme.PomodoroAppNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -14,5 +16,7 @@
 
         <item name="colorSecondary">@color/light_mode_primary_color</item>
         <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">@color/light_mode_primary_color</item>
     </style>
 </resources>
