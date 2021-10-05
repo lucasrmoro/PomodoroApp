@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
@@ -20,6 +18,7 @@ import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
+import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
 
@@ -97,43 +96,38 @@ class EditTaskActivity() : AppCompatActivity() {
         if (viewModel.isEditMode) {
             menuInflater.inflate(R.menu.delete_menu, menu)
             val deleteMenu = menu?.findItem(R.menu.delete_menu)
-            deleteMenu?.title = getString(delete)
+            deleteMenu?.title = getString(yes)
         }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_delete_action) {
-            setupConfirmationDialog()
+            deleteTask()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupConfirmationDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.confirm_delete))
-        builder.setMessage(getString(R.string.delete_confirmation_message))
-        builder.setPositiveButton(
-            getString(R.string.delete)
-        ) { dialog, _ ->
-            try {
-                viewModel.delete(this) {
-                    toast(successfully_deleted)
-                    finish()
-                    dialog.cancel()
+    private fun deleteTask() {
+        AlertDialogHelper.show(
+
+            context = this,
+            title = are_you_sure,
+            bodyMessage = delete_confirmation_message,
+            positiveButtonMessage = yes,
+            positiveButtonAction = {
+                try {
+                    viewModel.delete(this) {
+                        toast(successfully_deleted)
+                        finish()
+                    }
+                } catch (e: Exception) {
+                    toast(somenthing_went_wrong)
+                    Log.e("exception", "${e.message}")
                 }
-            } catch (e: Exception) {
-                toast(somenthing_went_wrong)
-                Log.e("exception", "${e.message}")
-            }
-        }
-        builder.setNegativeButton(
-            getString(R.string.cancel)
-        ) { dialog, _ ->
-            dialog.cancel()
-        }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
+            },
+            negativeButtonMessage = cancel
+        )
     }
 
     @SuppressLint("SetTextI18n")

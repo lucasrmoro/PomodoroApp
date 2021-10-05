@@ -6,7 +6,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.BuildConfig
-import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
@@ -66,20 +65,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         }
     }
 
-    fun setupConfirmationDialogMessage(context: Context): String {
-        return if (isSelectedTasksAmountAreMoreThanOne()) {
-            context.getString(R.string.delete_confirmation_multiple_tasks,
-                getQuantityOfSelectedTasks().toString())
-        } else {
-            context.getString(R.string.delete_confirmation_message)
-        }
-    }
-
-    private fun isSelectedTasksAmountAreMoreThanOne(): Boolean {
-        return getQuantityOfSelectedTasks() > 1
-    }
-
-    private fun getQuantityOfSelectedTasks(): Int {
+    fun getQuantityOfSelectedTasks(): Int {
         return tasksSelected.size
     }
 

@@ -8,8 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.PopupMenu
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
@@ -18,6 +16,7 @@ import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
+import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 
 
 class ListTaskActivity : AppCompatActivity() {
@@ -166,30 +165,25 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun setupConfirmationDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(confirm_delete))
-        builder.setMessage(
-            viewModel.setupConfirmationDialogMessage(this)
+        AlertDialogHelper.show(
+            context = this,
+            title = are_you_sure,
+            bodyMessage = resources.getQuantityString(
+                // Change the number of selected tasks on alert dialog
+                R.plurals.delete_selected_tasks,
+                viewModel.getQuantityOfSelectedTasks(),
+                viewModel.getQuantityOfSelectedTasks()),
+            positiveButtonMessage = yes,
+            positiveButtonAction = {
+                try {
+                    viewModel.deleteTasks(this)
+                } catch (e: Exception) {
+                    toast(somenthing_went_wrong)
+                    Log.e("exception", "${e.message}")
+                }
+            },
+            negativeButtonMessage = cancel
         )
-        builder.setPositiveButton(
-            getString(delete)
-        ) { dialog, _ ->
-            try {
-                viewModel.deleteTasks(this)
-                toast(successfully_deleted)
-                dialog.cancel()
-            } catch (e: Exception) {
-                toast(somenthing_went_wrong)
-                Log.e("exception", "${e.message}")
-            }
-        }
-        builder.setNegativeButton(
-            getString(cancel)
-        ) { dialog, _ ->
-            dialog.cancel()
-        }
-        val alertDialog: AlertDialog = builder.create()
-        alertDialog.show()
     }
 
     override fun onResume() {
