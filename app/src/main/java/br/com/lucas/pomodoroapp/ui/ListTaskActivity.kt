@@ -7,14 +7,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.lucas.pomodoroapp.R
+import br.com.lucas.pomodoroapp.R.anim.from_bottom_anim
+import br.com.lucas.pomodoroapp.R.anim.to_bottom_anim
+import br.com.lucas.pomodoroapp.R.drawable.ic_close
+import br.com.lucas.pomodoroapp.R.drawable.ic_skull
 import br.com.lucas.pomodoroapp.R.string.*
+import br.com.lucas.pomodoroapp.core.extensions.loadAnim
 import br.com.lucas.pomodoroapp.core.extensions.toast
+import br.com.lucas.pomodoroapp.core.extensions.toggleFabAnimation
+import br.com.lucas.pomodoroapp.core.extensions.toggleFabImage
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 
@@ -23,26 +29,17 @@ class ListTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListTaskBinding
 
-    lateinit var viewModel: ListTaskViewModel
+    private lateinit var viewModel: ListTaskViewModel
 
-    lateinit var adapter: ListTaskAdapter
+    private lateinit var adapter: ListTaskAdapter
 
     private var deleteMenu: Menu? = null
 
     private var clicked = false
 
-    private val fromBottom: Animation by lazy {
-        AnimationUtils.loadAnimation(
-            this,
-            R.anim.from_bottom_anim
-        )
-    }
-    private val toBottom: Animation by lazy {
-        AnimationUtils.loadAnimation(
-            this,
-            R.anim.to_bottom_anim
-        )
-    }
+    private val fromBottom: Animation by lazy { loadAnim(this, from_bottom_anim) }
+
+    private val toBottom: Animation by lazy { loadAnim(this, to_bottom_anim) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +50,7 @@ class ListTaskActivity : AppCompatActivity() {
         viewModel.taskList.observe(
             this
         ) { tasks ->
-            (binding.recyclerView.adapter as ListTaskAdapter).addTask(tasks)
+            adapter.addTask(tasks)
         }
 
         viewModel.selectionMode.observe(
@@ -63,7 +60,7 @@ class ListTaskActivity : AppCompatActivity() {
             if (!selectionMode) adapter.reset()
         }
 
-        binding.fab.setOnClickListener { view ->
+        binding.addFab.setOnClickListener {
             EditTaskActivity.launchNewTaskScreen(this)
         }
 
@@ -77,7 +74,6 @@ class ListTaskActivity : AppCompatActivity() {
     private fun configureList(context: Context) {
         adapter = ListTaskAdapter(
             selectionTaskCallback = { task, isSelected ->
-                Log.d("taskSelection", "task: ${task.taskName} --> isSelected: $isSelected")
                 viewModel.syncSelection(task, isSelected)
             },
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
@@ -88,7 +84,7 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun setupDebugButtons() {
-        setDebugFabVisible()
+        binding.debugFab.visibility = View.VISIBLE
 
         binding.debugFab.setOnClickListener {
             onButtonClicked()
@@ -100,15 +96,11 @@ class ListTaskActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDebugFabVisible() {
-        binding.debugFab.visibility = View.VISIBLE
-    }
-
     private fun onButtonClicked() {
-        setVisibility()
-        setAnimation()
-        changeDebugIcon()
-        setClickable()
+        binding.debugAddTasksFab.isVisible = clicked
+        binding.debugAddTasksFab.toggleFabAnimation(clicked, fromBottom, toBottom)
+        binding.debugFab.toggleFabImage(clicked, ic_skull, ic_close)
+        binding.debugAddTasksFab.isClickable = !clicked
         clicked = !clicked
     }
 
@@ -119,28 +111,6 @@ class ListTaskActivity : AppCompatActivity() {
         } catch (e: Exception) {
             toast(somenthing_went_wrong)
         }
-    }
-
-    private fun setVisibility() {
-        binding.debugAddTasksFab.isVisible = clicked
-    }
-
-    private fun setAnimation() {
-        if (!clicked)
-            binding.debugAddTasksFab.startAnimation(fromBottom)
-        else
-            binding.debugAddTasksFab.startAnimation(toBottom)
-    }
-
-    private fun changeDebugIcon() {
-        if (!clicked)
-            binding.debugFab.setImageResource(R.drawable.ic_close)
-        else
-            binding.debugFab.setImageResource(R.drawable.ic_skull)
-    }
-
-    private fun setClickable() {
-        binding.debugAddTasksFab.isClickable = !clicked
     }
 
     private fun changeTrashVisibilityBasedOnSelectionMode() {
@@ -176,6 +146,7 @@ class ListTaskActivity : AppCompatActivity() {
             positiveButtonMessage = yes,
             positiveButtonAction = {
                 try {
+                    toast(successfully_deleted)
                     viewModel.deleteTasks(this)
                 } catch (e: Exception) {
                     toast(somenthing_went_wrong)

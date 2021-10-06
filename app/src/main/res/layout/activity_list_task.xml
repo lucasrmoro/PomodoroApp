@@ -17,7 +17,7 @@
         style="@style/Theme.PomodoroApp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -37,8 +37,8 @@
         android:src="@drawable/ic_skull"
         android:visibility="gone"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="@id/fab"
-        app:layout_constraintEnd_toStartOf="@id/fab"
+        app:layout_constraintBottom_toBottomOf="@id/add_fab"
+        app:layout_constraintEnd_toStartOf="@id/add_fab"
         tools:visibility="visible"
         android:contentDescription="@string/open_debug_options_button"/>
 
