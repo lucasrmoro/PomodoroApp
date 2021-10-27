@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.R
+import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
@@ -75,19 +76,11 @@ class EditTaskViewModel : ViewModel() {
                 DataBaseConnect.getTaskDao(context).updateTask(
                     task
                 )
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.successfully_changed),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(R.string.successfully_saved)
                 closeScreen()
             }
         } else {
-            Toast.makeText(
-                context,
-                context.getString(R.string.fill_all_required_fields),
-                Toast.LENGTH_SHORT
-            ).show()
+            context.toast(R.string.fill_all_required_fields)
         }
     }
 
@@ -105,19 +98,11 @@ class EditTaskViewModel : ViewModel() {
                         uid = 0
                     )
                 )
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.successfully_saved),
-                    Toast.LENGTH_SHORT
-                ).show()
+                context.toast(R.string.successfully_saved)
                 closeScreen()
             }
         } else {
-            Toast.makeText(
-                context,
-                context.getString(R.string.fill_all_required_fields),
-                Toast.LENGTH_SHORT
-            ).show()
+            context.toast(R.string.fill_all_required_fields)
         }
     }
 

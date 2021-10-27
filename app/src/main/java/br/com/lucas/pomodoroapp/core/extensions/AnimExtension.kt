@@ -13,5 +13,4 @@ fun loadAnim(
             context,
             animation
         )
-
 }
