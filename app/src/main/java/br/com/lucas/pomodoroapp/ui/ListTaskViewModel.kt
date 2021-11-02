@@ -16,6 +16,9 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     val selectionMode = MutableLiveData<Boolean>(false)
     private val tasksSelected = ArrayList<Task>()
 
+    var previousSelection: ArrayList<Int>? = null
+        private set
+
     fun syncSelection(task: Task, isSelected: Boolean) {
         if (isSelected) {
             val exists = tasksSelected.any { it.uid == task.uid }
@@ -71,9 +74,20 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun refresh() {
         viewModelScope.launch {
-            taskList.postValue(
-                DataBaseConnect.getTaskDao(context).getAll()
-            )
+            val tasks = DataBaseConnect.getTaskDao(context).getAll()
+            val updatedList = tasks.map { task ->
+                if(previousSelection?.contains(task.uid) == true){
+                    task.toggleTask()
+                    tasksSelected.add(task)
+                }
+                task
+            }
+            taskList.postValue(updatedList)
         }
+    }
+
+    fun processPreviousSelection(preSelectedElements: ArrayList<Int>) {
+        selectionMode.value = preSelectedElements.isNotEmpty()
+        previousSelection = preSelectedElements
     }
 }
