@@ -62,7 +62,6 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             tasksSelected.forEach {
                 DataBaseConnect.getTaskDao(context).deleteTask(it)
             }
-            selectionMode.postValue(false)
             tasksSelected.clear()
             refresh()
         }
@@ -74,11 +73,12 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun refresh() {
         viewModelScope.launch {
+            selectionMode.postValue(false)
             val tasks = DataBaseConnect.getTaskDao(context).getAll()
             val updatedList = tasks.map { task ->
                 if(previousSelection?.contains(task.uid) == true){
                     task.toggleTask()
-                    tasksSelected.add(task)
+                    syncSelection(task, task.isTaskSelected())
                 }
                 task
             }
@@ -87,7 +87,6 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     }
 
     fun processPreviousSelection(preSelectedElements: ArrayList<Int>) {
-        selectionMode.value = preSelectedElements.isNotEmpty()
         previousSelection = preSelectedElements
     }
 }
