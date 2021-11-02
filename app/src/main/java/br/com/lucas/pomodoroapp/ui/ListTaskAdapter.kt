@@ -21,6 +21,11 @@ class ListTaskAdapter(
         submitList(tasks)
     }
 
+    fun selectedTaskIds() = currentList
+        .filter { it.isTaskSelected() }
+        .map { it.uid }
+        .toList()
+
     fun reset() {
         currentList.forEach {
             it.resetTaskSelection()
@@ -55,6 +60,13 @@ class ListTaskAdapter(
 
         fun bind(task: Task) {
             addTaskItemProperties(task)
+
+            if(task.isTaskSelected()) {
+                checkIconAppearAnimation()
+                binding.root.setCardBackgroundColor(cardColorSelected)
+                selectionTaskCallback(task, true)
+            }
+
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
                     toggleSelectionMode(task)
@@ -104,7 +116,7 @@ class ListTaskAdapter(
         }
     }
 
-    private class DiffCallback: DiffUtil.ItemCallback<Task>(){
+    private class DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem.uid == newItem.uid
         }

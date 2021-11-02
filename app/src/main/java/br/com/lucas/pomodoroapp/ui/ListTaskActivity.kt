@@ -2,6 +2,7 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -46,6 +47,10 @@ class ListTaskActivity : AppCompatActivity() {
         binding = ActivityListTaskBinding.inflate(layoutInflater)
         viewModel = ListTaskViewModel(application)
         setContentView(binding.root)
+
+        savedInstanceState?.getIntegerArrayList(SELECTED_ELEMENTS_KEY)?.let { previousSelection ->
+            viewModel.processPreviousSelection(previousSelection)
+        }
 
         viewModel.taskList.observe(
             this
@@ -122,7 +127,7 @@ class ListTaskActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.delete_menu, menu)
         this.deleteMenu = menu
         val deleteMenu = menu?.findItem(R.id.menu_delete_action)
-        deleteMenu?.isVisible = false
+        deleteMenu?.isVisible = viewModel.isSelectedModeEnabled()
         deleteMenu?.title = getString(delete_selected_tasks)
         return true
     }
@@ -160,5 +165,15 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putIntegerArrayList(SELECTED_ELEMENTS_KEY, ArrayList(adapter.selectedTaskIds()))
+
+        super.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        private const val SELECTED_ELEMENTS_KEY = "selected elements - adapter's list"
     }
 }
