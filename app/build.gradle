@@ -10,11 +10,16 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+
+        def bitriseBuildNumber = System.getenv("BITRISE_BUILD_NUMBER")
+        def buildNumber = bitriseBuildNumber != null ? bitriseBuildNumber : "999999999"
+        versionCode = buildNumber.toInteger()
+
         applicationId "br.com.lucas.pomodoroapp"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode versionCode
+        versionName "1.0.$versionCode"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,7 +46,6 @@ android {
 }
 
 dependencies {
-
     def room_version = "2.3.0"
 
     //Room
