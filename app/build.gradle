@@ -5,21 +5,20 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+private static int androidVersionCode(){
+    return System.env.ANDROID_VERSION_CODE != null ? System.env.ANDROID_VERSION_CODE : 100
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-
-        def bitriseBuildNumber = System.getenv("BITRISE_BUILD_NUMBER")
-        def buildNumber = bitriseBuildNumber != null ? bitriseBuildNumber : "999999999"
-        versionCode = buildNumber.toInteger()
-
         applicationId "br.com.lucas.pomodoroapp"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode versionCode
-        versionName "1.0.$versionCode"
+        versionCode androidVersionCode()
+        versionName "1.0.${androidVersionCode()}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
