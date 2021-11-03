@@ -1,8 +1,7 @@
-package br.com.lucas.pomodoroapp.ui
+package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -24,6 +23,7 @@ import br.com.lucas.pomodoroapp.core.extensions.toggleFabAnimation
 import br.com.lucas.pomodoroapp.core.extensions.toggleFabImage
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
+import br.com.lucas.pomodoroapp.ui.editTaskScreen.EditTaskActivity
 
 
 class ListTaskActivity : AppCompatActivity() {

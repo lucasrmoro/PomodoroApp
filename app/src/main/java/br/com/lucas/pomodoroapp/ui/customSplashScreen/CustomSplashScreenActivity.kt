@@ -1,9 +1,10 @@
-package br.com.lucas.pomodoroapp.ui
+package br.com.lucas.pomodoroapp.ui.customSplashScreen
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.lucas.pomodoroapp.databinding.ActivitySplashScreenBinding
+import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
 
 class CustomSplashScreenActivity : AppCompatActivity() {
 

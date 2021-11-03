@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp.ui
+package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
