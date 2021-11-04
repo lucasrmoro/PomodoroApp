@@ -76,7 +76,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             selectionMode.postValue(false)
             val tasks = DataBaseConnect.getTaskDao(context).getAll()
             val updatedList = tasks.map { task ->
-                if(previousSelection?.contains(task.uid) == true){
+                if (previousSelection?.contains(task.uid) == true) {
                     task.toggleTask()
                     syncSelection(task, task.isTaskSelected())
                 }

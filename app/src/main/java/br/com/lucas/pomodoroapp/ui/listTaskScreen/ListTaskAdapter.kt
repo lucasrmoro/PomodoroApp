@@ -61,7 +61,7 @@ class ListTaskAdapter(
         fun bind(task: Task) {
             addTaskItemProperties(task)
 
-            if(task.isTaskSelected()) {
+            if (task.isTaskSelected()) {
                 checkIconAppearAnimation()
                 binding.root.setCardBackgroundColor(cardColorSelected)
                 selectionTaskCallback(task, true)
