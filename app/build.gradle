@@ -9,6 +9,10 @@ private static int androidVersionCode(){
     return System.env.ANDROID_VERSION_CODE != null ? System.env.ANDROID_VERSION_CODE : 100
 }
 
+private static String androidVersionName(){
+    return System.env.ANDROID_VERSION_NAME != null ? System.env.ANDROID_VERSION_NAME : "1.0.0"
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -17,8 +21,8 @@ android {
         applicationId "br.com.lucas.pomodoroapp"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode androidVersionCode().toInteger()
-        versionName "1.0.${androidVersionCode().toInteger()}"
+        versionCode androidVersionCode()
+        versionName androidVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
