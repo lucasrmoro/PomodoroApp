@@ -11,6 +11,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
@@ -31,7 +32,7 @@ class EditTaskActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
-        viewModel = EditTaskViewModel()
+        viewModel = EditTaskViewModel(application)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
