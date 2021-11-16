@@ -7,13 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.AlarmManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToMilliseconds
 import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
