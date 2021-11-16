@@ -63,7 +63,7 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(5/10 * 1L),
+                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
                 notifyPendingIntent
             )
         }
