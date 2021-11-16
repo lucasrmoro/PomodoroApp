@@ -22,14 +22,17 @@
         <activity
             android:name=".ui.listTaskScreen.ListTaskActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PomodoroApp">
-        </activity>
+            android:theme="@style/Theme.PomodoroApp" />
         <activity
             android:name=".ui.editTaskScreen.EditTaskActivity"
-            android:theme="@style/Theme.PomodoroAppNoActionBar"
             android:label="@string/app_name"
             android:parentActivityName=".ui.listTaskScreen.ListTaskActivity"
-            android:windowSoftInputMode="stateAlwaysVisible">
-        </activity>
+            android:theme="@style/Theme.PomodoroAppNoActionBar"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+
+        <receiver
+            android:name=".core.receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 </manifest>

@@ -74,7 +74,7 @@ class ListTaskAdapter(
                 }
                 true
             }
-            binding.root.setOnClickListener { v ->
+            binding.root.setOnClickListener {
                 if (isSelectionModeEnabledCallback(task)) {
                     toggleSelectionMode(task)
                     selectionTaskCallback(task, task.isTaskSelected())

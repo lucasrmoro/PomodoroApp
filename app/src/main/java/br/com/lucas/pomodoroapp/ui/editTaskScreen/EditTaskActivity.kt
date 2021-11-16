@@ -1,9 +1,12 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,6 +14,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
@@ -31,7 +35,7 @@ class EditTaskActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
-        viewModel = EditTaskViewModel()
+        viewModel = EditTaskViewModel(application)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -40,7 +44,7 @@ class EditTaskActivity() : AppCompatActivity() {
 
         if (task != null) {
             viewModel.setup(task)
-            binding.toolbar.title = getString(R.string.edit_task_toolbar_label)
+            binding.toolbar.title = getString(edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =
                 "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"
