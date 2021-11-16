@@ -1,9 +1,12 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -37,11 +40,13 @@ class EditTaskActivity() : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        createChannel(getString(pomdoro_notification_channel_id), getString(R.string.pomodoro_notification_channel_name))
+
         val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
 
         if (task != null) {
             viewModel.setup(task)
-            binding.toolbar.title = getString(R.string.edit_task_toolbar_label)
+            binding.toolbar.title = getString(edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =
                 "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"
@@ -85,6 +90,25 @@ class EditTaskActivity() : AppCompatActivity() {
             } else {
                 binding.pomodoroTimer.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
             }
+        }
+    }
+
+    private fun createChannel(channelId: String, channelName: String){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+
+            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = getString(pomodoro_timer_reminder)
+
+            val notificationManager = getSystemService(
+                NotificationManager::class.java
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 

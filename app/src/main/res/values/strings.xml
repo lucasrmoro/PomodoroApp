@@ -30,6 +30,10 @@
     <string name="save_and_run_the_task">Save and run the task</string>
     <string name="delete_selected_tasks">Delete selected tasks</string>
     <string name="delete_confirmation_message">Are you sure you want to delete this task?</string>
+    <string name="pomdoro_notification_channel_id">pomodoro_channel</string>
+    <string name="label_pomodoro_timer">Pomodoro Timer</string>
+    <string name="pomodoro_timer_reminder">Pomodoro Timer Reminder</string>
+    <string name="pomodoro_notification_channel_name">Pomodoro</string>
     <plurals name="delete_selected_tasks">
         <item quantity="one">Are you sure you want to delete this task?</item>
         <item quantity="other">"Are you sure you want to delete %d tasks?"</item>
