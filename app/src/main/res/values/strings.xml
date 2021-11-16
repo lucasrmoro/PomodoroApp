@@ -34,6 +34,7 @@
     <string name="label_pomodoro_timer">Pomodoro Timer</string>
     <string name="pomodoro_timer_reminder">Pomodoro Timer Reminder</string>
     <string name="pomodoro_notification_channel_name">Pomodoro</string>
+    <string name="time_to_do_a_break">It\'s time to do a break!</string>
     <plurals name="delete_selected_tasks">
         <item quantity="one">Are you sure you want to delete this task?</item>
         <item quantity="other">"Are you sure you want to delete %d tasks?"</item>

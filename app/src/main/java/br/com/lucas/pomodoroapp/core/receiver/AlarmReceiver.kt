@@ -1,12 +1,10 @@
 package br.com.lucas.pomodoroapp.core.receiver
 
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.utils.sendNotification
@@ -22,9 +20,18 @@ class AlarmReceiver : BroadcastReceiver() {
             NotificationManager::class.java
         ) as NotificationManager
 
+        val launchListActivity = Intent(context, ListTaskActivity::class.java)
+        launchListActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
         notificationManager.sendNotification(
-            "It's time to do a break!",
-            context
+            context,
+            context.getString(R.string.time_to_do_a_break),
+            context.getString(R.string.label_pomodoro_timer),
+            R.drawable.ic_pomodoro,
+            launchListActivity,
+            context.getString(R.string.pomdoro_notification_channel_id),
+            context.getString(R.string.pomodoro_notification_channel_name),
+            context.getString(R.string.pomodoro_timer_reminder)
         )
     }
 

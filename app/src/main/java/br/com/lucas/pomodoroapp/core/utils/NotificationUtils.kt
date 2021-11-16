@@ -1,18 +1,42 @@
 package br.com.lucas.pomodoroapp.core.utils
 
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
 
 private const val NOTIFICATION_ID = 0
 
-fun NotificationManager.sendNotification(messageBody: String, context: Context){
+fun NotificationManager.sendNotification(
+    context: Context,
+    messageBody: String,
+    contentTitle: String,
+    @DrawableRes smallIcon: Int,
+    contentIntent: Intent,
+    channelId: String,
+    channelName: String,
+    channelDescription: String
+) {
 
-    val contentIntent = Intent(context, ListTaskActivity::class.java)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val notificationChannel = NotificationChannel(
+            channelId,
+            channelName,
+            NotificationManager.IMPORTANCE_HIGH
+        )
+
+        notificationChannel.enableLights(true)
+        notificationChannel.enableVibration(true)
+        notificationChannel.description = channelDescription
+
+        this.createNotificationChannel(notificationChannel)
+    }
+
     val contentPendingIntent = PendingIntent.getActivity(
         context,
         NOTIFICATION_ID,
@@ -24,8 +48,8 @@ fun NotificationManager.sendNotification(messageBody: String, context: Context){
         context,
         context.getString(R.string.pomdoro_notification_channel_id)
     )
-        .setSmallIcon(R.drawable.ic_pomodoro)
-        .setContentTitle(context.getString(R.string.label_pomodoro_timer))
+        .setSmallIcon(smallIcon)
+        .setContentTitle(contentTitle)
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)

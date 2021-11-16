@@ -40,8 +40,6 @@ class EditTaskActivity() : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        createChannel(getString(pomdoro_notification_channel_id), getString(R.string.pomodoro_notification_channel_name))
-
         val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
 
         if (task != null) {
@@ -90,25 +88,6 @@ class EditTaskActivity() : AppCompatActivity() {
             } else {
                 binding.pomodoroTimer.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
             }
-        }
-    }
-
-    private fun createChannel(channelId: String, channelName: String){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-
-            notificationChannel.enableLights(true)
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = getString(pomodoro_timer_reminder)
-
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            )
-            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
