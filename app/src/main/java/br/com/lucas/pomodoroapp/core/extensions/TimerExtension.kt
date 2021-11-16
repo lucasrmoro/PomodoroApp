@@ -18,7 +18,3 @@ fun Int.convertMinutesToHour(): String {
     }
     return "$hoursText:$minutesText"
 }
-
-fun Int.convertMinutesToMilliseconds():Int  {
-    return (this * 60 * 1000)
-}

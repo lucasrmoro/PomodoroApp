@@ -19,6 +19,7 @@ import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class EditTaskViewModel(application: Application) : AndroidViewModel(application) {
@@ -64,7 +65,7 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        task.taskMinutes.convertMinutesToMilliseconds(),
+                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
                 notifyPendingIntent
             )
         }
