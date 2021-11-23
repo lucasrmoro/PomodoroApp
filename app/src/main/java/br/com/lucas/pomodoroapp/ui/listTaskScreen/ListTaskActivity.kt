@@ -150,7 +150,6 @@ class ListTaskActivity : AppCompatActivity() {
             context = this,
             title = are_you_sure,
             bodyMessage = resources.getQuantityString(
-                // Change the number of selected tasks on alert dialog
                 R.plurals.delete_selected_tasks,
                 viewModel.getQuantityOfSelectedTasks(),
                 viewModel.getQuantityOfSelectedTasks()),

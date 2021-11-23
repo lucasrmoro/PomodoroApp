@@ -46,7 +46,6 @@
             android:id="@+id/checkItem"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginEnd="5dp"
             android:scaleX="0"
             android:scaleY="0"
             android:src="@drawable/ic_check"
@@ -55,6 +54,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorSecondary" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/timerSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
