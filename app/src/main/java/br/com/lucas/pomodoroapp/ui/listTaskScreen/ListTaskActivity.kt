@@ -2,6 +2,8 @@ package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -55,7 +57,7 @@ class ListTaskActivity : AppCompatActivity() {
         viewModel.taskList.observe(
             this
         ) { tasks ->
-            adapter.addTask(tasks)
+            adapter.addTask(viewModel.convertTasksToTaskAdapterItems(tasks))
         }
 
         viewModel.selectionMode.observe(
@@ -82,7 +84,10 @@ class ListTaskActivity : AppCompatActivity() {
                 viewModel.syncSelection(task, isSelected)
             },
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
-            launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
+            launchEditScreenCallback = {
+                EditTaskActivity.launchEditTaskScreen(context,
+                    viewModel.convertTaskToTaskAdapterItem(it))
+            }
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
@@ -165,6 +170,7 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
+        Handler(Looper.getMainLooper()).postDelayed({ adapter.hideAllTimerSwitches() }, 5000L)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

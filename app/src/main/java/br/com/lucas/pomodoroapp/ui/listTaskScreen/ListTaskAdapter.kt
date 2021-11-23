@@ -1,6 +1,7 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,13 +13,21 @@ import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
 
 class ListTaskAdapter(
-    private val selectionTaskCallback: ((Task, Boolean) -> Unit),
-    private val isSelectionModeEnabledCallback: ((Task) -> Boolean),
-    private val launchEditScreenCallback: ((Task) -> Unit)
-) : ListAdapter<Task, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
+    private val selectionTaskCallback: ((ListTaskAdapterItem, Boolean) -> Unit),
+    private val isSelectionModeEnabledCallback: ((ListTaskAdapterItem) -> Boolean),
+    private val launchEditScreenCallback: ((ListTaskAdapterItem) -> Unit)
+) : ListAdapter<ListTaskAdapterItem, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
 
-    fun addTask(tasks: List<Task>) {
+    fun addTask(tasks: List<ListTaskAdapterItem>) {
         submitList(tasks)
+    }
+
+    fun hideAllTimerSwitches() {
+        val newList = currentList.map {
+            it.isTimerSwitchViewVisible = false
+            it
+        }
+        submitList(newList)
     }
 
     fun selectedTaskIds() = currentList
@@ -29,6 +38,7 @@ class ListTaskAdapter(
     fun reset() {
         currentList.forEach {
             it.resetTaskSelection()
+            it.isTimerSwitchViewVisible = true
         }
     }
 
@@ -58,7 +68,7 @@ class ListTaskAdapter(
         private val cardColorSelected =
             binding.root.context.getColorResCompat(android.R.attr.colorControlHighlight)
 
-        fun bind(task: Task) {
+        fun bind(task: ListTaskAdapterItem) {
             addTaskItemProperties(task)
 
             if (task.isTaskSelected()) {
@@ -84,11 +94,16 @@ class ListTaskAdapter(
             }
         }
 
-        private fun addTaskItemProperties(task: Task) {
+        private fun addTaskItemProperties(task: ListTaskAdapterItem) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
             binding.root.setCardBackgroundColor(cardColorDefault)
             configureCheckItem()
+            if (task.isTimerSwitchViewVisible) {
+                binding.timerSwitch.visibility = View.VISIBLE
+            } else {
+                binding.timerSwitch.visibility = View.GONE
+            }
         }
 
         private fun configureCheckItem() {
@@ -96,7 +111,7 @@ class ListTaskAdapter(
             binding.checkItem.scaleY = 0f
         }
 
-        private fun toggleSelectionMode(task: Task) {
+        private fun toggleSelectionMode(task: ListTaskAdapterItem) {
             task.toggleTask()
             if (task.isTaskSelected()) {
                 checkIconAppearAnimation()
@@ -116,12 +131,18 @@ class ListTaskAdapter(
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Task>() {
-        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+    private class DiffCallback : DiffUtil.ItemCallback<ListTaskAdapterItem>() {
+        override fun areItemsTheSame(
+            oldItem: ListTaskAdapterItem,
+            newItem: ListTaskAdapterItem
+        ): Boolean {
             return oldItem.uid == newItem.uid
         }
 
-        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ListTaskAdapterItem,
+            newItem: ListTaskAdapterItem
+        ): Boolean {
             return oldItem == newItem
         }
 

@@ -2,7 +2,6 @@ package br.com.lucas.pomodoroapp.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
@@ -14,19 +13,4 @@ data class Task(
     var taskName: String,
     @ColumnInfo
     var taskMinutes: Int
-) : Serializable {
-    @Ignore
-    private var isSelected: Boolean = false
-
-    fun isTaskSelected(): Boolean{
-        return isSelected
-    }
-
-    fun toggleTask(){
-        isSelected = !isSelected
-    }
-
-    fun resetTaskSelection(){
-        isSelected = false
-    }
-}
+) : Serializable

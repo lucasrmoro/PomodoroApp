@@ -6,6 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.BuildConfig
+import br.com.lucas.pomodoroapp.core.extensions.toAdapterItem
+import br.com.lucas.pomodoroapp.core.extensions.toTaskItem
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
@@ -19,14 +21,23 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     var previousSelection: ArrayList<Int>? = null
         private set
 
-    fun syncSelection(task: Task, isSelected: Boolean) {
+    fun convertTaskToTaskAdapterItem(taskAdapterItem: ListTaskAdapterItem): Task{
+        return taskAdapterItem.toTaskItem()
+    }
+
+    fun convertTasksToTaskAdapterItems(listTask: List<Task>): List<ListTaskAdapterItem>{
+        return listTask.map {
+            it.toAdapterItem()
+        }
+    }
+    fun syncSelection(taskAdapterItem: ListTaskAdapterItem, isSelected: Boolean) {
         if (isSelected) {
-            val exists = tasksSelected.any { it.uid == task.uid }
+            val exists = tasksSelected.any { it.uid == taskAdapterItem.uid }
             if (!exists) {
-                tasksSelected.add(task)
+                tasksSelected.add(taskAdapterItem.toTaskItem())
             }
         } else {
-            tasksSelected.remove(task)
+            tasksSelected.remove(taskAdapterItem.toTaskItem())
         }
 
         if (isSelectedModeEnabled() != selectionMode.value) {
@@ -77,8 +88,10 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             val tasks = DataBaseConnect.getTaskDao(context).getAll()
             val updatedList = tasks.map { task ->
                 if (previousSelection?.contains(task.uid) == true) {
-                    task.toggleTask()
-                    syncSelection(task, task.isTaskSelected())
+                    val taskAdapterItem = task.toAdapterItem().apply {
+                        toggleTask()
+                    }
+                    syncSelection(taskAdapterItem, taskAdapterItem.isTaskSelected())
                 }
                 task
             }
