@@ -24,8 +24,7 @@ class ListTaskAdapter(
 
     fun hideAllTimerSwitches() {
         val newList = currentList.map {
-            it.isTimerSwitchViewVisible = false
-            it
+            it.copy(isTimerSwitchViewVisible = false)
         }
         submitList(newList)
     }
@@ -36,10 +35,11 @@ class ListTaskAdapter(
         .toList()
 
     fun reset() {
-        currentList.forEach {
+        val newList = currentList.map {
             it.resetTaskSelection()
-            it.isTimerSwitchViewVisible = true
+            it.copy(isTimerSwitchViewVisible = true)
         }
+        submitList(newList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {

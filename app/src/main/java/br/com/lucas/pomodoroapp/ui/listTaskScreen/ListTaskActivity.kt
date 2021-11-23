@@ -2,8 +2,6 @@ package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -64,7 +62,11 @@ class ListTaskActivity : AppCompatActivity() {
             this
         ) { selectionMode ->
             changeTrashVisibilityBasedOnSelectionMode()
-            if (!selectionMode) adapter.reset()
+            if (!selectionMode){
+                adapter.reset()
+            } else {
+                adapter.hideAllTimerSwitches()
+            }
         }
 
         binding.addFab.setOnClickListener {
@@ -170,7 +172,6 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
-        Handler(Looper.getMainLooper()).postDelayed({ adapter.hideAllTimerSwitches() }, 5000L)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
