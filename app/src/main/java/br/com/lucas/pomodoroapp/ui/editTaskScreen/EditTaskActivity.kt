@@ -3,11 +3,13 @@ package br.com.lucas.pomodoroapp.ui.editTaskScreen
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -41,9 +43,14 @@ class EditTaskActivity() : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
+        val requestAlarmPermissionIntent = Intent().apply {
+            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+        }
 
         if (task != null) {
-            viewModel.setup(task)
+            viewModel.setup(task){
+                startActivity(requestAlarmPermissionIntent)
+            }
             binding.toolbar.title = getString(edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =

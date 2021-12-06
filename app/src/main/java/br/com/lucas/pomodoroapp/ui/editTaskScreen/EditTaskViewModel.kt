@@ -5,8 +5,10 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.SystemClock
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.AlarmManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -37,9 +39,16 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
 
     private val alarmManager: AlarmManager? =
         application.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+    @RequiresApi(Build.VERSION_CODES.S)
+    private val hasPermission: Boolean? = alarmManager?.canScheduleExactAlarms()
     private val notifyIntent = Intent(application, AlarmReceiver::class.java)
+    private val pendingIntentFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
 
-    fun setup(task: Task) {
+    fun setup(task: Task, requestPermissionToSetExactAlarmCallback: (() -> Unit)) {
         this.task = task
         this.isEditMode = true
         total = task.taskMinutes
@@ -50,14 +59,28 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
             notifyIntent.apply {
                 putExtra(AlarmReceiver.TASK_NAME, task.taskName)
             },
-            PendingIntent.FLAG_UPDATE_CURRENT
+            pendingIntentFlag
         )
 
         Log.d(AlarmReceiver.TAG, "Starting ${task.taskName}")
         Log.d(AlarmReceiver.TAG,
             "task time: ${task.taskMinutes}")
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (hasPermission!!) {
+                startAlarm(task, notifyPendingIntent)
+            } else {
+                requestPermissionToSetExactAlarmCallback()
+            }
+        } else {
+            startAlarm(task, notifyPendingIntent)
+        }
+    }
 
+    private fun startAlarm(
+        task: Task,
+        notifyPendingIntent: PendingIntent
+    ) {
         alarmManager?.let { manager ->
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 manager,
@@ -67,7 +90,6 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
                 notifyPendingIntent
             )
         }
-
     }
 
     fun delete(context: Context, closeScreen: () -> Unit) {
