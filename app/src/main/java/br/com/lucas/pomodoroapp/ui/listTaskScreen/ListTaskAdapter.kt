@@ -161,7 +161,7 @@ class ListTaskAdapter(
                     manager,
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() +
-                            TimeUnit.MINUTES.toMillis(1L),
+                            TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
                     notifyPendingIntent
                 )
             }
