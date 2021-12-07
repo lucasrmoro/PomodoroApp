@@ -6,7 +6,8 @@ data class ListTaskAdapterItem(
     val taskName: String,
     val taskMinutes: Int,
     var isSelected: Boolean = false,
-    var isTimerSwitchViewVisible: Boolean = true
+    var isTimerSwitchViewVisible: Boolean = true,
+    var isPomodoroTimerEnabled: Boolean? = null
 ){
     fun isTaskSelected(): Boolean{
         return isSelected

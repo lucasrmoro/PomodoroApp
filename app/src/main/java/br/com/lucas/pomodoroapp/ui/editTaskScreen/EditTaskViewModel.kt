@@ -1,15 +1,8 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.os.SystemClock
 import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.app.AlarmManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,7 +12,6 @@ import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
 import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 
 class EditTaskViewModel(application: Application) : AndroidViewModel(application) {
@@ -37,59 +29,10 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
     var task: Task? = null
         private set
 
-    private val alarmManager: AlarmManager? =
-        application.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-    @RequiresApi(Build.VERSION_CODES.S)
-    private val hasPermission: Boolean? = alarmManager?.canScheduleExactAlarms()
-    private val notifyIntent = Intent(application, AlarmReceiver::class.java)
-    private val pendingIntentFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    } else {
-        PendingIntent.FLAG_UPDATE_CURRENT
-    }
-
-    fun setup(task: Task, requestPermissionToSetExactAlarmCallback: (() -> Unit)) {
+    fun setup(task: Task) {
         this.task = task
         this.isEditMode = true
         total = task.taskMinutes
-
-        val notifyPendingIntent = PendingIntent.getBroadcast(
-            getApplication(),
-            BROADCAST_REQUEST_CODE,
-            notifyIntent.apply {
-                putExtra(AlarmReceiver.TASK_NAME, task.taskName)
-            },
-            pendingIntentFlag
-        )
-
-        Log.d(AlarmReceiver.TAG, "Starting ${task.taskName}")
-        Log.d(AlarmReceiver.TAG,
-            "task time: ${task.taskMinutes}")
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (hasPermission!!) {
-                startAlarm(task, notifyPendingIntent)
-            } else {
-                requestPermissionToSetExactAlarmCallback()
-            }
-        } else {
-            startAlarm(task, notifyPendingIntent)
-        }
-    }
-
-    private fun startAlarm(
-        task: Task,
-        notifyPendingIntent: PendingIntent
-    ) {
-        alarmManager?.let { manager ->
-            AlarmManagerCompat.setExactAndAllowWhileIdle(
-                manager,
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
-                notifyPendingIntent
-            )
-        }
     }
 
     fun delete(context: Context, closeScreen: () -> Unit) {
@@ -157,9 +100,4 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
             context.toast(R.string.fill_all_required_fields)
         }
     }
-
-    companion object {
-        private const val BROADCAST_REQUEST_CODE = 123
-    }
-
 }

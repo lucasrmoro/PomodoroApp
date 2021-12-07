@@ -2,6 +2,7 @@ package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,22 +15,17 @@ import kotlinx.coroutines.launch
 
 class ListTaskViewModel(private val context: Application) : AndroidViewModel(context) {
 
-    val taskList = MutableLiveData<List<Task>>()
+    val taskList = MutableLiveData<List<ListTaskAdapterItem>>()
     val selectionMode = MutableLiveData<Boolean>(false)
     private val tasksSelected = ArrayList<Task>()
 
     var previousSelection: ArrayList<Int>? = null
         private set
 
-    fun convertTaskToTaskAdapterItem(taskAdapterItem: ListTaskAdapterItem): Task{
+    fun convertTaskAdapterItemToTask(taskAdapterItem: ListTaskAdapterItem): Task{
         return taskAdapterItem.toTaskItem()
     }
 
-    fun convertTasksToTaskAdapterItems(listTask: List<Task>): List<ListTaskAdapterItem>{
-        return listTask.map {
-            it.toAdapterItem()
-        }
-    }
     fun syncSelection(taskAdapterItem: ListTaskAdapterItem, isSelected: Boolean) {
         if (isSelected) {
             val exists = tasksSelected.any { it.uid == taskAdapterItem.uid }
@@ -40,7 +36,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             tasksSelected.remove(taskAdapterItem.toTaskItem())
         }
 
-        if (isSelectedModeEnabled() != selectionMode.value) {
+        if (selectionMode.value != isSelectedModeEnabled()) {
             selectionMode.value = isSelectedModeEnabled()
         }
     }
@@ -58,10 +54,6 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
             }
             refresh()
         }
-    }
-
-    fun isDebugMode(): Boolean {
-        return BuildConfig.DEBUG
     }
 
     fun isSelectedModeEnabled(): Boolean {
@@ -86,16 +78,24 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         viewModelScope.launch {
             selectionMode.postValue(false)
             val tasks = DataBaseConnect.getTaskDao(context).getAll()
-            val updatedList = tasks.map { task ->
-                if (previousSelection?.contains(task.uid) == true) {
-                    val taskAdapterItem = task.toAdapterItem().apply {
+            val updatedList: List<ListTaskAdapterItem> = tasks.map {
+                val task = it.toAdapterItem()
+                if (previousSelection?.contains(it.uid) == true) {
+                    val taskAdapterItem = task.apply {
                         toggleTask()
                     }
                     syncSelection(taskAdapterItem, taskAdapterItem.isTaskSelected())
                 }
                 task
             }
-            taskList.postValue(updatedList)
+            val updatedListWithTimerSwitchState = if(previousSelection?.isNotEmpty() == true){
+                updatedList.map {
+                    it.copy(isTimerSwitchViewVisible = false)
+                }
+            } else {
+                updatedList
+            }
+            taskList.postValue(updatedListWithTimerSwitchState)
         }
     }
 

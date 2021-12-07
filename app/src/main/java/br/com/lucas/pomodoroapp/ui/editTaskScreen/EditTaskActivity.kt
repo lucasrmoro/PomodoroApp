@@ -43,14 +43,9 @@ class EditTaskActivity() : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
-        val requestAlarmPermissionIntent = Intent().apply {
-            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-        }
 
         if (task != null) {
-            viewModel.setup(task){
-                startActivity(requestAlarmPermissionIntent)
-            }
+            viewModel.setup(task)
             binding.toolbar.title = getString(edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =

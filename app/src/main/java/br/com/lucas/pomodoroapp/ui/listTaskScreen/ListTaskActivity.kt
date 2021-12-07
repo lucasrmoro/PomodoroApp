@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.lucas.pomodoroapp.BuildConfig
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.R.anim.from_bottom_anim
 import br.com.lucas.pomodoroapp.R.anim.to_bottom_anim
@@ -55,7 +56,7 @@ class ListTaskActivity : AppCompatActivity() {
         viewModel.taskList.observe(
             this
         ) { tasks ->
-            adapter.addTask(viewModel.convertTasksToTaskAdapterItems(tasks))
+            adapter.addTask(tasks)
         }
 
         viewModel.selectionMode.observe(
@@ -73,9 +74,7 @@ class ListTaskActivity : AppCompatActivity() {
             EditTaskActivity.launchNewTaskScreen(this)
         }
 
-        if (viewModel.isDebugMode()) {
-            setupDebugButtons()
-        }
+        if (BuildConfig.DEBUG) setupDebugButtons()
 
         configureList(this)
     }
@@ -88,7 +87,7 @@ class ListTaskActivity : AppCompatActivity() {
             isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
             launchEditScreenCallback = {
                 EditTaskActivity.launchEditTaskScreen(context,
-                    viewModel.convertTaskToTaskAdapterItem(it))
+                    viewModel.convertTaskAdapterItemToTask(it))
             }
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
