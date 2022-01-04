@@ -24,8 +24,9 @@ import br.com.lucas.pomodoroapp.core.extensions.toggleFabImage
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import br.com.lucas.pomodoroapp.ui.editTaskScreen.EditTaskActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ListTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListTaskBinding
