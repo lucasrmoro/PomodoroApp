@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.observe
@@ -31,7 +32,7 @@ class ListTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListTaskBinding
 
-    private lateinit var viewModel: ListTaskViewModel
+    private val viewModel by viewModels<ListTaskViewModel>()
 
     private lateinit var adapter: ListTaskAdapter
 
@@ -46,7 +47,6 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListTaskBinding.inflate(layoutInflater)
-        viewModel = ListTaskViewModel(application)
         setContentView(binding.root)
 
         savedInstanceState?.getIntegerArrayList(SELECTED_ELEMENTS_KEY)?.let { previousSelection ->
@@ -153,7 +153,7 @@ class ListTaskActivity : AppCompatActivity() {
             positiveButtonAction = {
                 try {
                     toast(successfully_deleted)
-                    viewModel.deleteTasks(this)
+                    viewModel.deleteTasks()
                 } catch (e: Exception) {
                     toast(somenthing_went_wrong)
                     Log.e("exception", "${e.message}")

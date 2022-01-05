@@ -1,20 +1,17 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
@@ -25,17 +22,18 @@ import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.AndroidEntryPoint
 
-class EditTaskActivity() : AppCompatActivity() {
+@AndroidEntryPoint
+class EditTaskActivity: AppCompatActivity() {
 
     lateinit var binding: ActivityEditTaskBinding
 
-    lateinit var viewModel: EditTaskViewModel
+    private val viewModel by viewModels<EditTaskViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditTaskBinding.inflate(layoutInflater)
-        viewModel = EditTaskViewModel(application)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -64,9 +62,13 @@ class EditTaskActivity() : AppCompatActivity() {
         }
 
         binding.fabSave.setOnClickListener {
-            viewModel.onSaveEvent(context = this,
+            viewModel.onSaveEvent(
                 taskName = binding.editTaskName.text.toString(),
-                closeScreen = { finish() })
+                toastOfSuccessUpdate = { toast(successfully_changed) },
+                toastOfSuccessAdd = { toast(successfully_saved) },
+                toastOfFail = { toast(fill_all_required_fields) },
+                closeScreen = { finish() }
+            )
         }
 
         binding.fabSaveAndRun.setOnClickListener {
@@ -121,10 +123,10 @@ class EditTaskActivity() : AppCompatActivity() {
             positiveButtonMessage = yes,
             positiveButtonAction = {
                 try {
-                    viewModel.delete(this) {
-                        toast(successfully_deleted)
-                        finish()
-                    }
+                    viewModel.delete(
+                        toastOfSuccess = { toast(successfully_deleted) },
+                        closeScreen = { finish() }
+                    )
                 } catch (e: Exception) {
                     toast(somenthing_went_wrong)
                     Log.e("exception", "${e.message}")
