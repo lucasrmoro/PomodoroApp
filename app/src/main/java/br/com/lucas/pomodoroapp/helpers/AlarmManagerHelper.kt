@@ -22,7 +22,7 @@ class AlarmManagerHelper(private val context: Context) {
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(1L),
+                        TimeUnit.MINUTES.toMillis(time * 1L),
                 getPendingIntent(
                     broadcastReceiverClass,
                     broadcastRequestCode,
