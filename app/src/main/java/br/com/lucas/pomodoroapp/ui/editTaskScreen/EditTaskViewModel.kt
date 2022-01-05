@@ -1,26 +1,22 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
-import android.app.AlarmManager
-import android.app.Application
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.SystemClock
 import android.util.Log
-import androidx.core.app.AlarmManagerCompat
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
-import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.TaskRepository
+import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-
-class EditTaskViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class EditTaskViewModel @Inject constructor(
+    private val repository: TaskRepository,
+    private val alarmManagerHelper: AlarmManagerHelper
+) : ViewModel() {
 
     var total: Int = 25
         private set
@@ -35,45 +31,28 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
     var task: Task? = null
         private set
 
-    private val alarmManager: AlarmManager? =
-        application.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
-    private val notifyIntent = Intent(application, AlarmReceiver::class.java)
-
     fun setup(task: Task) {
         this.task = task
         this.isEditMode = true
         total = task.taskMinutes
 
-        val notifyPendingIntent = PendingIntent.getBroadcast(
-            getApplication(),
-            BROADCAST_REQUEST_CODE,
-            notifyIntent.apply {
-                putExtra(AlarmReceiver.TASK_NAME, task.taskName)
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
         Log.d(AlarmReceiver.TAG, "Starting ${task.taskName}")
         Log.d(AlarmReceiver.TAG,
             "task time: ${task.taskMinutes}")
 
-
-        alarmManager?.let { manager ->
-            AlarmManagerCompat.setExactAndAllowWhileIdle(
-                manager,
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
-                notifyPendingIntent
-            )
-        }
-
+        alarmManagerHelper.setExactAlarm(
+            broadcastReceiverClass = AlarmReceiver::class.java,
+            broadcastRequestCode = BROADCAST_REQUEST_CODE,
+            putExtraKey = AlarmReceiver.TASK_NAME,
+            putExtraValue = task.taskName,
+            time = task.taskMinutes)
     }
 
-    fun delete(context: Context, closeScreen: () -> Unit) {
+    fun delete(closeScreen: () -> Unit, toastOfSuccess: () -> Unit) {
         val task = task ?: return
         viewModelScope.launch {
-            DataBaseConnect.getTaskDao(context).deleteTask(task)
+            repository.deleteTask(task)
+            toastOfSuccess()
             closeScreen()
         }
     }
@@ -92,47 +71,61 @@ class EditTaskViewModel(application: Application) : AndroidViewModel(application
         isPomodoroTimerValid.value = total in 25..60
     }
 
-    fun onSaveEvent(context: Context, taskName: String, closeScreen: (() -> Unit)) {
+    fun onSaveEvent(
+        taskName: String,
+        closeScreen: (() -> Unit),
+        toastOfSuccessUpdate: () -> Unit,
+        toastOfSuccessAdd: () -> Unit,
+        toastOfFail: () -> Unit
+    ) {
         if (task == null) {
-            saveNewTask(context, taskName, closeScreen)
+            saveNewTask(taskName, toastOfSuccessAdd, toastOfFail, closeScreen)
         } else {
             task!!.taskName = taskName
             task!!.taskMinutes = total
             validTask(task!!.taskName)
             checkTotalTime()
-            saveSameTask(context, task!!, closeScreen)
+            saveSameTask(task!!, closeScreen, toastOfSuccessUpdate, toastOfFail)
         }
     }
 
-    private fun saveSameTask(context: Context, task: Task, closeScreen: () -> Unit) {
+    private fun saveSameTask(
+        task: Task,
+        closeScreen: () -> Unit,
+        toastOfSuccessUpdate: () -> Unit,
+        toastOfFail: () -> Unit
+    ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
-                DataBaseConnect.getTaskDao(context).updateTask(
-                    task
-                )
-                context.toast(R.string.successfully_saved)
+                repository.updateTask(task)
+                toastOfSuccessUpdate()
                 closeScreen()
             }
         } else {
-            context.toast(R.string.fill_all_required_fields)
+            toastOfFail()
         }
     }
 
-    private fun saveNewTask(context: Context, taskName: String, closeScreen: () -> Unit) {
+    private fun saveNewTask(
+        taskName: String,
+        toastOfSuccessAdd: () -> Unit,
+        toastOfFail: () -> Unit,
+        closeScreen: () -> Unit
+    ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
-                DataBaseConnect.getTaskDao(context).insertTask(
+                repository.insertTask(
                     Task(
                         taskName = taskName,
                         taskMinutes = total,
                         uid = 0
                     )
                 )
-                context.toast(R.string.successfully_saved)
+                toastOfSuccessAdd()
                 closeScreen()
             }
         } else {
-            context.toast(R.string.fill_all_required_fields)
+            toastOfFail()
         }
     }
 
