@@ -40,7 +40,7 @@ class EditTaskViewModel @Inject constructor(
         Log.d(AlarmReceiver.TAG,
             "task time: ${task.taskMinutes}")
 
-        alarmManagerHelper.setExactAlarm(task)
+        alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
 
     fun delete(closeScreen: () -> Unit, toastOfSuccess: () -> Unit) {
