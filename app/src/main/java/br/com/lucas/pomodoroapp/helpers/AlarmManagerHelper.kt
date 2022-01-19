@@ -6,48 +6,45 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import androidx.core.app.AlarmManagerCompat
+import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
+import br.com.lucas.pomodoroapp.database.Task
 import dagger.hilt.android.internal.Contexts.getApplication
 import java.util.concurrent.TimeUnit
 
 class AlarmManagerHelper(private val context: Context) {
     fun setExactAlarm(
-        broadcastReceiverClass: Class<*>,
-        broadcastRequestCode: Int,
-        putExtraKey: String,
-        putExtraValue: String,
-        time: Int
+        task: Task
     ) {
         buildAlarmManager()?.let { manager ->
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(time * 1L),
-                getPendingIntent(
-                    broadcastReceiverClass,
-                    broadcastRequestCode,
-                    putExtraKey,
-                    putExtraValue)
+                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
+                getPendingIntent(task)
             )
         }
     }
 
+    private fun buildAlarmManager(): AlarmManager? =
+        context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+
     private fun getPendingIntent(
-        broadcastReceiverClass: Class<*>,
-        broadcastRequestCode: Int,
-        putExtraKey: String,
-        putExtraValue: String
+        task: Task
     ): PendingIntent {
-        val notifyIntent = Intent(context, broadcastReceiverClass)
+        val notifyIntent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra(AlarmReceiver.TASK_NAME, task.taskName)
+        }
 
         return PendingIntent.getBroadcast(
             getApplication(context),
-            broadcastRequestCode,
-            notifyIntent.putExtra(putExtraKey, putExtraValue),
+            BROADCAST_REQUEST_CODE,
+            notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
-    private fun buildAlarmManager(): AlarmManager? =
-        context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+    companion object {
+        private const val BROADCAST_REQUEST_CODE = 123
+    }
 }

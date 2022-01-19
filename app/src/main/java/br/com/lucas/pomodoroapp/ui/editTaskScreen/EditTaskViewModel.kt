@@ -40,12 +40,7 @@ class EditTaskViewModel @Inject constructor(
         Log.d(AlarmReceiver.TAG,
             "task time: ${task.taskMinutes}")
 
-        alarmManagerHelper.setExactAlarm(
-            broadcastReceiverClass = AlarmReceiver::class.java,
-            broadcastRequestCode = BROADCAST_REQUEST_CODE,
-            putExtraKey = AlarmReceiver.TASK_NAME,
-            putExtraValue = task.taskName,
-            time = task.taskMinutes)
+        alarmManagerHelper.setExactAlarm(task)
     }
 
     fun delete(closeScreen: () -> Unit, toastOfSuccess: () -> Unit) {
@@ -128,9 +123,4 @@ class EditTaskViewModel @Inject constructor(
             toastOfFail()
         }
     }
-
-    companion object {
-        private const val BROADCAST_REQUEST_CODE = 123
-    }
-
 }
