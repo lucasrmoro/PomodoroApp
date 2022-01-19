@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp.database.di
+package br.com.lucas.pomodoroapp.di
 
 import android.content.Context
 import androidx.room.Room
