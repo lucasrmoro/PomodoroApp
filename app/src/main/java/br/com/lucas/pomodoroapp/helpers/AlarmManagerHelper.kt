@@ -12,10 +12,13 @@ import dagger.hilt.android.internal.Contexts.getApplication
 import java.util.concurrent.TimeUnit
 
 class AlarmManagerHelper(private val context: Context) {
+    private val alarmManager: AlarmManager? =
+        context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+
     fun setExactAlarm(
         task: Task
     ) {
-        buildAlarmManager()?.let { manager ->
+        alarmManager?.let { manager ->
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -25,9 +28,6 @@ class AlarmManagerHelper(private val context: Context) {
             )
         }
     }
-
-    private fun buildAlarmManager(): AlarmManager? =
-        context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
     private fun getPendingIntent(
         task: Task
