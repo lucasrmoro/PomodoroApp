@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.SystemClock
 import androidx.core.app.AlarmManagerCompat
 import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
-import br.com.lucas.pomodoroapp.database.Task
 import dagger.hilt.android.internal.Contexts.getApplication
 import java.util.concurrent.TimeUnit
 
@@ -16,24 +15,24 @@ class AlarmManagerHelper(private val context: Context) {
         context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 
     fun setExactAlarm(
-        task: Task
+        alarmTime: Int
     ) {
         alarmManager?.let { manager ->
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 manager,
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
-                        TimeUnit.MINUTES.toMillis(task.taskMinutes * 1L),
-                getPendingIntent(task)
+                        TimeUnit.MINUTES.toMillis(alarmTime * 1L),
+                getPendingIntent(alarmTime)
             )
         }
     }
 
     private fun getPendingIntent(
-        task: Task
+        alarmTime: Int
     ): PendingIntent {
         val notifyIntent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra(AlarmReceiver.TASK_NAME, task.taskName)
+            putExtra(AlarmReceiver.TASK_NAME, alarmTime)
         }
 
         return PendingIntent.getBroadcast(
