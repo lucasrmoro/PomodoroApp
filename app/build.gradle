@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'dagger.hilt.android.plugin'
 }
 
 private static int androidVersionCode(){
@@ -50,6 +51,10 @@ android {
 
 dependencies {
     def room_version = "2.3.0"
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"

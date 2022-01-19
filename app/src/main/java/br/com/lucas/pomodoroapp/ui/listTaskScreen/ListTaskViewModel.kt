@@ -1,16 +1,20 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.BuildConfig
-import br.com.lucas.pomodoroapp.database.DataBaseConnect
 import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.TaskRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListTaskViewModel(private val context: Application) : AndroidViewModel(context) {
+@HiltViewModel
+class ListTaskViewModel @Inject constructor(
+    private val repository: TaskRepository
+) : ViewModel() {
 
     val taskList = MutableLiveData<List<Task>>()
     val selectionMode = MutableLiveData<Boolean>(false)
@@ -37,7 +41,7 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
     fun addTenTasksOnDataBase() {
         viewModelScope.launch {
             for (i in 1..10) {
-                DataBaseConnect.getTaskDao(context).insertTask(
+                repository.insertTask(
                     Task(
                         taskName = "Test Task $i",
                         taskMinutes = 25,
@@ -57,11 +61,13 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
         return tasksSelected.isNotEmpty()
     }
 
-    fun deleteTasks(context: Context) {
+    fun deleteTasks() {
         viewModelScope.launch {
             tasksSelected.forEach {
-                DataBaseConnect.getTaskDao(context).deleteTask(it)
+                repository.deleteTask(it)
             }
+            selectionMode.value = false
+            previousSelection?.clear()
             tasksSelected.clear()
             refresh()
         }
@@ -73,9 +79,11 @@ class ListTaskViewModel(private val context: Application) : AndroidViewModel(con
 
     fun refresh() {
         viewModelScope.launch {
+            repository.getAllTasks().collect { listOfTasks ->
+                taskList.value = listOfTasks
+            }
             selectionMode.postValue(false)
-            val tasks = DataBaseConnect.getTaskDao(context).getAll()
-            val updatedList = tasks.map { task ->
+            val updatedList = taskList.value?.map { task ->
                 if (previousSelection?.contains(task.uid) == true) {
                     task.toggleTask()
                     syncSelection(task, task.isTaskSelected())
