@@ -20,7 +20,7 @@ class ListTaskViewModel @Inject constructor(
     val selectionMode = MutableLiveData<Boolean>(false)
     private val tasksSelected = ArrayList<Task>()
 
-    var previousSelection: ArrayList<Int>? = null
+    var previousSelection: ArrayList<Int> = arrayListOf()
         private set
 
     fun syncSelection(task: Task, isSelected: Boolean) {
@@ -67,7 +67,7 @@ class ListTaskViewModel @Inject constructor(
                 repository.deleteTask(it)
             }
             selectionMode.value = false
-            previousSelection?.clear()
+            previousSelection.clear()
             tasksSelected.clear()
             refresh()
         }
@@ -84,7 +84,7 @@ class ListTaskViewModel @Inject constructor(
             }
             selectionMode.postValue(false)
             val updatedList = taskList.value?.map { task ->
-                if (previousSelection?.contains(task.uid) == true) {
+                if (previousSelection.contains(task.uid)) {
                     task.toggleTask()
                     syncSelection(task, task.isTaskSelected())
                 }
