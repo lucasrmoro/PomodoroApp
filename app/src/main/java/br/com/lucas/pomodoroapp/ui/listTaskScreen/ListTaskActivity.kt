@@ -87,9 +87,11 @@ class ListTaskActivity : AppCompatActivity() {
             }
         }
         adapter = ListTaskAdapter(listTaskAdapterEvents)
-        binding.recyclerView.itemAnimator = null
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.apply{
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@ListTaskActivity.adapter
+        }
     }
 
     private fun setupDebugButtons() {
