@@ -7,24 +7,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
-import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
-
 class ListTaskAdapter(
-    private val selectionTaskCallback: ((Task, Boolean) -> Unit),
-    private val isSelectionModeEnabledCallback: ((Task) -> Boolean),
-    private val launchEditScreenCallback: ((Task) -> Unit)
-) : ListAdapter<Task, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
+    private val listTaskAdapterEvents: ListTaskAdapterEvents
+) : ListAdapter<AdapterItem, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
 
-    fun addTask(tasks: List<Task>) {
+    fun addTask(tasks: List<AdapterItem>) {
         submitList(tasks)
     }
-
-    fun selectedTaskIds() = currentList
-        .filter { it.isTaskSelected() }
-        .map { it.uid }
-        .toList()
 
     fun reset() {
         currentList.forEach {
@@ -58,72 +49,59 @@ class ListTaskAdapter(
         private val cardColorSelected =
             binding.root.context.getColorResCompat(android.R.attr.colorControlHighlight)
 
-        fun bind(task: Task) {
-            addTaskItemProperties(task)
-
-            if (task.isTaskSelected()) {
-                checkIconAppearAnimation()
-                binding.root.setCardBackgroundColor(cardColorSelected)
-                selectionTaskCallback(task, true)
-            }
+        fun bind(task: AdapterItem) {
+            binding.itemTaskName.text = task.taskName
+            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            cardSelectedState(task.isTaskSelected, false)
 
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
                     toggleSelectionMode(task)
-                    selectionTaskCallback(task, task.isTaskSelected())
                 }
                 true
             }
+
             binding.root.setOnClickListener {
-                if (isSelectionModeEnabledCallback(task)) {
+                if (listTaskAdapterEvents.isSelectionModeEnabledCallback()) {
                     toggleSelectionMode(task)
-                    selectionTaskCallback(task, task.isTaskSelected())
                 } else {
-                    launchEditScreenCallback(task)
+                    listTaskAdapterEvents.launchEditScreenCallback(task)
                 }
             }
         }
 
-        private fun addTaskItemProperties(task: Task) {
-            binding.itemTaskName.text = task.taskName
-            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
-            binding.root.setCardBackgroundColor(cardColorDefault)
-            configureCheckItem()
-        }
-
-        private fun configureCheckItem() {
-            binding.checkItem.scaleX = 0f
-            binding.checkItem.scaleY = 0f
-        }
-
-        private fun toggleSelectionMode(task: Task) {
+        private fun toggleSelectionMode(task: AdapterItem) {
             task.toggleTask()
-            if (task.isTaskSelected()) {
-                checkIconAppearAnimation()
-                binding.root.setCardBackgroundColor(cardColorSelected)
+            listTaskAdapterEvents.selectionTaskCallback(task)
+            cardSelectedState(task.isTaskSelected, true)
+        }
+
+        private fun cardSelectedState(isSelected: Boolean, isAnimated: Boolean) {
+            val scale = if(isSelected) 1f else 0f
+            val cardColor = if(isSelected) cardColorSelected else cardColorDefault
+            binding.root.setCardBackgroundColor(cardColor)
+            if(isAnimated){
+                binding.checkItem.animate().scaleX(scale).scaleY(scale).duration = 250
             } else {
-                checkIconDisappearAnimation()
-                binding.root.setCardBackgroundColor(cardColorDefault)
+                binding.checkItem.scaleX = scale
+                binding.checkItem.scaleY = scale
             }
-        }
-
-        private fun checkIconAppearAnimation() {
-            binding.checkItem.animate().scaleX(1f).scaleY(1f).duration = 250
-        }
-
-        private fun checkIconDisappearAnimation() {
-            binding.checkItem.animate().scaleX(0f).scaleY(0f).duration = 250
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Task>() {
-        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+    private class DiffCallback : DiffUtil.ItemCallback<AdapterItem>() {
+        override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
             return oldItem.uid == newItem.uid
         }
 
-        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        override fun areContentsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
             return oldItem == newItem
         }
-
     }
+}
+
+interface ListTaskAdapterEvents {
+    fun selectionTaskCallback(adapterItem: AdapterItem)
+    fun isSelectionModeEnabledCallback(): Boolean
+    fun launchEditScreenCallback(adapterItem: AdapterItem)
 }
