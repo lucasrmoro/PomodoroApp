@@ -2,26 +2,21 @@ package br.com.lucas.pomodoroapp.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import br.com.lucas.pomodoroapp.CoroutinesTestRule
+import br.com.lucas.pomodoroapp.core.extensions.toAdapterItem
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.database.TaskDao
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskViewModel
 import com.google.common.truth.Truth
-import io.mockk.*
-import kotlinx.coroutines.Dispatchers
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.coroutines.suspendCoroutine
 
 @ExperimentalCoroutinesApi
 class ListTaskViewModelTest {
@@ -56,10 +51,10 @@ class ListTaskViewModelTest {
             viewModel.refresh()
 
             val result1 = viewModel.taskList.value
-            val result2 = viewModel.previousSelection
+            val result2 = viewModel.isSelectedModeEnabled()
 
             Truth.assertThat(result1).isEmpty()
-            Truth.assertThat(result2).isEmpty()
+            Truth.assertThat(result2).isFalse()
         }
 
     @Test
@@ -69,33 +64,29 @@ class ListTaskViewModelTest {
             viewModel.refresh()
 
             val result1 = viewModel.taskList.value
-            val result2 = viewModel.previousSelection
+            val result2 = viewModel.isSelectedModeEnabled()
 
             Truth.assertThat(result1).isNotEmpty()
-            Truth.assertThat(result2).isEmpty()
+            Truth.assertThat(result2).isFalse()
         }
 
     @Test
     fun `Refresh with previous selection - there are some selected tasks`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
-            val task1 = testTask.copy(uid = 0, taskName = "Test1").apply { toggleTask() }
-            val task2 = testTask.copy(uid = 1, taskName = "Test2").apply { toggleTask() }
+            val task1 = testTask.copy(uid = 0, taskName = "Test1")
+            val task2 = testTask.copy(uid = 1, taskName = "Test2")
             val task3 = testTask.copy(uid = 2, taskName = "Test3")
             coEvery { taskDao.getAll() }.returns(flowOf(listOf(task1, task2, task3)))
+
+            val selectedTask1 = task1.toAdapterItem().apply { toggleTask() }
+            val selectedTask2 = task2.toAdapterItem().apply { toggleTask() }
+
             viewModel.refresh()
 
-            val tasksSelected = viewModel.taskList.value
-                ?.filter { it.isTaskSelected() }
-                ?.map { it.uid }
-                ?.toList() ?: listOf(0, 1)
+            viewModel.syncSelection(selectedTask1)
+            viewModel.syncSelection(selectedTask2)
 
-            viewModel.processPreviousSelection(ArrayList(tasksSelected))
-
-            val listOfTasksUid = viewModel.taskList.value
-                ?.map { it.uid }
-                ?.toList()
-
-            Truth.assertThat(listOfTasksUid?.containsAll(viewModel.previousSelection)).isTrue()
+            Truth.assertThat(viewModel.getQuantityOfSelectedTasks()).isEqualTo(2)
         }
 
     @Test
@@ -105,8 +96,11 @@ class ListTaskViewModelTest {
             val task2 = testTask.copy(uid = 1, taskName = "Test2")
             coEvery { taskDao.getAll() }.returns(flowOf(listOf(task1, task2)))
 
-            viewModel.syncSelection(task1, true)
-            viewModel.syncSelection(task2, true)
+            val selectedTask1 = task1.toAdapterItem().apply { toggleTask() }
+            val selectedTask2 = task2.toAdapterItem().apply { toggleTask() }
+
+            viewModel.syncSelection(selectedTask1)
+            viewModel.syncSelection(selectedTask2)
 
             viewModel.deleteTasks()
 
