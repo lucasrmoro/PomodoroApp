@@ -80,14 +80,18 @@ class ListTaskViewModel @Inject constructor(
         return tasksSelected.size
     }
 
+    private fun checkTaskIsSelected(task: AdapterItem){
+        if(tasksSelected.any{ it.uid == task.uid}){
+            task.toggleTask()
+            syncSelection(task)
+        }
+    }
+
     fun refresh() {
         viewModelScope.launch {
             repository.getAllTasks().collect { listOfTasks ->
                 val updatedList = listOfTasks.toAdapterItems().map { task ->
-                    if (tasksSelected.contains(task.toTaskItem())) {
-                        task.toggleTask()
-                        syncSelection(task)
-                    }
+                    checkTaskIsSelected(task)
                     task
                 }
                 taskList.postValue(updatedList)
