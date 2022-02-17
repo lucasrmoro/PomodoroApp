@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.BuildConfig
+import br.com.lucas.pomodoroapp.core.extensions.toAdapterItems
+import br.com.lucas.pomodoroapp.core.extensions.toTaskItem
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,16 +18,18 @@ class ListTaskViewModel @Inject constructor(
     private val repository: TaskRepository
 ) : ViewModel() {
 
-    val taskList = MutableLiveData<List<Task>>()
+    val taskList = MutableLiveData<List<AdapterItem>>()
     val selectionMode = MutableLiveData<Boolean>(false)
     private val tasksSelected = ArrayList<Task>()
 
-    var previousSelection: ArrayList<Int> = arrayListOf()
-        private set
+    fun convertAdapterItemToTask(adapterItem: AdapterItem): Task {
+        return adapterItem.toTaskItem()
+    }
 
-    fun syncSelection(task: Task, isSelected: Boolean) {
-        if (isSelected) {
-            val exists = tasksSelected.any { it.uid == task.uid }
+    fun syncSelection(taskAdapterItem: AdapterItem) {
+        val task = taskAdapterItem.toTaskItem()
+        if (taskAdapterItem.isSelected) {
+            val exists = tasksSelected.any { it.uid == taskAdapterItem.uid }
             if (!exists) {
                 tasksSelected.add(task)
             }
@@ -67,7 +71,6 @@ class ListTaskViewModel @Inject constructor(
                 repository.deleteTask(it)
             }
             selectionMode.value = false
-            previousSelection.clear()
             tasksSelected.clear()
             refresh()
         }
@@ -80,21 +83,15 @@ class ListTaskViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             repository.getAllTasks().collect { listOfTasks ->
-                taskList.value = listOfTasks
-            }
-            selectionMode.postValue(false)
-            val updatedList = taskList.value?.map { task ->
-                if (previousSelection.contains(task.uid)) {
-                    task.toggleTask()
-                    syncSelection(task, task.isTaskSelected())
+                val updatedList = listOfTasks.toAdapterItems().map { task ->
+                    if (tasksSelected.contains(task.toTaskItem())) {
+                        task.toggleTask()
+                        syncSelection(task)
+                    }
+                    task
                 }
-                task
+                taskList.postValue(updatedList)
             }
-            taskList.postValue(updatedList)
         }
-    }
-
-    fun processPreviousSelection(preSelectedElements: ArrayList<Int>) {
-        previousSelection = preSelectedElements
     }
 }
