@@ -49,10 +49,6 @@ class ListTaskActivity : AppCompatActivity() {
         binding = ActivityListTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        savedInstanceState?.getIntegerArrayList(SELECTED_ELEMENTS_KEY)?.let { previousSelection ->
-            viewModel.processPreviousSelection(previousSelection)
-        }
-
         viewModel.taskList.observe(
             this
         ) { tasks ->
@@ -78,13 +74,20 @@ class ListTaskActivity : AppCompatActivity() {
     }
 
     private fun configureList(context: Context) {
-        adapter = ListTaskAdapter(
-            selectionTaskCallback = { task, isSelected ->
-                viewModel.syncSelection(task, isSelected)
-            },
-            isSelectionModeEnabledCallback = { viewModel.isSelectedModeEnabled() },
-            launchEditScreenCallback = { EditTaskActivity.launchEditTaskScreen(context, it) }
-        )
+        val listTaskAdapterEvents = object : ListTaskAdapterEvents {
+            override fun selectionTaskCallback(adapterItem: AdapterItem) {
+                viewModel.syncSelection(adapterItem)
+            }
+
+            override fun isSelectionModeEnabledCallback() = viewModel.isSelectedModeEnabled()
+
+            override fun launchEditScreenCallback(adapterItem: AdapterItem) {
+                EditTaskActivity.launchEditTaskScreen(context,
+                    viewModel.convertAdapterItemToTask(adapterItem))
+            }
+        }
+        adapter = ListTaskAdapter(listTaskAdapterEvents)
+        binding.recyclerView.itemAnimator = null
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
     }
@@ -166,15 +169,5 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putIntegerArrayList(SELECTED_ELEMENTS_KEY, ArrayList(adapter.selectedTaskIds()))
-
-        super.onSaveInstanceState(outState)
-    }
-
-    companion object {
-        private const val SELECTED_ELEMENTS_KEY = "selected elements - adapter's list"
     }
 }
