@@ -4,17 +4,16 @@ data class AdapterItem(
     val uid: Int,
     val taskName: String,
     val taskMinutes: Int,
-    var isSelected: Boolean = false
-){
-    fun isTaskSelected(): Boolean{
-        return isSelected
-    }
+    private var isSelected: Boolean = false
+) {
+    val isTaskSelected: Boolean
+        get() = isSelected
 
-    fun toggleTask(){
+    fun toggleTask() {
         isSelected = !isSelected
     }
 
-    fun resetTaskSelection(){
+    fun resetTaskSelection() {
         isSelected = false
     }
 }
