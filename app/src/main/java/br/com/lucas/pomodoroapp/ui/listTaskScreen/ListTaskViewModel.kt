@@ -28,7 +28,7 @@ class ListTaskViewModel @Inject constructor(
 
     fun syncSelection(taskAdapterItem: AdapterItem) {
         val task = taskAdapterItem.toTaskItem()
-        if (taskAdapterItem.isSelected) {
+        if (taskAdapterItem.isTaskSelected) {
             val exists = tasksSelected.any { it.uid == taskAdapterItem.uid }
             if (!exists) {
                 tasksSelected.add(task)

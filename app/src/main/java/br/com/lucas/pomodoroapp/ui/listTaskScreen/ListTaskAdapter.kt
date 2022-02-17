@@ -52,7 +52,7 @@ class ListTaskAdapter(
         fun bind(task: AdapterItem) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
-            cardSelectedState(task.isTaskSelected(), false)
+            cardSelectedState(task.isTaskSelected, false)
 
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
@@ -73,7 +73,7 @@ class ListTaskAdapter(
         private fun toggleSelectionMode(task: AdapterItem) {
             task.toggleTask()
             listTaskAdapterEvents.selectionTaskCallback(task)
-            cardSelectedState(task.isTaskSelected(), true)
+            cardSelectedState(task.isTaskSelected, true)
         }
 
         private fun cardSelectedState(isSelected: Boolean, isAnimated: Boolean) {
