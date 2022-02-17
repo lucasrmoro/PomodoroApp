@@ -14,19 +14,4 @@ data class Task(
     var taskName: String,
     @ColumnInfo
     var taskMinutes: Int
-) : Serializable {
-    @Ignore
-    private var isSelected: Boolean = false
-
-    fun isTaskSelected(): Boolean{
-        return isSelected
-    }
-
-    fun toggleTask(){
-        isSelected = !isSelected
-    }
-
-    fun resetTaskSelection(){
-        isSelected = false
-    }
-}
+) : Serializable
