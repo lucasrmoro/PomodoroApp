@@ -43,7 +43,7 @@ class EditTaskViewModel @Inject constructor(
         alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
 
-    fun delete(closeScreen: () -> Unit, toastOfSuccess: () -> Unit) {
+    fun delete(closeScreen: () -> Unit = {}, toastOfSuccess: () -> Unit = {}) {
         val task = task ?: return
         viewModelScope.launch {
             repository.deleteTask(task)
