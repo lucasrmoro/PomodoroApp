@@ -68,10 +68,10 @@ class EditTaskViewModel @Inject constructor(
 
     fun onSaveEvent(
         taskName: String,
-        closeScreen: (() -> Unit),
-        toastOfSuccessUpdate: () -> Unit,
-        toastOfSuccessAdd: () -> Unit,
-        toastOfFail: () -> Unit
+        closeScreen: (() -> Unit) = {},
+        toastOfSuccessUpdate: () -> Unit= {},
+        toastOfSuccessAdd: () -> Unit = {},
+        toastOfFail: () -> Unit = {}
     ) {
         if (task == null) {
             saveNewTask(taskName, toastOfSuccessAdd, toastOfFail, closeScreen)
