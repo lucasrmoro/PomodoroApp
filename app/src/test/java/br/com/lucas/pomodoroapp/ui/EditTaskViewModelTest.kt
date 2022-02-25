@@ -47,7 +47,7 @@ class EditTaskViewModelTest {
     }
 
     @Test
-    fun `Add a new task with valid name and Pomodoro time`() =
+    fun `Add a new task`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             viewModel.checkTaskTimeIsValid(0, 30)
             viewModel.checkTaskNameIsValid("New Task")
