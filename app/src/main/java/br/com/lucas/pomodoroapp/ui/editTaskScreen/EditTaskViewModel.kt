@@ -52,11 +52,11 @@ class EditTaskViewModel @Inject constructor(
         }
     }
 
-    fun validTask(content: String) {
-        isTaskNameValid.value = content.length >= 3
+    fun checkTaskNameIsValid(taskName: String) {
+        isTaskNameValid.value = taskName.length >= 3
     }
 
-    fun checkTimeIsValid(hour: Int, minute: Int) {
+    fun checkTaskTimeIsValid(hour: Int, minute: Int) {
         val hoursInMinutes = hour * HOUR_ON_MINUTES
         total = hoursInMinutes + minute
         checkTotalTime()
@@ -78,7 +78,7 @@ class EditTaskViewModel @Inject constructor(
         } else {
             task!!.taskName = taskName
             task!!.taskMinutes = total
-            validTask(task!!.taskName)
+            checkTaskNameIsValid(task!!.taskName)
             checkTotalTime()
             saveSameTask(task!!, closeScreen, toastOfSuccessUpdate, toastOfFail)
         }

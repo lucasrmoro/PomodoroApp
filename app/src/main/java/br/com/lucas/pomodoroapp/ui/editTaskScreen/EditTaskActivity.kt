@@ -57,7 +57,7 @@ class EditTaskActivity: AppCompatActivity() {
         }
 
         binding.editTaskName.doAfterTextChanged {
-            viewModel.validTask(it.toString())
+            viewModel.checkTaskNameIsValid(it.toString())
             Log.d("log test editTask", it.toString())
         }
 
@@ -146,7 +146,7 @@ class EditTaskActivity: AppCompatActivity() {
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
-            viewModel.checkTimeIsValid(picker.hour, picker.minute)
+            viewModel.checkTaskTimeIsValid(picker.hour, picker.minute)
             binding.editPomodoroTimer.text = viewModel.total.convertMinutesToHour()
         }
     }
