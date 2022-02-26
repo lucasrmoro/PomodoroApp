@@ -12,6 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+typealias EditTaskCallback = () -> Unit
+
 @HiltViewModel
 class EditTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
@@ -43,7 +45,7 @@ class EditTaskViewModel @Inject constructor(
         alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
 
-    fun delete(closeScreen: () -> Unit = {}, toastOfSuccess: () -> Unit = {}) {
+    fun delete(closeScreen: EditTaskCallback = {}, toastOfSuccess: EditTaskCallback = {}) {
         val task = task ?: return
         viewModelScope.launch {
             repository.deleteTask(task)
@@ -68,10 +70,10 @@ class EditTaskViewModel @Inject constructor(
 
     fun onSaveEvent(
         taskName: String,
-        closeScreen: (() -> Unit) = {},
-        toastOfSuccessUpdate: () -> Unit= {},
-        toastOfSuccessAdd: () -> Unit = {},
-        toastOfFail: () -> Unit = {}
+        closeScreen: EditTaskCallback = {},
+        toastOfSuccessUpdate: EditTaskCallback = {},
+        toastOfSuccessAdd: EditTaskCallback = {},
+        toastOfFail: EditTaskCallback = {}
     ) {
         if (task == null) {
             saveNewTask(taskName, toastOfSuccessAdd, toastOfFail, closeScreen)
@@ -86,9 +88,9 @@ class EditTaskViewModel @Inject constructor(
 
     private fun saveSameTask(
         task: Task,
-        closeScreen: () -> Unit,
-        toastOfSuccessUpdate: () -> Unit,
-        toastOfFail: () -> Unit
+        closeScreen: EditTaskCallback,
+        toastOfSuccessUpdate: EditTaskCallback,
+        toastOfFail: EditTaskCallback
     ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
@@ -103,9 +105,9 @@ class EditTaskViewModel @Inject constructor(
 
     private fun saveNewTask(
         taskName: String,
-        toastOfSuccessAdd: () -> Unit,
-        toastOfFail: () -> Unit,
-        closeScreen: () -> Unit
+        toastOfSuccessAdd: EditTaskCallback,
+        toastOfFail: EditTaskCallback,
+        closeScreen: EditTaskCallback
     ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
