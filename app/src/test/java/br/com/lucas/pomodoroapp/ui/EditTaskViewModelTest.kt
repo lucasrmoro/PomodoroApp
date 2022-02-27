@@ -2,12 +2,13 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import br.com.lucas.pomodoroapp.CoroutinesTestRule
+import br.com.lucas.pomodoroapp.rules.CoroutinesTestRule
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.database.TaskDao
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
 import br.com.lucas.pomodoroapp.ui.editTaskScreen.EditTaskViewModel
+import br.com.lucas.pomodoroapp.rules.TimberRule
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +25,9 @@ class EditTaskViewModelTest {
 
     @get: Rule
     val coroutinesTestRule = CoroutinesTestRule()
+
+    @get: Rule
+    val timberRule = TimberRule()
 
     private lateinit var context: Context
     private lateinit var alarmManagerHelper: AlarmManagerHelper

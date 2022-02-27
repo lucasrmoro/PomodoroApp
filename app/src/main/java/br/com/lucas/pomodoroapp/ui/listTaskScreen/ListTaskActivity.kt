@@ -2,7 +2,6 @@ package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,6 +25,7 @@ import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import br.com.lucas.pomodoroapp.ui.editTaskScreen.EditTaskActivity
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ListTaskActivity : AppCompatActivity() {
@@ -161,7 +161,7 @@ class ListTaskActivity : AppCompatActivity() {
                     viewModel.deleteTasks()
                 } catch (e: Exception) {
                     toast(somenthing_went_wrong)
-                    Log.e("exception", "${e.message}")
+                    Timber.tag("Exception").e(e)
                 }
             },
             negativeButtonMessage = cancel

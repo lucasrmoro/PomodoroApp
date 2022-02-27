@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -23,9 +22,10 @@ import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import com.google.android.material.timepicker.MaterialTimePicker.Builder
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
-class EditTaskActivity: AppCompatActivity() {
+class EditTaskActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityEditTaskBinding
 
@@ -53,12 +53,12 @@ class EditTaskActivity: AppCompatActivity() {
         }
 
         binding.editPomodoroTimer.doAfterTextChanged {
-            Log.d("log test editTimer", it.toString())
+            Timber.d("Pomodoro time: $it")
         }
 
         binding.editTaskName.doAfterTextChanged {
             viewModel.checkTaskNameIsValid(it.toString())
-            Log.d("log test editTask", it.toString())
+            Timber.d("Task name: $it")
         }
 
         binding.fabSave.setOnClickListener {
@@ -129,7 +129,7 @@ class EditTaskActivity: AppCompatActivity() {
                     )
                 } catch (e: Exception) {
                     toast(somenthing_went_wrong)
-                    Log.e("exception", "${e.message}")
+                    Timber.e(e.message)
                 }
             },
             negativeButtonMessage = cancel
@@ -142,7 +142,7 @@ class EditTaskActivity: AppCompatActivity() {
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(0)
             .setMinute(25)
-            .setTitleText(getString(R.string.select_pomodoro_time))
+            .setTitleText(getString(select_pomodoro_time))
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {

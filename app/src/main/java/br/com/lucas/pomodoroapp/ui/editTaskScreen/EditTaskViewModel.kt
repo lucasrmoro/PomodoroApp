@@ -1,6 +1,5 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +9,7 @@ import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 typealias EditTaskCallback = () -> Unit
@@ -38,9 +38,8 @@ class EditTaskViewModel @Inject constructor(
         this.isEditMode = true
         total = task.taskMinutes
 
-        Log.d(AlarmReceiver.TAG, "Starting ${task.taskName}")
-        Log.d(AlarmReceiver.TAG,
-            "task time: ${task.taskMinutes}")
+        Timber.tag(AlarmReceiver.TAG).d("Starting ${task.taskName}")
+        Timber.tag(AlarmReceiver.TAG).d("task time: ${task.taskMinutes}")
 
         alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
