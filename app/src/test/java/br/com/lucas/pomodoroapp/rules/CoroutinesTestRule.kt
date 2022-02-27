@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp
+package br.com.lucas.pomodoroapp.rules
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

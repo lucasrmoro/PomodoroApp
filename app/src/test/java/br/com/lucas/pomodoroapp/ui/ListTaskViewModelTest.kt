@@ -1,7 +1,7 @@
 package br.com.lucas.pomodoroapp.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import br.com.lucas.pomodoroapp.CoroutinesTestRule
+import br.com.lucas.pomodoroapp.rules.CoroutinesTestRule
 import br.com.lucas.pomodoroapp.core.extensions.toAdapterItem
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.database.TaskDao

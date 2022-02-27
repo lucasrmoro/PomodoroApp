@@ -1,6 +1,5 @@
 package br.com.lucas.pomodoroapp.ui.editTaskScreen
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,10 @@ import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
+
+typealias EditTaskCallback = () -> Unit
 
 @HiltViewModel
 class EditTaskViewModel @Inject constructor(
@@ -36,14 +38,13 @@ class EditTaskViewModel @Inject constructor(
         this.isEditMode = true
         total = task.taskMinutes
 
-        Log.d(AlarmReceiver.TAG, "Starting ${task.taskName}")
-        Log.d(AlarmReceiver.TAG,
-            "task time: ${task.taskMinutes}")
+        Timber.tag(AlarmReceiver.TAG).d("Starting ${task.taskName}")
+        Timber.tag(AlarmReceiver.TAG).d("task time: ${task.taskMinutes}")
 
         alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
 
-    fun delete(closeScreen: () -> Unit, toastOfSuccess: () -> Unit) {
+    fun delete(closeScreen: EditTaskCallback = {}, toastOfSuccess: EditTaskCallback = {}) {
         val task = task ?: return
         viewModelScope.launch {
             repository.deleteTask(task)
@@ -52,11 +53,11 @@ class EditTaskViewModel @Inject constructor(
         }
     }
 
-    fun validTask(content: String) {
-        isTaskNameValid.value = content.length >= 3
+    fun checkTaskNameIsValid(taskName: String) {
+        isTaskNameValid.value = taskName.length >= 3
     }
 
-    fun checkTimeIsValid(hour: Int, minute: Int) {
+    fun checkTaskTimeIsValid(hour: Int, minute: Int) {
         val hoursInMinutes = hour * HOUR_ON_MINUTES
         total = hoursInMinutes + minute
         checkTotalTime()
@@ -68,17 +69,17 @@ class EditTaskViewModel @Inject constructor(
 
     fun onSaveEvent(
         taskName: String,
-        closeScreen: (() -> Unit),
-        toastOfSuccessUpdate: () -> Unit,
-        toastOfSuccessAdd: () -> Unit,
-        toastOfFail: () -> Unit
+        closeScreen: EditTaskCallback = {},
+        toastOfSuccessUpdate: EditTaskCallback = {},
+        toastOfSuccessAdd: EditTaskCallback = {},
+        toastOfFail: EditTaskCallback = {}
     ) {
         if (task == null) {
             saveNewTask(taskName, toastOfSuccessAdd, toastOfFail, closeScreen)
         } else {
             task!!.taskName = taskName
             task!!.taskMinutes = total
-            validTask(task!!.taskName)
+            checkTaskNameIsValid(task!!.taskName)
             checkTotalTime()
             saveSameTask(task!!, closeScreen, toastOfSuccessUpdate, toastOfFail)
         }
@@ -86,9 +87,9 @@ class EditTaskViewModel @Inject constructor(
 
     private fun saveSameTask(
         task: Task,
-        closeScreen: () -> Unit,
-        toastOfSuccessUpdate: () -> Unit,
-        toastOfFail: () -> Unit
+        closeScreen: EditTaskCallback,
+        toastOfSuccessUpdate: EditTaskCallback,
+        toastOfFail: EditTaskCallback
     ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {
@@ -103,9 +104,9 @@ class EditTaskViewModel @Inject constructor(
 
     private fun saveNewTask(
         taskName: String,
-        toastOfSuccessAdd: () -> Unit,
-        toastOfFail: () -> Unit,
-        closeScreen: () -> Unit
+        toastOfSuccessAdd: EditTaskCallback,
+        toastOfFail: EditTaskCallback,
+        closeScreen: EditTaskCallback
     ) {
         if (isPomodoroTimerValid.value == true && isTaskNameValid.value == true) {
             viewModelScope.launch {

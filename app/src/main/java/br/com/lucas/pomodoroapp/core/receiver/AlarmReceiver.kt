@@ -4,16 +4,16 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.content.ContextCompat
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.utils.sendNotification
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
+import timber.log.Timber
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val taskName = intent.getStringExtra(TASK_NAME) ?: ""
-        Log.d(TAG, "$taskName should finishes")
+        Timber.tag(TAG).d("$taskName should finishes")
 
         val notificationManager = ContextCompat.getSystemService(
             context,
