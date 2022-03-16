@@ -60,5 +60,6 @@ You can delete only one task by pressing on top of it and clicking on the delete
 
 - Kotlin
 - MVVM Architecture
+- Dependency Injection (Dagger-Hilt)
 - Jetpack components
 - Bitrise and Firebase to CI/CD
