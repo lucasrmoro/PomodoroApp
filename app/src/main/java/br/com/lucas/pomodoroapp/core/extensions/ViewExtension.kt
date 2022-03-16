@@ -3,9 +3,9 @@ package br.com.lucas.pomodoroapp.core.extensions
 import android.view.View
 
 fun View.display(display: Boolean, gone: Boolean = true){
-    if(display){
-        this.visibility = View.VISIBLE
-    } else {
-        if(gone) this.visibility = View.GONE else this.visibility = View.INVISIBLE
+    this.visibility = when{
+        display -> View.VISIBLE
+        display.not() && gone -> View.GONE
+        else -> View.INVISIBLE
     }
 }
