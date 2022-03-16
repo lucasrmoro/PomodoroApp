@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.utils.sendNotification
+import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
 import timber.log.Timber
 
@@ -21,7 +23,6 @@ class AlarmReceiver : BroadcastReceiver() {
         ) as NotificationManager
 
         val launchListActivity = Intent(context, ListTaskActivity::class.java)
-        launchListActivity.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
         notificationManager.sendNotification(
             context,
@@ -33,10 +34,17 @@ class AlarmReceiver : BroadcastReceiver() {
             context.getString(R.string.pomodoro_notification_channel_name),
             context.getString(R.string.pomodoro_timer_reminder)
         )
+
+        context.getSharedPreferences(PreferencesHelper.MY_PREFS, Context.MODE_PRIVATE).edit()
+            .remove(PreferencesHelper.ACTIVE_POMODORO_TIMER).apply()
+
+        val alarmFinishIntent = Intent(ALARM_FINISH_INTENT_ACTION)
+        LocalBroadcastManager.getInstance(context).sendBroadcast(alarmFinishIntent)
     }
 
     companion object {
         const val TAG = "AlarmReceiver"
         const val TASK_NAME = "TASK NAME KEY"
+        const val ALARM_FINISH_INTENT_ACTION = "Alarm finish intent action"
     }
 }
