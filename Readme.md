@@ -26,7 +26,7 @@ A project that aims to implement the Pomodoro technique to organize and improve 
 | CRUD                             |         ✔️           |
 | Delete multiple tasks            |         ✔️           |
 | Countdown timer                  |         ❌          |
-| Notification when timer finished |         ❌          |
+| Notification when timer finished |         ✔️           |
 | Custom ringtone                  |         ❌          |
 
 ## Usage
