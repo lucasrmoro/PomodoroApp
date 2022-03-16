@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
 import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.R.string.*
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.core.extensions.toast
@@ -42,7 +41,7 @@ class EditTaskActivity : AppCompatActivity() {
 
         if (task != null) {
             viewModel.setup(task)
-            binding.toolbar.title = getString(edit_task_toolbar_label)
+            binding.toolbar.title = getString(R.string.edit_task_toolbar_label)
             binding.editTaskName.setText("${viewModel.task?.taskName}")
             binding.editPomodoroTimer.text =
                 "${viewModel.task?.taskMinutes?.convertMinutesToHour()}"
@@ -64,15 +63,15 @@ class EditTaskActivity : AppCompatActivity() {
         binding.fabSave.setOnClickListener {
             viewModel.onSaveEvent(
                 taskName = binding.editTaskName.text.toString(),
-                toastOfSuccessUpdate = { toast(successfully_changed) },
-                toastOfSuccessAdd = { toast(successfully_saved) },
-                toastOfFail = { toast(fill_all_required_fields) },
+                toastOfSuccessUpdate = { toast(R.string.successfully_changed) },
+                toastOfSuccessAdd = { toast(R.string.successfully_saved) },
+                toastOfFail = { toast(R.string.fill_all_required_fields) },
                 closeScreen = { finish() }
             )
         }
 
         binding.fabSaveAndRun.setOnClickListener {
-            toast(feature_isnt_implemented)
+            toast(R.string.feature_isnt_implemented)
         }
 
         viewModel.isTaskNameValid.observe(this) {
@@ -85,7 +84,7 @@ class EditTaskActivity : AppCompatActivity() {
 
         viewModel.isPomodoroTimerValid.observe(this) {
             if (it == false) {
-                toast(select_valid_time, 3500)
+                toast(R.string.select_valid_time, 3500)
                 binding.pomodoroTimer.setTextColor(Color.RED)
             } else {
                 binding.pomodoroTimer.setTextColor(this.getColorResCompat(android.R.attr.textColorPrimary))
@@ -102,37 +101,40 @@ class EditTaskActivity : AppCompatActivity() {
         if (viewModel.isEditMode) {
             menuInflater.inflate(R.menu.delete_menu, menu)
             val deleteMenu = menu?.findItem(R.menu.delete_menu)
-            deleteMenu?.title = getString(yes)
+            deleteMenu?.title = getString(R.string.yes)
         }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_delete_action) {
-            deleteTask()
+            if(viewModel.isTaskEnabled){
+                toast(R.string.can_not_delete_task_with_active_timer)
+            } else {
+                deleteTask()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun deleteTask() {
         AlertDialogHelper.show(
-
             context = this,
-            title = are_you_sure,
-            bodyMessage = delete_confirmation_message,
-            positiveButtonMessage = yes,
+            title = R.string.are_you_sure,
+            bodyMessage = R.string.delete_confirmation_message,
+            positiveButtonMessage = R.string.yes,
             positiveButtonAction = {
                 try {
                     viewModel.delete(
-                        toastOfSuccess = { toast(successfully_deleted) },
+                        toastOfSuccess = { toast(R.string.successfully_deleted) },
                         closeScreen = { finish() }
                     )
                 } catch (e: Exception) {
-                    toast(somenthing_went_wrong)
+                    toast(R.string.somenthing_went_wrong)
                     Timber.e(e.message)
                 }
             },
-            negativeButtonMessage = cancel
+            negativeButtonMessage = R.string.cancel
         )
     }
 
@@ -142,7 +144,7 @@ class EditTaskActivity : AppCompatActivity() {
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(0)
             .setMinute(25)
-            .setTitleText(getString(select_pomodoro_time))
+            .setTitleText(R.string.select_pomodoro_time)
             .build()
         picker.show(supportFragmentManager, "Test")
         picker.addOnPositiveButtonClickListener {
@@ -163,6 +165,6 @@ class EditTaskActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        private const val TASK_NAME_KEY = "task"
+        private const val TASK_NAME_KEY = "Task"
     }
 }
