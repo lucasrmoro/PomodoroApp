@@ -15,6 +15,7 @@ class AlarmManagerHelper(
     private val context: Context,
     private val requestAlarmPermissionIntent: Intent = Intent().apply {
         action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
     },
 ) {
     private val alarmManager: AlarmManager? =
