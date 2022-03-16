@@ -3,13 +3,11 @@ package br.com.lucas.pomodoroapp.ui.editTaskScreen
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
 import br.com.lucas.pomodoroapp.database.Task
 import br.com.lucas.pomodoroapp.database.TaskRepository
-import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
+import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 typealias EditTaskCallback = () -> Unit
@@ -17,11 +15,14 @@ typealias EditTaskCallback = () -> Unit
 @HiltViewModel
 class EditTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
-    private val alarmManagerHelper: AlarmManagerHelper
+    private val preferencesHelper: PreferencesHelper,
 ) : ViewModel() {
 
     var total: Int = 25
         private set
+
+    val isTaskEnabled: Boolean
+        get() = task?.uid == preferencesHelper.taskTimerEnabled
 
     val isPomodoroTimerValid = MutableLiveData<Boolean>()
     val isTaskNameValid = MutableLiveData<Boolean>()
@@ -37,11 +38,6 @@ class EditTaskViewModel @Inject constructor(
         this.task = task
         this.isEditMode = true
         total = task.taskMinutes
-
-        Timber.tag(AlarmReceiver.TAG).d("Starting ${task.taskName}")
-        Timber.tag(AlarmReceiver.TAG).d("task time: ${task.taskMinutes}")
-
-        alarmManagerHelper.setExactAlarm(task.taskMinutes)
     }
 
     fun delete(closeScreen: EditTaskCallback = {}, toastOfSuccess: EditTaskCallback = {}) {

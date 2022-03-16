@@ -5,6 +5,8 @@ import androidx.room.Room
 import br.com.lucas.pomodoroapp.database.AppDataBase
 import br.com.lucas.pomodoroapp.database.TaskDao
 import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
+import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
+import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskViewStateManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,16 +20,28 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideAppContext(@ApplicationContext context: Context) = context
+
+    @Singleton
+    @Provides
     fun provideTaskDao(appDataBase: AppDataBase): TaskDao = appDataBase.taskDao()
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDataBase =
+    fun provideAppDatabase(context: Context): AppDataBase =
         Room.databaseBuilder(context, AppDataBase::class.java, "pomodoro-db")
             .build()
 
     @Singleton
     @Provides
-    fun provideAlarmManagerHelper(@ApplicationContext context: Context): AlarmManagerHelper =
+    fun provideAlarmManagerHelper(context: Context): AlarmManagerHelper =
         AlarmManagerHelper(context)
+
+    @Singleton
+    @Provides
+    fun providePreferencesHelper(context: Context): PreferencesHelper = PreferencesHelper(context)
+
+    @Singleton
+    @Provides
+    fun provideListTaskViewStateManager(): ListTaskViewStateManager = ListTaskViewStateManager()
 }
