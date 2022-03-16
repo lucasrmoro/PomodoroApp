@@ -8,6 +8,9 @@ class AlarmMediator @Inject constructor(
     private val alarmManagerHelper: AlarmManagerHelper,
     private val preferencesHelper: PreferencesHelper,
 ) {
+    val taskTimerEnabled: Int
+        get() = preferencesHelper.taskTimerEnabled
+
     fun syncTaskTimer(
         isTimerEnabled: Boolean,
         taskId: Int,
@@ -22,7 +25,4 @@ class AlarmMediator @Inject constructor(
             alarmManagerHelper.cancelAlarm()
         }
     }
-
-    val taskTimerEnabled: Int
-        get() = preferencesHelper.taskTimerEnabled
 }
