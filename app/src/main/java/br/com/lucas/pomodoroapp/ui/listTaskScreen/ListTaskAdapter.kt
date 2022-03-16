@@ -1,26 +1,24 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
+import br.com.lucas.pomodoroapp.core.extensions.display
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
+import br.com.lucas.pomodoroapp.core.extensions.isNotCheckedByHuman
 import br.com.lucas.pomodoroapp.databinding.ListTaskItemBinding
 
 class ListTaskAdapter(
-    private val listTaskAdapterEvents: ListTaskAdapterEvents
+    private val listTaskAdapterEvents: ListTaskAdapterEvents,
 ) : ListAdapter<AdapterItem, ListTaskAdapter.TaskViewHolder>(DiffCallback()) {
 
     fun addTask(tasks: List<AdapterItem>) {
         submitList(tasks)
-    }
-
-    fun reset() {
-        currentList.forEach {
-            it.resetTaskSelection()
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -44,47 +42,43 @@ class ListTaskAdapter(
     inner class TaskViewHolder(private val binding: ListTaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val cardColorDefault =
-            binding.root.context.getColorResCompat(android.R.attr.colorBackground)
-        private val cardColorSelected =
-            binding.root.context.getColorResCompat(android.R.attr.colorControlHighlight)
-
+        @SuppressLint("ResourceType")
         fun bind(task: AdapterItem) {
             binding.itemTaskName.text = task.taskName
             binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
-            cardSelectedState(task.isTaskSelected, false)
+            binding.checkItem.scaleX = task.selectionState.scale
+            binding.checkItem.scaleY = task.selectionState.scale
+            binding.root.setBackgroundColor(binding.root.context.getColorResCompat(task.selectionState.backgroundColor))
+            binding.timerSwitch.display(task.isSwitchVisible)
+
+            val timerSwitchListener =
+                CompoundButton.OnCheckedChangeListener { v, isChecked ->
+                    if (v != null) {
+                        listTaskAdapterEvents.timerTaskCallback(task, isChecked)
+                    }
+                }
+
+            if (task.isSwitchVisible) {
+                binding.timerSwitch.isEnabled = task.switchState.isAvailable
+                binding.timerSwitch.isNotCheckedByHuman(task.switchState.isEnabled,
+                    timerSwitchListener)
+            }
+
+            binding.timerSwitch.setOnCheckedChangeListener(timerSwitchListener)
 
             binding.root.setOnLongClickListener { v ->
                 if (v != null) {
-                    toggleSelectionMode(task)
+                    listTaskAdapterEvents.selectionTaskCallback(task)
                 }
                 true
             }
 
             binding.root.setOnClickListener {
                 if (listTaskAdapterEvents.isSelectionModeEnabledCallback()) {
-                    toggleSelectionMode(task)
+                    listTaskAdapterEvents.selectionTaskCallback(task)
                 } else {
                     listTaskAdapterEvents.launchEditScreenCallback(task)
                 }
-            }
-        }
-
-        private fun toggleSelectionMode(task: AdapterItem) {
-            task.toggleTask()
-            listTaskAdapterEvents.selectionTaskCallback(task)
-            cardSelectedState(task.isTaskSelected, true)
-        }
-
-        private fun cardSelectedState(isSelected: Boolean, isAnimated: Boolean) {
-            val scale = if(isSelected) 1f else 0f
-            val cardColor = if(isSelected) cardColorSelected else cardColorDefault
-            binding.root.setCardBackgroundColor(cardColor)
-            if(isAnimated){
-                binding.checkItem.animate().scaleX(scale).scaleY(scale).duration = 250
-            } else {
-                binding.checkItem.scaleX = scale
-                binding.checkItem.scaleY = scale
             }
         }
     }
@@ -104,4 +98,5 @@ interface ListTaskAdapterEvents {
     fun selectionTaskCallback(adapterItem: AdapterItem)
     fun isSelectionModeEnabledCallback(): Boolean
     fun launchEditScreenCallback(adapterItem: AdapterItem)
+    fun timerTaskCallback(adapterItem: AdapterItem, isTimerEnabled: Boolean)
 }
