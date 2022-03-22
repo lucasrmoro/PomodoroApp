@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp.database
+package br.com.lucas.pomodoroapp.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -12,5 +12,5 @@ data class Task(
     @ColumnInfo
     var taskName: String,
     @ColumnInfo
-    var taskMinutes: Int
+    var pomodoroDurations: PomodoroDurations
 ) : Serializable

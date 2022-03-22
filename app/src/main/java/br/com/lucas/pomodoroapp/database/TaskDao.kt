@@ -1,6 +1,7 @@
 package br.com.lucas.pomodoroapp.database
 
 import androidx.room.*
+import br.com.lucas.pomodoroapp.database.model.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao

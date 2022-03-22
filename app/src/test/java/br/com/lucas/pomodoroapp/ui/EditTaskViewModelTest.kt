@@ -2,7 +2,7 @@ package br.com.lucas.pomodoroapp.ui
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.database.TaskDao
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.helpers.PreferencesHelper

@@ -1,6 +1,6 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 
 class ListTaskViewStateManager {
 

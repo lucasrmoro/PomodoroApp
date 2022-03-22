@@ -15,7 +15,7 @@ import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.convertMinutesToHour
 import br.com.lucas.pomodoroapp.core.extensions.getColorResCompat
 import br.com.lucas.pomodoroapp.core.extensions.toast
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.databinding.ActivityEditTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import com.google.android.material.timepicker.MaterialTimePicker.Builder

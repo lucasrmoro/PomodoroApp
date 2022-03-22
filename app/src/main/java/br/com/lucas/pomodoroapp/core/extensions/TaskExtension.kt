@@ -1,6 +1,6 @@
 package br.com.lucas.pomodoroapp.core.extensions
 
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.AdapterItem
 
 fun Task.toAdapterItem(): AdapterItem = AdapterItem(uid, taskName, taskMinutes)

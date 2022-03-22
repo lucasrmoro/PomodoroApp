@@ -3,7 +3,7 @@ package br.com.lucas.pomodoroapp.ui.editTaskScreen
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel

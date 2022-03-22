@@ -1,5 +1,6 @@
 package br.com.lucas.pomodoroapp.database
 
+import br.com.lucas.pomodoroapp.database.model.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate

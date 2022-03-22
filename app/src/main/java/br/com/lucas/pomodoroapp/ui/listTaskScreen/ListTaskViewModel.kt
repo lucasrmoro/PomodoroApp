@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.core.extensions.toAdapterItems
 import br.com.lucas.pomodoroapp.core.extensions.toTaskItem
-import br.com.lucas.pomodoroapp.database.Task
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.mediators.AlarmMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
