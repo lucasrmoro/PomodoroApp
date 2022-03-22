@@ -10,8 +10,9 @@ class PomodoroDurationsConverter {
     fun pomodoroDurationsToString(pomodoroDurations: PomodoroDurations): String =
         Gson().toJson(pomodoroDurations)
 
+
     @TypeConverter
-    fun pomodoroDurationsFromString(pomodoroTimerSpecs: String): PomodoroDurations =
-        Gson().fromJson(pomodoroTimerSpecs, PomodoroDurations::class.java)
+    fun pomodoroDurationsFromString(pomodoroDurations: String): PomodoroDurations =
+        Gson().fromJson(pomodoroDurations, PomodoroDurations::class.java)
 
 }
