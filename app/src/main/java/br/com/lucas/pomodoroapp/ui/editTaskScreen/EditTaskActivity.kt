@@ -37,7 +37,7 @@ class EditTaskActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val task: Task? = intent.getSerializableExtra(TASK_NAME_KEY) as? Task
+        val task: Task? = intent.getParcelableExtra(TASK_NAME_KEY) as? Task
 
         if (task != null) {
             viewModel.setup(task)
