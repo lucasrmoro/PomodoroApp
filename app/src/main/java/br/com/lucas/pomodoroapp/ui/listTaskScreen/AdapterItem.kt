@@ -1,11 +1,12 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import androidx.annotation.ColorRes
+import br.com.lucas.pomodoroapp.database.model.PomodoroDurations
 
 data class AdapterItem(
     val uid: Int,
     val taskName: String,
-    val taskMinutes: Int,
+    val pomodoroDurations: PomodoroDurations,
     val selectionState: SelectionState = SelectionState.DEFAULT,
     val switchState: SwitchState = SwitchState.DEFAULT,
     val isSwitchVisible: Boolean = true,
