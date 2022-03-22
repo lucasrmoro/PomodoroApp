@@ -7,7 +7,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
-import br.com.lucas.pomodoroapp.core.utils.sendNotification
+import br.com.lucas.pomodoroapp.core.utils.notification.sendNotification
 import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
 import timber.log.Timber

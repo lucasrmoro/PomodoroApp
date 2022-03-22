@@ -1,4 +1,5 @@
-package br.com.lucas.pomodoroapp.core.utils
+
+package br.com.lucas.pomodoroapp.core.utils.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
