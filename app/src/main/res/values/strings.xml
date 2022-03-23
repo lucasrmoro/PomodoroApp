@@ -2,7 +2,7 @@
     <string name="app_name">Pomodoro App</string>
     <string name="pomodoro_timer">Pomodoro Timer:</string>
     <string name="edit_timer">Choose your Pomodoro Timer:</string>
-    <string name="task_name">Task:</string>
+    <string name="task_name">Task name</string>
     <string name="edit_task">Write your task</string>
     <string name="ringtone">Ringtone:</string>
     <string name="edit_ringtone">Choose Ringtone:</string>
@@ -37,6 +37,13 @@
     <string name="time_to_do_a_break">It\'s time to do a break!</string>
     <string name="can_not_select_task_with_timer_active">You can not select a task with timer active!</string>
     <string name="can_not_delete_task_with_active_timer">You can not delete a task with task timer active!</string>
+    <string name="pomodoro_timer_durations">Pomodoro Timer Durations</string>
+    <string name="minutes_unit_type">minutes *</string>
+    <string name="pomodoro_time">Pomodoro time</string>
+    <string name="short_break_time">Short break</string>
+    <string name="long_break_time">Long break</string>
+    <string name="pomodoro_timers_cycles">Quantity of Pomodoro Timers cycles</string>
+    <string name="you_have_to_name_the_task">You have to name the task!</string>
     <plurals name="delete_selected_tasks">
         <item quantity="one">Are you sure you want to delete this task?</item>
         <item quantity="other">"Are you sure you want to delete %d tasks?"</item>
