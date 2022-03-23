@@ -45,7 +45,7 @@ class ListTaskAdapter(
         @SuppressLint("ResourceType")
         fun bind(task: AdapterItem) {
             binding.itemTaskName.text = task.taskName
-            binding.itemTaskTime.text = task.taskMinutes.convertMinutesToHour()
+            binding.itemTaskTime.text = task.pomodoroDurations.pomodoroTime.convertMinutesToHour()
             binding.checkItem.scaleX = task.selectionState.scale
             binding.checkItem.scaleY = task.selectionState.scale
             binding.root.setBackgroundColor(binding.root.context.getColorResCompat(task.selectionState.backgroundColor))
