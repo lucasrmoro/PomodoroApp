@@ -17,61 +17,189 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/create_task_toolbar_label" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edt_task_name_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:hint="@string/task_name"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_task_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/_cv_pomodoro_durations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/edt_task_name_layout"
+            app:layout_constraintStart_toStartOf="@id/edt_task_name_layout"
+            app:layout_constraintTop_toBottomOf="@id/edt_task_name_layout"
+            app:strokeColor="@color/material_on_background_disabled"
+            app:strokeWidth="1.5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/pomodoro_durations_title"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pomodoro_timer_durations"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/_minutes_unit_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/minutes_unit_type"
+                    android:textAlignment="center"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="@id/pomodoro_durations_title"
+                    app:layout_constraintStart_toStartOf="@id/pomodoro_durations_title"
+                    app:layout_constraintTop_toBottomOf="@id/pomodoro_durations_title" />
+
+                <TextView
+                    android:id="@+id/_tv_pomodoro_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/pomodoro_time"
+                    app:layout_constraintEnd_toEndOf="@id/_minutes_unit_type"
+                    app:layout_constraintStart_toStartOf="@id/_minutes_unit_type"
+                    app:layout_constraintTop_toBottomOf="@id/_minutes_unit_type" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_pomodoro_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="5"
+                    android:valueFrom="25"
+                    android:valueTo="60"
+                    app:layout_constraintEnd_toStartOf="@id/edt_pomodoro_time"
+                    app:layout_constraintStart_toStartOf="@id/_tv_pomodoro_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_pomodoro_time" />
+
+                <TextView
+                    android:id="@+id/edt_pomodoro_time"
+                    android:layout_width="33dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/slider_pomodoro_time"
+                    app:layout_constraintEnd_toEndOf="@id/_tv_pomodoro_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_pomodoro_time" />
+
+                <TextView
+                    android:id="@+id/_tv_short_break_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/short_break_time"
+                    app:layout_constraintEnd_toEndOf="@id/edt_pomodoro_time"
+                    app:layout_constraintStart_toStartOf="@id/slider_pomodoro_time"
+                    app:layout_constraintTop_toBottomOf="@id/slider_pomodoro_time" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_short_break_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="5"
+                    android:valueFrom="5"
+                    android:valueTo="15"
+                    app:layout_constraintEnd_toStartOf="@id/edt_short_break_time"
+                    app:layout_constraintStart_toStartOf="@id/_tv_short_break_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_short_break_time" />
+
+                <TextView
+                    android:id="@+id/edt_short_break_time"
+                    android:layout_width="33dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/slider_short_break_time"
+                    app:layout_constraintEnd_toEndOf="@id/_tv_short_break_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_short_break_time" />
+
+                <TextView
+                    android:id="@+id/_tv_long_break_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/long_break_time"
+                    app:layout_constraintEnd_toEndOf="@id/edt_short_break_time"
+                    app:layout_constraintStart_toStartOf="@id/slider_short_break_time"
+                    app:layout_constraintTop_toBottomOf="@id/slider_short_break_time" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider_long_break_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:stepSize="5"
+                    android:valueFrom="20"
+                    android:valueTo="50"
+                    app:layout_constraintEnd_toStartOf="@id/edt_long_break_time"
+                    app:layout_constraintStart_toStartOf="@id/_tv_long_break_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_long_break_time" />
+
+                <TextView
+                    android:id="@+id/edt_long_break_time"
+                    android:layout_width="33dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@id/slider_long_break_time"
+                    app:layout_constraintEnd_toEndOf="@id/_tv_long_break_time"
+                    app:layout_constraintTop_toBottomOf="@id/_tv_long_break_time" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <TextView
-            android:id="@+id/task_name"
+            android:id="@+id/_tv_pomodoro_timers_cycles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/task_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            android:layout_marginHorizontal="44dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/pomodoro_timers_cycles"
+            app:layout_constraintEnd_toEndOf="@id/_cv_pomodoro_durations"
+            app:layout_constraintStart_toStartOf="@id/_cv_pomodoro_durations"
+            app:layout_constraintTop_toBottomOf="@id/_cv_pomodoro_durations" />
 
-        <EditText
-            android:id="@+id/edit_task_name"
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_pomodoro_timers_cycles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_task"
-            android:textSize="20sp"
-            android:inputType="textCapWords"
-            app:layout_constraintEnd_toEndOf="@+id/task_name"
-            app:layout_constraintStart_toStartOf="@+id/task_name"
-            app:layout_constraintTop_toBottomOf="@+id/task_name" />
+            android:stepSize="1"
+            android:valueFrom="1"
+            android:valueTo="10"
+            app:layout_constraintEnd_toStartOf="@id/edt_pomodoro_timers_cycles"
+            app:layout_constraintStart_toStartOf="@id/_tv_pomodoro_timers_cycles"
+            app:layout_constraintTop_toBottomOf="@id/_tv_pomodoro_timers_cycles" />
 
         <TextView
-            android:id="@+id/pomodoro_timer"
-            android:layout_width="0dp"
+            android:id="@+id/edt_pomodoro_timers_cycles"
+            android:layout_width="33dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/pomodoro_timer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_task_name" />
-
-        <TextView
-            android:id="@+id/edit_pomodoro_timer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center|start"
-            android:paddingTop="3dp"
-            android:paddingBottom="12dp"
-            android:textSize="20sp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:ems="10"
-            android:focusable="true"
-            android:hint="@string/edit_timer"
-            app:layout_constraintEnd_toEndOf="@+id/pomodoro_timer"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/pomodoro_timer"
-            app:layout_constraintTop_toBottomOf="@+id/pomodoro_timer" />
-
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@id/slider_pomodoro_timers_cycles"
+            app:layout_constraintEnd_toEndOf="@id/_tv_pomodoro_timers_cycles"
+            app:layout_constraintTop_toBottomOf="@id/_tv_pomodoro_timers_cycles" />
 
         <TextView
             android:id="@+id/ringtone"
@@ -84,17 +212,17 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_pomodoro_timer"
+            app:layout_constraintTop_toBottomOf="@+id/slider_pomodoro_timers_cycles"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/edit_ringtone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:paddingBottom="15dp"
             android:inputType="text"
+            android:paddingBottom="15dp"
             android:text="@string/edit_ringtone"
+            android:textSize="20sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/ringtone"
             app:layout_constraintStart_toStartOf="@+id/ringtone"
@@ -108,6 +236,7 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="55dp"
             android:layout_marginEnd="36dp"
+            android:contentDescription="@string/save_task"
             android:text="@string/save_button"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnSecondary"
@@ -115,8 +244,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_ringtone"
-            android:contentDescription="@string/save_task" />
+            app:layout_constraintTop_toBottomOf="@id/edit_ringtone" />
 
         <Button
             android:id="@+id/fab_save_and_run"
@@ -124,16 +252,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
+            android:contentDescription="@string/save_and_run_the_task"
             android:text="@string/save_and_run_button"
-            android:visibility="gone"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnSecondary"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@+id/fab_save"
-            android:contentDescription="@string/save_and_run_the_task"/>
+            app:layout_constraintTop_toTopOf="@+id/fab_save" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
