@@ -1,4 +1,3 @@
-
 package br.com.lucas.pomodoroapp.core.utils.notification
 
 import android.app.NotificationChannel
@@ -8,39 +7,29 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import br.com.lucas.pomodoroapp.R
+import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
 
-private const val NOTIFICATION_ID = 0
-
-fun NotificationManager.sendNotification(
+fun getNotificationBuilder(
     context: Context,
-    messageBody: String,
     contentTitle: String,
-    @DrawableRes smallIcon: Int,
-    contentIntent: Intent,
+    messageBody: String,
     channelId: String,
     channelName: String,
-    channelDescription: String
-) {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val notificationChannel = NotificationChannel(
-            channelId,
-            channelName,
-            NotificationManager.IMPORTANCE_HIGH
-        )
-
-        notificationChannel.enableLights(true)
-        notificationChannel.enableVibration(true)
-        notificationChannel.description = channelDescription
-
-        this.createNotificationChannel(notificationChannel)
-    }
+    notificationID: Int,
+    notificationCategory: String,
+    notificationPriority: Int = NotificationCompat.PRIORITY_DEFAULT,
+    contentIntent: Intent = Intent(context, ListTaskActivity::class.java),
+    @DrawableRes smallIcon: Int = R.drawable.ic_pomodoro,
+): NotificationCompat.Builder {
+    val updatedChannelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        getNotificationChannel(context, channelId, channelName) else ""
 
     val contentPendingIntent = PendingIntent.getActivity(
         context,
-        NOTIFICATION_ID,
+        notificationID,
         contentIntent,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -49,16 +38,28 @@ fun NotificationManager.sendNotification(
         }
     )
 
-    val builder = NotificationCompat.Builder(
+    return NotificationCompat.Builder(
         context,
-        context.getString(R.string.pomdoro_notification_channel_id)
+        updatedChannelId
     )
         .setSmallIcon(smallIcon)
         .setContentTitle(contentTitle)
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
-        .setAutoCancel(true)
-        .setPriority(NotificationCompat.PRIORITY_MAX)
+        .setCategory(notificationCategory)
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .setPriority(notificationPriority)
+}
 
-    notify(NOTIFICATION_ID, builder.build())
+@RequiresApi(Build.VERSION_CODES.O)
+private fun getNotificationChannel(
+    context: Context,
+    channelId: String,
+    channelName: String,
+): String {
+    val channel = NotificationChannel(channelId,
+        channelName, NotificationManager.IMPORTANCE_NONE)
+    val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    service.createNotificationChannel(channel)
+    return channelId
 }

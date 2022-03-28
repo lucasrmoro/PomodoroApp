@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import br.com.lucas.pomodoroapp.database.AppDataBase
 import br.com.lucas.pomodoroapp.database.TaskDao
-import br.com.lucas.pomodoroapp.helpers.AlarmManagerHelper
 import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskViewStateManager
 import dagger.Module
@@ -31,11 +30,6 @@ object AppModule {
     fun provideAppDatabase(context: Context): AppDataBase =
         Room.databaseBuilder(context, AppDataBase::class.java, "pomodoro-db")
             .build()
-
-    @Singleton
-    @Provides
-    fun provideAlarmManagerHelper(context: Context): AlarmManagerHelper =
-        AlarmManagerHelper(context)
 
     @Singleton
     @Provides

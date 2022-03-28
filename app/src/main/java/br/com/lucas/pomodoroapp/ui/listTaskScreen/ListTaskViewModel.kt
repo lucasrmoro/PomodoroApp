@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.lucas.pomodoroapp.core.extensions.toAdapterItems
 import br.com.lucas.pomodoroapp.core.extensions.toTaskItem
-import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.database.model.PomodoroDurations
+import br.com.lucas.pomodoroapp.database.model.Task
 import br.com.lucas.pomodoroapp.mediators.AlarmMediator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ListTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
     private val alarmMediator: AlarmMediator,
-    private val listTaskViewStateManager: ListTaskViewStateManager
+    private val listTaskViewStateManager: ListTaskViewStateManager,
 ) : ViewModel() {
 
     val taskList = MutableLiveData<List<AdapterItem>>()
@@ -53,9 +53,12 @@ class ListTaskViewModel @Inject constructor(
         }
     }
 
-    fun syncTaskTimer(task: AdapterItem, isTimerEnabled: Boolean) {
+    fun syncPomodoroCountdown(task: AdapterItem, isTimerEnabled: Boolean) {
         viewModelScope.launch {
-            alarmMediator.syncTaskTimer(isTimerEnabled, task.uid, task.pomodoroDurations.pomodoroTime)
+            alarmMediator.syncPomodoroCountdown(isTimerEnabled,
+                task.uid,
+                task.pomodoroDurations.pomodoroTime
+            )
             refreshStateOfTasks()
         }
     }

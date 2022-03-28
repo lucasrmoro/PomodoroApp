@@ -25,12 +25,13 @@ import br.com.lucas.pomodoroapp.core.extensions.loadAnim
 import br.com.lucas.pomodoroapp.core.extensions.toast
 import br.com.lucas.pomodoroapp.core.extensions.toggleFabAnimation
 import br.com.lucas.pomodoroapp.core.extensions.toggleFabImage
-import br.com.lucas.pomodoroapp.core.receiver.AlarmReceiver
+import br.com.lucas.pomodoroapp.core.receiver.CountdownTimerReceiver
 import br.com.lucas.pomodoroapp.databinding.ActivityListTaskBinding
 import br.com.lucas.pomodoroapp.helpers.AlertDialogHelper
 import br.com.lucas.pomodoroapp.ui.editTaskScreen.EditTaskActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+
 
 @AndroidEntryPoint
 class ListTaskActivity : AppCompatActivity() {
@@ -49,7 +50,7 @@ class ListTaskActivity : AppCompatActivity() {
 
     private val toBottom: Animation by lazy { loadAnim(this, to_bottom_anim) }
 
-    private val alarmFinishReceiver = object : BroadcastReceiver() {
+    private val countdownFinishReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             viewModel.refreshStateOfTasks()
         }
@@ -103,7 +104,7 @@ class ListTaskActivity : AppCompatActivity() {
             }
 
             override fun timerTaskCallback(adapterItem: AdapterItem, isTimerEnabled: Boolean) {
-                viewModel.syncTaskTimer(adapterItem, isTimerEnabled)
+                viewModel.syncPomodoroCountdown(adapterItem, isTimerEnabled)
             }
         }
         adapter = ListTaskAdapter(listTaskAdapterEvents)
@@ -190,12 +191,12 @@ class ListTaskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
-        LocalBroadcastManager.getInstance(this).registerReceiver(alarmFinishReceiver,
-            IntentFilter(AlarmReceiver.ALARM_FINISH_INTENT_ACTION))
+        LocalBroadcastManager.getInstance(this).registerReceiver(countdownFinishReceiver,
+            IntentFilter(CountdownTimerReceiver.COUNTDOWN_TIME_STEP_FINISH_ACTION))
     }
 
     override fun onPause() {
         super.onPause()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(alarmFinishReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(countdownFinishReceiver)
     }
 }

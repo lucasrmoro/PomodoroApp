@@ -1,20 +1,15 @@
 package br.com.lucas.pomodoroapp.core.extensions
 
-import kotlin.math.absoluteValue
+import java.util.concurrent.TimeUnit
 
 fun Int.convertMinutesToHour(): String {
-    val hours = this / 60
-    var minutes = hours * 60 - this
-    minutes = minutes.absoluteValue
+    val hours = TimeUnit.MINUTES.toHours(this.toLong())
+    val minutes = this % 60
+    return String.format("%02d:%02d", hours, minutes)
+}
 
-    var hoursText = hours.toString()
-    if (hoursText.length == 1) {
-        hoursText = "0$hoursText"
-    }
-
-    var minutesText = minutes.toString()
-    if (minutesText.length == 1) {
-        minutesText = "0$minutesText"
-    }
-    return "$hoursText:$minutesText"
+fun Long.toMinutesAndSeconds(): String {
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(this)
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(this) % 60
+    return String.format("%02d:%02d", minutes, seconds)
 }
