@@ -34,6 +34,7 @@
     <string name="save_button">Save</string>
     <string name="save_task">Save task</string>
     <string name="fill_all_required_fields">Fill all required fields!</string>
+    <string name="delete_this_task">Delete this task</string>
     <string name="can_not_delete_task_with_pomodoro_timer_enabled">You can not delete a task with a Pomodoro Timer enabled!</string>
     <string name="delete_confirmation_message">Are you sure you want to delete this task?</string>
 
