@@ -4,7 +4,7 @@
     <!-- POMODORO APP NOTIFICATION -->
     <string name="label_pomodoro_timer">Pomodoro Timer</string>
     <string name="pomodoro_notification_channel_id">pomodoro_channel</string>
-    <string name="pomodoro_notification_channel_name">Pomodoro</string>
+    <string name="pomodoro_notification_channel_name">Pomodoro Timer</string>
 
     <!-- GENERIC STRINGS -->
     <string name="successfully_saved">Successfully saved!</string>

@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
-            android:text="@string/pomodoro_timer"
             app:layout_constraintEnd_toStartOf="@id/checkItem"
             app:layout_constraintStart_toEndOf="@id/iconTimer"
             app:layout_constraintTop_toTopOf="@id/iconTimer" />

@@ -52,10 +52,8 @@ class ListTaskAdapter(
             binding.timerSwitch.display(task.isSwitchVisible)
 
             val timerSwitchListener =
-                CompoundButton.OnCheckedChangeListener { v, isChecked ->
-                    if (v != null) {
-                        listTaskAdapterEvents.timerTaskCallback(task, isChecked)
-                    }
+                CompoundButton.OnCheckedChangeListener { view, isChecked ->
+                    view?.run { listTaskAdapterEvents.timerTaskCallback(task, isChecked) }
                 }
 
             if (task.isSwitchVisible) {
@@ -66,10 +64,8 @@ class ListTaskAdapter(
 
             binding.timerSwitch.setOnCheckedChangeListener(timerSwitchListener)
 
-            binding.root.setOnLongClickListener { v ->
-                if (v != null) {
-                    listTaskAdapterEvents.selectionTaskCallback(task)
-                }
+            binding.root.setOnLongClickListener { view ->
+                view?.run { listTaskAdapterEvents.selectionTaskCallback(task) }
                 true
             }
 

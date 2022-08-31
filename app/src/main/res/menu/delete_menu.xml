@@ -7,5 +7,6 @@
         android:id="@+id/menu_delete_action"
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom"
+        android:title="@string/delete_selected_tasks"
         tools:ignore="MenuTitle" />
 </menu>

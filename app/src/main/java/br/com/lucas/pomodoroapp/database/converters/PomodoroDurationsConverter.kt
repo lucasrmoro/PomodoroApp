@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp.core.utils.converters
+package br.com.lucas.pomodoroapp.database.converters
 
 import androidx.room.TypeConverter
 import br.com.lucas.pomodoroapp.database.model.PomodoroDurations

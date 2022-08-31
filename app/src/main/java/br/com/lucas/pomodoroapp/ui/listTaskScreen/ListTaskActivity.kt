@@ -154,14 +154,13 @@ class ListTaskActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.delete_menu, menu)
         this.deleteMenu = menu
         val deleteMenu = menu?.findItem(R.id.menu_delete_action)
-        deleteMenu?.isVisible = viewModel.isSelectionModeEnabled()
-        deleteMenu?.title = getString(R.string.delete_selected_tasks)
+        deleteMenu?.isVisible = false
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete_action) {
-            setupConfirmationDialog()
+        when(item.itemId) {
+            R.id.menu_delete_action -> setupConfirmationDialog()
         }
         return super.onOptionsItemSelected(item)
     }

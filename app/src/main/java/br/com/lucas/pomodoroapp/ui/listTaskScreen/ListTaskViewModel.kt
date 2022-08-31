@@ -8,23 +8,24 @@ import br.com.lucas.pomodoroapp.core.extensions.toTaskItem
 import br.com.lucas.pomodoroapp.database.TaskRepository
 import br.com.lucas.pomodoroapp.database.model.PomodoroDurations
 import br.com.lucas.pomodoroapp.database.model.Task
-import br.com.lucas.pomodoroapp.mediators.AlarmMediator
+import br.com.lucas.pomodoroapp.helpers.PomodoroTimerHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ListTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
-    private val alarmMediator: AlarmMediator,
     private val listTaskViewStateManager: ListTaskViewStateManager,
+    private val pomodoroTimerHelper: PomodoroTimerHelper
 ) : ViewModel() {
 
     val taskList = MutableLiveData<List<AdapterItem>>()
     val selectionMode = MutableLiveData(false)
     private val tasksSelected = ArrayList<Task>()
-    private var taskTimerEnabled = -1
+    private var taskWithPomodoroTimerEnabled: Task? = null
 
     fun convertAdapterItemToTask(adapterItem: AdapterItem): Task {
         return adapterItem.toTaskItem()
@@ -55,10 +56,7 @@ class ListTaskViewModel @Inject constructor(
 
     fun syncPomodoroCountdown(task: AdapterItem, isTimerEnabled: Boolean) {
         viewModelScope.launch {
-            alarmMediator.syncPomodoroCountdown(isTimerEnabled,
-                task.uid,
-                task.pomodoroDurations.pomodoroTime
-            )
+            pomodoroTimerHelper.isPomodoroTimerEnabled(isTimerEnabled, task.toTaskItem())
             refreshStateOfTasks()
         }
     }
@@ -98,18 +96,19 @@ class ListTaskViewModel @Inject constructor(
     }
 
     fun refreshStateOfTasks(listOfTasks: List<AdapterItem>? = taskList.value) {
-        taskTimerEnabled = alarmMediator.taskTimerEnabled
+        taskWithPomodoroTimerEnabled = pomodoroTimerHelper.taskWithPomodoroTimerEnabled
         listTaskViewStateManager.sync(
             taskList = listOfTasks,
             isSelectionModeEnabled = isSelectionModeEnabled(),
             tasksSelected = tasksSelected,
-            taskTimerEnabled = taskTimerEnabled)
+            taskWithPomodoroTimerEnabled = taskWithPomodoroTimerEnabled)
         taskList.postValue(listTaskViewStateManager.getTaskListUpdated())
     }
 
     fun refresh() {
         viewModelScope.launch {
             repository.getAllTasks().collect { listOfTasks ->
+                Timber.d("List of tasks from DB: ${listOfTasks.toAdapterItems()}")
                 refreshStateOfTasks(listOfTasks.toAdapterItems())
             }
         }

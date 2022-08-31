@@ -1,24 +1,26 @@
 package br.com.lucas.pomodoroapp.ui.listTaskScreen
 
 import br.com.lucas.pomodoroapp.database.model.Task
+import br.com.lucas.pomodoroapp.ui.listTaskScreen.SelectionState.*
+import br.com.lucas.pomodoroapp.ui.listTaskScreen.SwitchState.*
 
 class ListTaskViewStateManager {
 
     private var taskList: List<AdapterItem>? = null
     private var tasksSelected: List<Task>? = null
-    private var taskTimerEnabled: Int = -1
+    private var taskWithPomodoroTimerEnabled: Task? = null
     private var isSelectionModeEnabled: Boolean = true
 
     fun sync(
         taskList: List<AdapterItem>?,
         isSelectionModeEnabled: Boolean,
         tasksSelected: List<Task>,
-        taskTimerEnabled: Int,
+        taskWithPomodoroTimerEnabled: Task?,
     ) {
         this.taskList = taskList
         this.isSelectionModeEnabled = isSelectionModeEnabled
         this.tasksSelected = tasksSelected
-        this.taskTimerEnabled = taskTimerEnabled
+        this.taskWithPomodoroTimerEnabled = taskWithPomodoroTimerEnabled
     }
 
     fun toggleTaskSelection(task: AdapterItem): AdapterItem = task.toggleSelectionState()
@@ -33,27 +35,15 @@ class ListTaskViewStateManager {
         return updatedList
     }
 
-    private fun updateTaskSelection(task: AdapterItem): SelectionState {
-        return if (tasksSelected?.any { it.uid == task.uid } == true) {
-            SelectionState.SELECTED
-        } else {
-            SelectionState.DEFAULT
-        }
-    }
+    private fun updateTaskSelection(task: AdapterItem): SelectionState =
+        if (tasksSelected?.any { it.uid == task.uid } == true) SELECTED else NOT_SELECTED
 
-    private fun updateSwitchVisibility(task: AdapterItem): Boolean {
-        return if (isSelectionModeEnabled) task.uid == taskTimerEnabled else true
-    }
 
-    private fun updateSwitchState(task: AdapterItem): SwitchState {
-        return if (taskTimerEnabled != -1) {
-            if (task.uid == taskTimerEnabled) {
-                SwitchState.ENABLED
-            } else {
-                SwitchState.DISABLED
-            }
-        } else {
-            SwitchState.DEFAULT
-        }
-    }
+    private fun updateSwitchVisibility(task: AdapterItem) =
+        if (isSelectionModeEnabled) task.uid == taskWithPomodoroTimerEnabled?.uid else true
+
+    private fun updateSwitchState(task: AdapterItem): SwitchState =
+        taskWithPomodoroTimerEnabled?.run {
+            if(task.uid == taskWithPomodoroTimerEnabled?.uid) ENABLED else DISABLED
+        } ?: DEFAULT
 }

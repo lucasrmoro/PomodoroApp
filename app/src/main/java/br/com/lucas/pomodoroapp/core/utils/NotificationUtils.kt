@@ -1,4 +1,4 @@
-package br.com.lucas.pomodoroapp.core.utils.notification
+package br.com.lucas.pomodoroapp.core.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,8 +9,43 @@ import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.ui.listTaskScreen.ListTaskActivity
+
+fun showNotification(
+    context: Context,
+    contentTitle: String,
+    messageBody: String,
+    channelId: String,
+    channelName: String,
+    notificationID: Int,
+    notificationCategory: String,
+    notificationPriority: Int = NotificationCompat.PRIORITY_DEFAULT,
+    contentIntent: Intent = Intent(context, ListTaskActivity::class.java),
+    @DrawableRes smallIcon: Int = R.drawable.ic_pomodoro,
+) {
+    val notificationBuilder = getNotificationBuilder(
+        context,
+        contentTitle,
+        messageBody,
+        channelId,
+        channelName,
+        notificationID,
+        notificationCategory,
+        notificationPriority,
+        contentIntent,
+        smallIcon
+    )
+    val notificationManager = getNotificationManager(context)
+    notificationManager?.notify(notificationID, notificationBuilder.build())
+}
+
+fun getNotificationManager(context: Context) =
+    ContextCompat.getSystemService(
+        context,
+        NotificationManager::class.java
+    )
 
 fun getNotificationBuilder(
     context: Context,
@@ -57,8 +92,10 @@ private fun getNotificationChannel(
     channelId: String,
     channelName: String,
 ): String {
-    val channel = NotificationChannel(channelId,
-        channelName, NotificationManager.IMPORTANCE_NONE)
+    val channel = NotificationChannel(
+        channelId,
+        channelName, NotificationManager.IMPORTANCE_NONE
+    )
     val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     service.createNotificationChannel(channel)
     return channelId

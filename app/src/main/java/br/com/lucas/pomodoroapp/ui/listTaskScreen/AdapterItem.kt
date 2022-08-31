@@ -7,19 +7,19 @@ data class AdapterItem(
     val uid: Int,
     val taskName: String,
     val pomodoroDurations: PomodoroDurations,
-    val selectionState: SelectionState = SelectionState.DEFAULT,
+    val selectionState: SelectionState = SelectionState.NOT_SELECTED,
     val switchState: SwitchState = SwitchState.DEFAULT,
-    val isSwitchVisible: Boolean = true,
+    val isSwitchVisible: Boolean = true
 ) {
     fun toggleSelectionState() = copy(selectionState =
-    if (selectionState != SelectionState.SELECTED) SelectionState.SELECTED else SelectionState.DEFAULT)
+    if (selectionState != SelectionState.SELECTED) SelectionState.SELECTED else SelectionState.NOT_SELECTED)
 }
 
 enum class SelectionState(
     val scale: Float,
     @ColorRes val backgroundColor: Int,
 ) {
-    DEFAULT(
+    NOT_SELECTED(
         scale = 0f,
         backgroundColor = android.R.attr.colorBackground
     ),

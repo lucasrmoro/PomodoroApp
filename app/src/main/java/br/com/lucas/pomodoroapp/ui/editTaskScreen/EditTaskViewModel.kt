@@ -19,8 +19,8 @@ class EditTaskViewModel @Inject constructor(
     private val preferencesHelper: PreferencesHelper,
 ) : ViewModel() {
 
-    val isTaskEnabled: Boolean
-        get() = task?.uid == preferencesHelper.taskTimerEnabled
+    val isTaskWithPomodoroTimerEnabled: Boolean
+        get() = task?.uid == preferencesHelper.taskWithPomodoroTimerEnabled?.uid
 
     val isTaskNameValid = MutableLiveData<Boolean>()
 

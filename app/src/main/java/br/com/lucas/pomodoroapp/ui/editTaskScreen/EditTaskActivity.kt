@@ -32,6 +32,8 @@ class EditTaskActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        Timber.d("TESSTE")
+
         val task: Task? = intent.getParcelableExtra(TASK_NAME_KEY) as? Task
         var durations = PomodoroDurations()
 
@@ -106,15 +108,15 @@ class EditTaskActivity : AppCompatActivity() {
         if (viewModel.isEditMode) {
             menuInflater.inflate(R.menu.delete_menu, menu)
             val deleteMenu = menu?.findItem(R.menu.delete_menu)
-            deleteMenu?.title = getString(R.string.yes)
+            deleteMenu?.title = getString(R.string.delete_this_task)
         }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_delete_action) {
-            if (viewModel.isTaskEnabled) {
-                toast(R.string.can_not_delete_task_with_active_timer)
+            if (viewModel.isTaskWithPomodoroTimerEnabled) {
+                toast(R.string.can_not_delete_task_with_pomodoro_timer_enabled)
             } else {
                 deleteTask()
             }

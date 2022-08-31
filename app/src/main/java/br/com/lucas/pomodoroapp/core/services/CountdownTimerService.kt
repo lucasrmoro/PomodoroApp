@@ -1,92 +1,99 @@
 package br.com.lucas.pomodoroapp.core.services
 
 import android.app.Notification
-import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
 import android.os.CountDownTimer
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import br.com.lucas.pomodoroapp.R
 import br.com.lucas.pomodoroapp.core.extensions.toMinutesAndSeconds
 import br.com.lucas.pomodoroapp.core.receiver.CountdownTimerReceiver
-import br.com.lucas.pomodoroapp.core.utils.notification.getNotificationBuilder
+import br.com.lucas.pomodoroapp.core.utils.getNotificationBuilder
+import br.com.lucas.pomodoroapp.core.utils.getNotificationManager
+import br.com.lucas.pomodoroapp.helpers.PomodoroStep.*
+import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class CountdownTimerService : Service() {
 
-    private lateinit var timer: CountDownTimer
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var notificationBuilder: NotificationCompat.Builder
+    @Inject
+    lateinit var context: Context
+
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
+
+    private var timer: CountDownTimer? = null
+    private val notificationManager by lazy { getNotificationManager(context) }
+    private val notificationBuilder by lazy { getNotificationBuilder(
+        context = context,
+        messageBody = context.getString(R.string.label_pomodoro_timer),
+        contentTitle = "",
+        channelId = context.getString(R.string.pomodoro_notification_channel_id),
+        channelName = context.getString(R.string.pomodoro_notification_channel_name),
+        notificationID = COUNTDOWN_NOTIFICATION_ID,
+        notificationCategory = Notification.CATEGORY_SERVICE,
+        notificationPriority = NotificationCompat.PRIORITY_MAX
+    ) }
 
     override fun onCreate() {
         super.onCreate()
-        setupNotificationVariables()
-        LocalBroadcastManager.getInstance(this)
+        LocalBroadcastManager.getInstance(context)
             .registerReceiver(CountdownTimerReceiver(),
-                IntentFilter(CountdownTimerReceiver.COUNTDOWN_TIMER_FINISH))
+                IntentFilter(CountdownTimerReceiver.COUNTDOWN_BROADCAST_INTENT_ACTION))
     }
 
     override fun onBind(intent: Intent?): IBinder = LocalBinder()
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val countdownTimeLength = intent.getIntExtra(COUNTDOWN_TIME_LENGTH, 25)
-        val updatedTimeLength = TimeUnit.MINUTES.toMillis(countdownTimeLength.toLong())
-        startForegroundCountdown(updatedTimeLength)
+        startForegroundCountdown()
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
-        timer.cancel()
+        timer?.cancel()
         super.onDestroy()
     }
 
-    private fun startForegroundCountdown(countdownTimeLength: Long) {
-        timer = getCountdownTimer(countdownTimeLength).start()
+    private fun startForegroundCountdown() {
+        val pomodoroDurations = preferencesHelper.taskWithPomodoroTimerEnabled?.pomodoroDurations
+        val countdownTimeLength = when(preferencesHelper.currentPomodoroTimerStep) {
+            POMODORO_TIME -> 10
+            SHORT_BREAK -> 5
+            LONG_BREAK -> 8
+            else -> null
+        }
+        val timeInMillis = countdownTimeLength?.let { TimeUnit.SECONDS.toMillis(it.toLong()) }
+        timer = timeInMillis?.let { initCountdownTimer(it) }
         startForeground(COUNTDOWN_NOTIFICATION_ID, notificationBuilder.build())
     }
 
-    private fun getCountdownTimer(
+    private fun initCountdownTimer(
         countdownTimeLength: Long,
-        countdownInterval: Long = 1000,
+        countdownInterval: Long = ONE_SECOND_IN_MILLIS,
     ): CountDownTimer {
         return object : CountDownTimer(countdownTimeLength, countdownInterval) {
             override fun onTick(remainingMillis: Long) {
-                notificationManager.notify(COUNTDOWN_NOTIFICATION_ID,
-                    notificationBuilder
-                        .setContentTitle(remainingMillis.toMinutesAndSeconds())
-                        .build())
+                val builder = notificationBuilder.apply { setContentTitle(remainingMillis.toMinutesAndSeconds()) }
+                notificationManager?.notify(COUNTDOWN_NOTIFICATION_ID, builder.build())
             }
 
             override fun onFinish() {
+                stopForeground(false)
+                stopService(Intent(context, this@CountdownTimerService::class.java))
                 stopSelf()
-                val countdownFinishIntent = Intent(CountdownTimerReceiver.COUNTDOWN_TIMER_FINISH)
-                LocalBroadcastManager.getInstance(this@CountdownTimerService)
+                val countdownFinishIntent = Intent(CountdownTimerReceiver.COUNTDOWN_BROADCAST_INTENT_ACTION)
+                LocalBroadcastManager.getInstance(context)
                     .sendBroadcast(countdownFinishIntent)
             }
         }.start()
-    }
-
-    private fun setupNotificationVariables() {
-        notificationManager = ContextCompat.getSystemService(
-            this,
-            NotificationManager::class.java
-        ) as NotificationManager
-        notificationBuilder = getNotificationBuilder(
-            context = this,
-            messageBody = getString(R.string.label_pomodoro_timer),
-            contentTitle = "",
-            channelId = getString(R.string.pomodoro_notification_channel_id),
-            channelName = getString(R.string.pomodoro_notification_channel_name),
-            notificationID = COUNTDOWN_NOTIFICATION_ID,
-            notificationCategory = Notification.CATEGORY_SERVICE,
-            notificationPriority = NotificationCompat.PRIORITY_MAX
-        )
     }
 
     inner class LocalBinder : Binder() {
@@ -94,7 +101,7 @@ class CountdownTimerService : Service() {
     }
 
     companion object {
-        const val COUNTDOWN_TIME_LENGTH = "Countdown time length according task step time"
-        private const val COUNTDOWN_NOTIFICATION_ID = 101
+        const val COUNTDOWN_NOTIFICATION_ID = 101
+        private const val ONE_SECOND_IN_MILLIS = 1000.toLong()
     }
 }

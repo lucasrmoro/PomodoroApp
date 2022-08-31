@@ -2,6 +2,7 @@ package br.com.lucas.pomodoroapp.di
 
 import android.content.Context
 import androidx.room.Room
+import br.com.lucas.pomodoroapp.core.services.CountdownTimerService
 import br.com.lucas.pomodoroapp.database.AppDataBase
 import br.com.lucas.pomodoroapp.database.TaskDao
 import br.com.lucas.pomodoroapp.helpers.PreferencesHelper
@@ -29,6 +30,7 @@ object AppModule {
     @Provides
     fun provideAppDatabase(context: Context): AppDataBase =
         Room.databaseBuilder(context, AppDataBase::class.java, "pomodoro-db")
+            .fallbackToDestructiveMigration()
             .build()
 
     @Singleton
